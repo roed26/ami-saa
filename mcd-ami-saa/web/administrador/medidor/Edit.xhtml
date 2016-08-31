@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="MedidorEditDlg" widgetVar="MedidorEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditMedidorTitle}">
+            <h:form id="MedidorEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{medidorController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditMedidorLabel_idMedidor}" for="idMedidor" />
+                        <p:inputText id="idMedidor" value="#{medidorController.selected.idMedidor}" title="#{bundle.EditMedidorTitle_idMedidor}" required="true" requiredMessage="#{bundle.EditMedidorRequiredMessage_idMedidor}"/>
+                        <p:outputLabel value="#{bundle.EditMedidorLabel_estado}" for="estado" />
+                        <p:inputText id="estado" value="#{medidorController.selected.estado}" title="#{bundle.EditMedidorTitle_estado}" />
+                        <p:outputLabel value="#{bundle.EditMedidorLabel_tipo}" for="tipo" />
+                        <p:inputText id="tipo" value="#{medidorController.selected.tipo}" title="#{bundle.EditMedidorTitle_tipo}" />
+                        <p:outputLabel value="#{bundle.EditMedidorLabel_marca}" for="marca" />
+                        <p:inputText id="marca" value="#{medidorController.selected.marca}" title="#{bundle.EditMedidorTitle_marca}" />
+                        <p:outputLabel value="#{bundle.EditMedidorLabel_modelo}" for="modelo" />
+                        <p:inputText id="modelo" value="#{medidorController.selected.modelo}" title="#{bundle.EditMedidorTitle_modelo}" />
+                        <p:outputLabel value="#{bundle.EditMedidorLabel_clase}" for="clase" />
+                        <p:inputText id="clase" value="#{medidorController.selected.clase}" title="#{bundle.EditMedidorTitle_clase}" />
+                        <p:outputLabel value="#{bundle.EditMedidorLabel_idPlcMc}" for="idPlcMc" />
+                        <p:selectOneMenu id="idPlcMc" value="#{medidorController.selected.idPlcMc}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{plcMcController.itemsAvailableSelectOne}"
+                                           var="idPlcMcItem"
+                                           itemValue="#{idPlcMcItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditMedidorLabel_idPlcTu1}" for="idPlcTu1" />
+                        <p:selectOneMenu id="idPlcTu1" value="#{medidorController.selected.idPlcTu1}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{plcTuController.itemsAvailableSelectOne}"
+                                           var="idPlcTu1Item"
+                                           itemValue="#{idPlcTu1Item}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditMedidorLabel_idPlcTu2}" for="idPlcTu2" />
+                        <p:selectOneMenu id="idPlcTu2" value="#{medidorController.selected.idPlcTu2}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{plcTuController.itemsAvailableSelectOne}"
+                                           var="idPlcTu2Item"
+                                           itemValue="#{idPlcTu2Item}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditMedidorLabel_idProducto}" for="idProducto" />
+                        <p:selectOneMenu id="idProducto" value="#{medidorController.selected.idProducto}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{productoController.itemsAvailableSelectOne}"
+                                           var="idProductoItem"
+                                           itemValue="#{idProductoItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{medidorController.update}" value="#{bundle.Save}" update="display,:MedidorListForm:datalist,:growl" oncomplete="handleSubmit(args, 'MedidorEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="MedidorEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

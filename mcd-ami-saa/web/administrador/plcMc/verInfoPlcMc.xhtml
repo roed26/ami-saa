@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+
+    <p:dialog id="PlcMcViewDlg" widgetVar="PlcMcViewDialog" modal="true" resizable="false" header="Información plc_mc">
+        <h:form id="PlcMcViewForm">
+            <p:panelGrid styleClass="panelgrid">
+                <p:row>
+                    <p:column style="background: #F2F5F9;">
+                        <h:outputText value="Identificador PLC_MC"/>
+
+                    </p:column>
+                    <p:column>
+                        <h:outputText value="#{plcMcController.selected.idPlcMc}" title="#{bundle.ViewPlcMcTitle_idPlcMc}"/>        
+                    </p:column>
+                    <p:column style="background: #F2F5F9;">
+                        <h:outputText value="Dirección MAC PLC_MC"/>
+                    </p:column>
+                    <p:column>
+                        <h:outputText value="#{plcMcController.selected.macPlcMc}" title="#{bundle.ViewPlcMcTitle_macPlcMc}"/>        
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column style="background: #F2F5F9;">
+                        <h:outputText value="Versión firmware"/>
+                    </p:column>
+                    <p:column>
+                        <h:outputText value="#{plcMcController.selected.versionFw}" title="#{bundle.ViewPlcMcTitle_versionFw}"/>        
+                    </p:column>
+                    <p:column style="background: #F2F5F9;">
+                        <h:outputText value="Estado"/>
+                    </p:column>
+                    <p:column>
+                        <h:outputText value="#{plcMcController.selected.estado}" title="#{bundle.ViewPlcMcTitle_estado}"/>        
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column style="background: #F2F5F9;">
+                        <h:outputText value="Ganancia de transmisión (V)"/>
+                    </p:column>
+                    <p:column>
+                        <h:outputText value="#{plcMcController.selected.gtx}" title="#{bundle.ViewPlcMcTitle_gtx}"/>        
+                    </p:column>
+                    <p:column style="background: #F2F5F9;">
+                        <h:outputText value="Ganancia de recepción (mV)"/>
+                    </p:column>
+                    <p:column>
+                        <h:outputText value="#{plcMcController.selected.grx}" title="#{bundle.ViewPlcMcTitle_grx}"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column style="background: #F2F5F9;">
+                        <h:outputText value="Tasa de transmisión (bps)"/>
+                    </p:column>
+                    <p:column>
+                        <h:outputText value="#{plcMcController.selected.bps}" title="#{bundle.ViewPlcMcTitle_bps}"/>
+                    </p:column>
+                    <p:column style="background: #F2F5F9;">
+                        <h:outputText value="Retardo de transmisión (ms)"/>
+                    </p:column>
+                    <p:column>
+                        <h:outputText value="#{plcMcController.selected.rtx}" title="#{bundle.ViewPlcMcTitle_rtx}"/>
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+            <p:commandButton value="Cerrar" onclick="PlcMcViewDialog.hide()"/>
+
+        </h:form>
+    </p:dialog>
+
+</html>

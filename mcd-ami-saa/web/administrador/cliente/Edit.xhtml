@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ClienteEditDlg" widgetVar="ClienteEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditClienteTitle}">
+            <h:form id="ClienteEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{clienteController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditClienteLabel_cedula}" for="cedula" />
+                        <p:inputText id="cedula" value="#{clienteController.selected.cedula}" title="#{bundle.EditClienteTitle_cedula}" required="true" requiredMessage="#{bundle.EditClienteRequiredMessage_cedula}"/>
+                        <p:outputLabel value="#{bundle.EditClienteLabel_nombres}" for="nombres" />
+                        <p:inputText id="nombres" value="#{clienteController.selected.nombres}" title="#{bundle.EditClienteTitle_nombres}" required="true" requiredMessage="#{bundle.EditClienteRequiredMessage_nombres}"/>
+                        <p:outputLabel value="#{bundle.EditClienteLabel_apellidos}" for="apellidos" />
+                        <p:inputText id="apellidos" value="#{clienteController.selected.apellidos}" title="#{bundle.EditClienteTitle_apellidos}" required="true" requiredMessage="#{bundle.EditClienteRequiredMessage_apellidos}"/>
+                        <p:outputLabel value="#{bundle.EditClienteLabel_direccion}" for="direccion" />
+                        <p:inputText id="direccion" value="#{clienteController.selected.direccion}" title="#{bundle.EditClienteTitle_direccion}" required="true" requiredMessage="#{bundle.EditClienteRequiredMessage_direccion}"/>
+                        <p:outputLabel value="#{bundle.EditClienteLabel_barrio}" for="barrio" />
+                        <p:inputText id="barrio" value="#{clienteController.selected.barrio}" title="#{bundle.EditClienteTitle_barrio}" required="true" requiredMessage="#{bundle.EditClienteRequiredMessage_barrio}"/>
+                        <p:outputLabel value="#{bundle.EditClienteLabel_estrato}" for="estrato" />
+                        <p:inputText id="estrato" value="#{clienteController.selected.estrato}" title="#{bundle.EditClienteTitle_estrato}" required="true" requiredMessage="#{bundle.EditClienteRequiredMessage_estrato}"/>
+                        <p:outputLabel value="#{bundle.EditClienteLabel_email}" for="email" />
+                        <p:inputText id="email" value="#{clienteController.selected.email}" title="#{bundle.EditClienteTitle_email}" />
+                        <p:outputLabel value="#{bundle.EditClienteLabel_celular}" for="celular" />
+                        <p:inputText id="celular" value="#{clienteController.selected.celular}" title="#{bundle.EditClienteTitle_celular}" />
+                        <p:outputLabel value="#{bundle.EditClienteLabel_idCiudad}" for="idCiudad" />
+                        <p:selectOneMenu id="idCiudad" value="#{clienteController.selected.idCiudad}" required="true" requiredMessage="#{bundle.EditClienteRequiredMessage_idCiudad}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{ciudadController.itemsAvailableSelectOne}"
+                                           var="idCiudadItem"
+                                           itemValue="#{idCiudadItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{clienteController.update}" value="#{bundle.Save}" update="display,:ClienteListForm:datalist,:growl" oncomplete="handleSubmit(args, 'ClienteEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="ClienteEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

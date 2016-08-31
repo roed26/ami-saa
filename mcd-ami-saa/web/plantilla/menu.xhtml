@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+
+    </h:head>
+    <h:body>
+        <div id="contenidoMenu">
+            <h:form id="formMenu" >
+                <p:tieredMenu>
+                    <p:menuitem value="Inicio"/>
+
+                    <p:submenu label="Gestión de dispositivos">
+                        <p:submenu label="Dispositivos PLC_TU">
+                            <p:menuitem value="Registrar PLC_TU" action="#{routingController.irRegistroPlcTu()}" ajax="false"/>
+                            <p:menuitem value="Gestionar PLC_TU"  action="#{routingController.irGestionPlcTu()}" ajax="false"/>
+                        </p:submenu>
+                        <p:submenu label="Dispositivos PLC_MC">
+                            <p:menuitem value="Registrar PLC_MC" action="#{routingController.irRegistroPlcMc()}" ajax="false"/>
+                            <p:menuitem value="Gestionar PLC_MC"  action="#{routingController.irGestionPlcMc()}" ajax="false"/>
+                        </p:submenu>                        
+                        <p:submenu label="Dispositivos PLC_MMS">
+                            <p:menuitem value="Registrar PLC_MMS" action="#{routingController.irRegistroPlcMms()}" ajax="false"/>
+                            <p:menuitem value="Gestionar PLC_MMS"  action="#{routingController.irGestionPlcMms()}" ajax="false"/>
+                        </p:submenu>
+                        <p:submenu label="Vincular">
+                            <p:menuitem value="Vincular producto a un PLC_TU" action="#{routingController.irVincularPlcTu()}" ajax="false"/>
+                            <p:menuitem value="Vincular PLC_MMS a un trafo"  action="#{routingController.irVincularPlcMms()}" ajax="false"/>
+                            <p:menuitem value="Vincular PLC_MC a varios productos"  action="#{routingController.irVincularPlcMc()}" ajax="false"/>
+                        </p:submenu>
+                    </p:submenu>
+                    <p:submenu label="Gestión de amarres">
+                        <p:menuitem value="Por cliente" action="#{routingController.irEstadoAmarre()}" ajax="false"/>
+                        <p:menuitem value="Por trafo" action="#{routingController.irListaClientes()}" ajax="false"/>
+                        <p:menuitem value="Solicitud estado de amarre" action="#{routingController.irSolicitudTiempoReal()}" ajax="false"/>
+                    </p:submenu>
+                    <p:submenu label="Gestión consumo">
+                        <p:menuitem value="Por cliente" action="#{routingController.irConsumoCliente()}" ajax="false"/>
+
+                    </p:submenu>
+                    <p:submenu label="Gestión de clientes">
+                        <p:menuitem value=""  ajax="false"/>
+                    </p:submenu>
+                    <p:submenu label="Trafo">
+                        <p:menuitem value=""  ajax="false"/>
+                    </p:submenu>
+                </p:tieredMenu>
+            </h:form>
+        </div>
+
+    </h:body>
+</html>

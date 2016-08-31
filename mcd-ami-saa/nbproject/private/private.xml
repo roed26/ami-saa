@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/D:/ami/mcd-ami-saa/web/administrador/plcTu/listadoPlcTu.xhtml</file>
+            <file>file:/D:/ami/mcd-ami-saa/web/administrador/plcTu/registroPlcTu.xhtml</file>
+            <file>file:/D:/ami/mcd-ami-saa/web/plantilla/footer.xhtml</file>
+            <file>file:/D:/ami/mcd-ami-saa/web/plantilla/usuarioMain.xhtml</file>
+            <file>file:/D:/ami/mcd-ami-saa/web/plantillaVisitante/menu.xhtml</file>
+            <file>file:/D:/ami/mcd-ami-saa/web/plantilla/usuarioMain_1.xhtml</file>
+            <file>file:/D:/ami/mcd-ami-saa/web/administrador/plcMc/listadoPlcMc.xhtml</file>
+            <file>file:/D:/ami/mcd-ami-saa/web/templates/_usuariotmp.xhtml</file>
+            <file>file:/D:/ami/mcd-ami-saa/src/java/com/ceo/amisaa/entidades/EventosAmarre.java</file>
+            <file>file:/D:/ami/mcd-ami-saa/src/java/com/ceo/amisaa/entidades/Cliente.java</file>
+            <file>file:/D:/ami/mcd-ami-saa/web/administrador/plcMms/RegistroPlcMms.xhtml</file>
+            <file>file:/D:/ami/mcd-ami-saa/web/administrador/plcMc/RegistroPlcMc.xhtml</file>
+            <file>file:/D:/ami/mcd-ami-saa/web/templates/_visitantetmp.xhtml</file>
+            <file>file:/D:/ami/mcd-ami-saa/web/resources/css/style.css</file>
+            <file>file:/D:/ami/mcd-ami-saa/web/resources/css/default.css</file>
+            <file>file:/D:/ami/mcd-ami-saa/src/java/com/ceo/amisaa/managedbean/ClienteController.java</file>
+            <file>file:/D:/ami/mcd-ami-saa/src/java/com/ceo/amisaa/sessionbeans/EventosAmarreFacade.java</file>
+            <file>file:/D:/ami/mcd-ami-saa/web/resources/css/visitante.css</file>
+            <file>file:/D:/ami/mcd-ami-saa/web/administrador/plcMms/listadoPlcMms.xhtml</file>
+            <file>file:/D:/ami/mcd-ami-saa/web/plantilla/content.xhtml</file>
+            <file>file:/D:/ami/mcd-ami-saa/web/resources/css/cssLayout.css</file>
+            <file>file:/D:/ami/mcd-ami-saa/web/plantillaVisitante/index.xhtml</file>
+            <file>file:/D:/ami/mcd-ami-saa/web/administrador/cliente/estadoAmarre.xhtml</file>
+            <file>file:/D:/ami/mcd-ami-saa/web/plantilla/menu.xhtml</file>
+            <file>file:/D:/ami/mcd-ami-saa/src/java/com/ceo/amisaa/entidades/PlcMms.java</file>
+            <file>file:/D:/ami/mcd-ami-saa/web/resources/css/normalize.css</file>
+        </group>
+    </open-files>
+</project-private>

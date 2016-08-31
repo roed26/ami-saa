@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ProductoEditDlg" widgetVar="ProductoEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditProductoTitle}">
+            <h:form id="ProductoEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{productoController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditProductoLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{productoController.selected.id}" title="#{bundle.EditProductoTitle_id}" required="true" requiredMessage="#{bundle.EditProductoRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.EditProductoLabel_estado}" for="estado" />
+                        <p:inputText id="estado" value="#{productoController.selected.estado}" title="#{bundle.EditProductoTitle_estado}" required="true" requiredMessage="#{bundle.EditProductoRequiredMessage_estado}"/>
+                        <p:outputLabel value="#{bundle.EditProductoLabel_latitud}" for="latitud" />
+                        <p:inputText id="latitud" value="#{productoController.selected.latitud}" title="#{bundle.EditProductoTitle_latitud}" required="true" requiredMessage="#{bundle.EditProductoRequiredMessage_latitud}"/>
+                        <p:outputLabel value="#{bundle.EditProductoLabel_longitud}" for="longitud" />
+                        <p:inputText id="longitud" value="#{productoController.selected.longitud}" title="#{bundle.EditProductoTitle_longitud}" required="true" requiredMessage="#{bundle.EditProductoRequiredMessage_longitud}"/>
+                        <p:outputLabel value="#{bundle.EditProductoLabel_cedula}" for="cedula" />
+                        <p:selectOneMenu id="cedula" value="#{productoController.selected.cedula}" required="true" requiredMessage="#{bundle.EditProductoRequiredMessage_cedula}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{clienteController.itemsAvailableSelectOne}"
+                                           var="cedulaItem"
+                                           itemValue="#{cedulaItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{productoController.update}" value="#{bundle.Save}" update="display,:ProductoListForm:datalist,:growl" oncomplete="handleSubmit(args, 'ProductoEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="ProductoEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

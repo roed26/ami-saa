@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="EventosAmarreMcCreateDlg" widgetVar="EventosAmarreMcCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateEventosAmarreMcTitle}">
+            <h:form id="EventosAmarreMcCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{eventosAmarreMcController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateEventosAmarreMcLabel_idAmarreMc}" for="idAmarreMc" />
+                        <p:inputText id="idAmarreMc" value="#{eventosAmarreMcController.selected.idAmarreMc}" title="#{bundle.CreateEventosAmarreMcTitle_idAmarreMc}" required="true" requiredMessage="#{bundle.CreateEventosAmarreMcRequiredMessage_idAmarreMc}"/>
+                        <p:outputLabel value="#{bundle.CreateEventosAmarreMcLabel_estadoAmarre}" for="estadoAmarre" />
+                        <p:inputText id="estadoAmarre" value="#{eventosAmarreMcController.selected.estadoAmarre}" title="#{bundle.CreateEventosAmarreMcTitle_estadoAmarre}" required="true" requiredMessage="#{bundle.CreateEventosAmarreMcRequiredMessage_estadoAmarre}"/>
+                        <p:outputLabel value="#{bundle.CreateEventosAmarreMcLabel_fechaHora}" for="fechaHora" />
+                        <p:calendar id="fechaHora" pattern="MM/dd/yyyy HH:mm:ss" value="#{eventosAmarreMcController.selected.fechaHora}" title="#{bundle.EditEventosAmarreMcTitle_fechaHora}" required="true" requiredMessage="#{bundle.EditEventosAmarreMcRequiredMessage_fechaHora}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateEventosAmarreMcLabel_idMedidor}" for="idMedidor" />
+                        <p:selectOneMenu id="idMedidor" value="#{eventosAmarreMcController.selected.idMedidor}" >
+                            <f:selectItems value="#{medidorController.itemsAvailableSelectOne}"
+                                           var="idMedidorItem"
+                                           itemValue="#{idMedidorItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateEventosAmarreMcLabel_macPlcMc}" for="macPlcMc" />
+                        <p:selectOneMenu id="macPlcMc" value="#{eventosAmarreMcController.selected.macPlcMc}" required="true" requiredMessage="#{bundle.EditEventosAmarreMcRequiredMessage_macPlcMc}">
+                            <f:selectItems value="#{plcMcController.itemsAvailableSelectOne}"
+                                           var="macPlcMcItem"
+                                           itemValue="#{macPlcMcItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateEventosAmarreMcLabel_macPlcMms}" for="macPlcMms" />
+                        <p:selectOneMenu id="macPlcMms" value="#{eventosAmarreMcController.selected.macPlcMms}" required="true" requiredMessage="#{bundle.EditEventosAmarreMcRequiredMessage_macPlcMms}">
+                            <f:selectItems value="#{plcMmsController.itemsAvailableSelectOne}"
+                                           var="macPlcMmsItem"
+                                           itemValue="#{macPlcMmsItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{eventosAmarreMcController.create}" value="#{bundle.Save}" update="display,:EventosAmarreMcListForm:datalist,:growl" oncomplete="handleSubmit(args,'EventosAmarreMcCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="EventosAmarreMcCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

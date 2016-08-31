@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="TrafoViewDlg" widgetVar="TrafoViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewTrafoTitle}">
+            <h:form id="TrafoViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{trafoController.selected != null}">
+                        <h:outputText value="#{bundle.ViewTrafoLabel_idTrafo}"/>
+                        <h:outputText value="#{trafoController.selected.idTrafo}" title="#{bundle.ViewTrafoTitle_idTrafo}"/>
+                        <h:outputText value="#{bundle.ViewTrafoLabel_latitud}"/>
+                        <h:outputText value="#{trafoController.selected.latitud}" title="#{bundle.ViewTrafoTitle_latitud}"/>
+                        <h:outputText value="#{bundle.ViewTrafoLabel_longitud}"/>
+                        <h:outputText value="#{trafoController.selected.longitud}" title="#{bundle.ViewTrafoTitle_longitud}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="TrafoViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>
