@@ -6,26 +6,20 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 
-    <p:dialog id="PlcMcEditDlg" widgetVar="PlcMcEditDialog" modal="true" resizable="false"  header="Editar información plc_mc">
+    <p:dialog id="PlcMcEditDlg" widgetVar="PlcMcEditDialog" closable="false" modal="true" resizable="false"  header="Editar información plc_mc">
         <h:form id="PlcMcEditForm">
             <p:panelGrid styleClass="panelgrid" id="panel" >
                 <p:row>
                     <p:column>
                         <p:outputLabel value="Dirección MAC PLC_MC"/>                
-                        <h:outputLabel style="font-style: italic;font-size: 16px;text-align: left; color:red;" 
-                                       value="*" />
                     </p:column>
                     <p:column>
                         <p:inputText id="macPlcMc" 
+                                     disabled="true"
                                      value="#{plcMcController.selected.macPlcMc}" 
                                      title="Dirección MAC" 
-                                     required="true" 
-                                     requiredMessage="Campo requerido"
-                                     converter="toUpperCaseConverter"
-                                     placeholder="16 caracteres"
                                      >
-                            <f:ajax event="blur" render="@this" />
-                            <f:validator validatorId="ValidarCampo16Caracteres"/>
+
                         </p:inputText>        
                     </p:column>
                     <p:column>

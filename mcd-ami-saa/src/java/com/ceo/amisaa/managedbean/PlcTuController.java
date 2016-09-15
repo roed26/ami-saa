@@ -7,6 +7,7 @@ import com.ceo.amisaa.managedbean.util.JsfUtil.PersistAction;
 import com.ceo.amisaa.sessionbeans.PlcTuFacade;
 
 import java.io.Serializable;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -176,8 +177,6 @@ public class PlcTuController implements Serializable {
         this.ejbPlcTu.edit(this.objPlcTu);
         RequestContext requestContext = RequestContext.getCurrentInstance();
         productoSeleccionado=false;
-        requestContext.update("PlcTuListForm");
-        requestContext.update("informacionProducto");
         requestContext.execute("PF('mensajeVinculo').show()");     
         
         
@@ -228,12 +227,18 @@ public class PlcTuController implements Serializable {
     }
 
     public void seleccionarProducto(Producto producto) {
-        this.producto = producto;
-        productoSeleccionado = true;
-        RequestContext requestContext = RequestContext.getCurrentInstance();
-        requestContext.update("PlcTuListForm");
-        requestContext.execute("PF('seleccionarProducto').hide()");
-
+        
+            this.producto = producto;
+            productoSeleccionado = true;
+            /*RequestContext requestContext = RequestContext.getCurrentInstance();
+            requestContext.execute("PF('seleccionarProducto').hide()");
+            requestContext.update("informacionProducto");
+            requestContext.update("plcTuListForm");*/
+        
+      
+        
+        
+        
     }
 
     @FacesConverter(forClass = PlcTu.class)

@@ -33,7 +33,7 @@ public class ClienteFacade extends AbstractFacade<Cliente> {
 
     public List<Cliente> buscarPorNombresApellidos(String nombresApellidos) {
         Query query = getEntityManager().createNamedQuery("Cliente.findByNombresApellidos");
-        query.setParameter("nombresApellidos", "%" + nombresApellidos + "%");
+        query.setParameter("nombresApellidos","%" +nombresApellidos+"%" );
         List<Cliente> resultList = query.getResultList();
         return resultList;
     }
@@ -41,7 +41,7 @@ public class ClienteFacade extends AbstractFacade<Cliente> {
     public Cliente buscarPorCedula(String cedula) {
         Cliente cliente = new Cliente();
         Query query = getEntityManager().createNamedQuery("Cliente.findByCedula");
-        query.setParameter("cedula", "%" + cedula + "%");
+        query.setParameter("cedula",cedula);
         List<Cliente> resultList = query.getResultList();
 
         if (resultList.size() > 0) {

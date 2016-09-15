@@ -6,18 +6,17 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 
-    <p:dialog id="PlcTuEditDlg" widgetVar="PlcTuEditDialog" modal="true" resizable="false"  header="Editar información PLC_TU">
+    <p:dialog id="PlcTuEditDlg" widgetVar="PlcTuEditDialog" modal="true" resizable="false" closable="false" header="Editar información PLC_TU">
         <h:form id="PlcTuEditForm" >
             <p:panelGrid styleClass="panelgrid" id="panel" >
                 <p:row>
                     <p:column>
                         <p:outputLabel value="Dirección MAC PLC_TU" />
-                        <h:outputLabel style="font-style: italic;font-size: 16px;text-align: left; color:red;" 
-                                       value="*" />
                     </p:column>
                     <p:column>
                         <p:inputText id="macPlcTu" 
                                      value="#{plcTuController.selected.macPlcTu}" 
+                                     disabled="true"
                                      title="Dirección MAC" 
                                      required="true" 
                                      requiredMessage="Campo requerido"
@@ -25,7 +24,7 @@
                                      placeholder="16 caracteres"
                                      >
                             <f:ajax event="blur" render="@this" />
-                            <f:validator validatorId="ValidarCampo16Caracteres"/>
+                            
                         </p:inputText>
 
                     </p:column>
@@ -179,7 +178,7 @@
                 <p:row>
                     <p:column colspan="3" style="text-align: center;">
                         <p:commandButton actionListener="#{plcTuController.editarInfoPlcTu}"  value="Guardar" update=":PlcTuListForm:datalist,panel" ajax="true"/>
-                        <p:commandButton value="Cancelar" onclick="PF('PlcTuEditDialog').hide()" action="#{plcTuController.newObj()}"/>
+                        <p:commandButton value="Cancelar" onclick="PF('PlcTuEditDialog').hide()" actionListener="#{plcTuController.newObj()}"/>
                     </p:column>
 
                 </p:row>

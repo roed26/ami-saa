@@ -11,17 +11,14 @@
         <title>Estado amarre clientes </title>
     </h:head>
     <h:body>
-        <h:form id="datosIngreso">
-            <h:panelGrid columns="2"> 
-                <p:outputLabel value="Seleccione un cliente para conocer el estado de amarre " style="color: black;font-weight: bold; font-size: 14px;" />                      
-                <p:commandButton value="Seleccionar cliente" 
+        <h:form id="datosIngreso" >
+            <h:panelGrid columns="2" > 
+                <p:commandButton style="left: 850px" action="#{clienteController.cambiarEstadoSeleccion}" value="Realizar nueva consulta" 
                                  onclick="PF('seleccionarCliente').show()" />
             </h:panelGrid>
             <br/>
-            <br/>
         </h:form>
 
-        <p:separator/>
         <h:form id="clienteSeleccionado">
 
             <p:outputLabel style="font-weight: bold; font-size: 16px; color: black;" value="Información de consumo" rendered="#{clienteController.clienteSeleccionado}"/>
@@ -29,10 +26,18 @@
             <br/>
             <p:panelGrid  rendered="#{clienteController.clienteSeleccionado}">
                 <p:row>
-                    <p:column rowspan="9">
+                    <p:column rowspan="9" rendered="#{!clienteController.sinConsumo}">
                         <p:barChart value="#{clienteController.consumo}" legendPosition="ne" 
-                                    title="Consumo" style="height:400px; width: 500px;"
+                                    title="Consumo" style="height:400px; width: 500px; color: red;"
                                     xaxisLabel="dias" yaxisLabel="Kw/h" 
+
+                                    />
+                    </p:column>
+                    <p:column rowspan="9" rendered="#{clienteController.sinConsumo}">
+                        <p:barChart value="#{clienteController.consumo}" legendPosition="ne" 
+                                    title="El cliente no registra consumo en esta fecha" style="height:400px; width: 500px; color: red;"
+                                    xaxisLabel="dias" yaxisLabel="Kw/h" 
+
                                     />
                     </p:column>
                     <p:column>
@@ -112,7 +117,7 @@
                         <p:graphicImage width="20" height="20" value="./../resources/img/estado/activo.png"/>
                     </p:column>
                     <p:column style="vertical-align: middle;" rendered="#{!clienteController.activo}">
-                        <p:outputLabel style="font-size: 17px; font-weight: bold;" value="No hay amarre"/>
+                        <p:outputLabel style="font-size: 17px; font-weight: bold;" value="Sin amarre"/>
                     </p:column>
                     <p:column colspan="2" style="vertical-align: middle;" rendered="#{!clienteController.activo}">
                         <p:graphicImage width="20" height="20" value="./../resources/img/estado/inactivo.png"/>
@@ -121,7 +126,8 @@
                 </p:row>
             </p:panelGrid>
         </h:form>
-        <p:dialog rendered="#{!clienteController.clienteSeleccionado}" header="Seleccionar cliente" resizable="false" width="850" position="center" modal="true"  widgetVar="seleccionarCliente">
+        <p:dialog visible="#{!clienteController.clienteSeleccionado}" header="Seleccionar cliente" resizable="false" width="850" position="center" modal="true"  widgetVar="seleccionarCliente">
+            <p:outputLabel value="Seleccione un cliente para conocer su consumo en un determinado periodo de tiempo " style="background: #c2dfef; color: black;font-weight: bold; font-size: 16px;" />                    
             <h:form id="ClienteListForm">
                 <br/>
                 <h:panelGrid columns="2">
@@ -138,7 +144,6 @@
                              rows="10"
                              rowsPerPageTemplate="5,10"
                              >
-
                     <p:column >
                         <f:facet name="header">
                             <h:outputText value="Cédula"/>

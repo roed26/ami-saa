@@ -7,17 +7,23 @@ import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
-@FacesValidator(value = "ValidarCampo10Numeros")
-public class ValidarCampo10Numero implements Validator {
+@FacesValidator(value = "ValidarCampoNumericoCelular")
+public class ValidarCampoNumericoCelular implements Validator {
 
     @Override
     public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
         String texto = String.valueOf(value);
 
-        if (texto.length() != 10 && texto.length() != 0) {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Deben ser 10 números.");
+        try {
+            if (!texto.equalsIgnoreCase("")) {
+                long campo = Long.parseLong(texto);
+            }
+
+        } catch (Exception e) {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Campo solo puede contener números.", "Campo solo puede contener números.");
             throw new ValidatorException(msg);
-        } 
+        }
 
     }
+
 }

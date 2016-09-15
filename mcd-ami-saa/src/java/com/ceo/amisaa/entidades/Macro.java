@@ -79,8 +79,8 @@ public class Macro implements Serializable {
     private Trafo idTrafo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idMacro")
     private Collection<ParametrosMacro> parametrosMacroCollection;
-    @OneToMany(mappedBy = "idMacro")
-    private Collection<EventosConsumo> eventosConsumoCollection;
+    //@OneToMany(mappedBy = "idMacro")
+    //private Collection<EventosConsumo> eventosConsumoCollection;
 
     public Macro() {
     }
@@ -163,14 +163,14 @@ public class Macro implements Serializable {
         this.parametrosMacroCollection = parametrosMacroCollection;
     }
 
-    @XmlTransient
+    /*@XmlTransient
     public Collection<EventosConsumo> getEventosConsumoCollection() {
         return eventosConsumoCollection;
     }
 
     public void setEventosConsumoCollection(Collection<EventosConsumo> eventosConsumoCollection) {
         this.eventosConsumoCollection = eventosConsumoCollection;
-    }
+    }*/
 
     @Override
     public int hashCode() {

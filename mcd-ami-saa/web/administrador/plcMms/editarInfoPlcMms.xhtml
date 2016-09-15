@@ -6,7 +6,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 
-    <p:dialog id="PlcMmsEditDlg" widgetVar="PlcMmsEditDialog" modal="true" resizable="false" header="Editar información plc_mms">
+    <p:dialog id="PlcMmsEditDlg" widgetVar="PlcMmsEditDialog" closable="false" modal="true" resizable="false" header="Editar información plc_mms">
         <h:form id="PlcMmsEditForm">  
             <p:panelGrid styleClass="panelgrid" id="panel">
                 <p:row>
@@ -18,6 +18,7 @@
                     <p:column>
                         <p:inputText id="macPlcMms" 
                                      value="#{plcMmsController.selected.macPlcMms}" 
+                                     disabled="true"
                                      title="Dirección MAC" 
                                      required="true" 
                                      requiredMessage="Campo requerido"
@@ -25,7 +26,7 @@
                                      placeholder="16 caracteres"
                                      >
                             <f:ajax event="blur" render="@this" />
-                            <f:validator validatorId="ValidarCampo16Caracteres"/>
+                            
                         </p:inputText>        
                     </p:column>
                     <p:column>
@@ -172,13 +173,11 @@
                         <p:outputLabel value="Número de celular" />                        
                     </p:column>
                     <p:column>
-                        <p:inputText id="idPlcMms" value="#{plcMmsController.selected.numeroCelular}" 
+                        <p:inputText id="numerocelular" value="#{plcMmsController.selected.numeroCelular}" 
                                      title="Número de celular" 
-                                     required="true" 
-                                     requiredMessage="Campo requerido"
                                      placeholder="Solo números"
                                      >
-                            <f:validator validatorId="ValidarCampoNumerico"/>
+                            <f:validator validatorId="ValidarCampoNumericoCelular"/>
                             <f:validator validatorId="ValidarCampo10Numeros"/>
                             <f:validator validatorId="ValidarCampoNumeroCelular"/>
 
@@ -187,7 +186,7 @@
 
                     </p:column>
                     <p:column>
-                        <p:message for="idPlcMms"/>
+                        <p:message for="numerocelular"/>
                     </p:column>
                 </p:row>  
                 <p:row>
@@ -195,13 +194,7 @@
                         <p:outputLabel value="Vinculado al trafo" />
                     </p:column>
                     <p:column>
-                        <p:selectOneMenu id="idProdcto" value="#{plcMmsController.selected.idTrafo}" >
-                            <f:selectItem itemLabel="Seleccione..." itemValue="0" />
-                            <f:selectItems value="#{trafoController.itemsAvailableSelectOne}"
-                                           var="idTrafoItem"
-                                           itemLabel="#{idTrafoItem.idTrafo}"
-                                           itemValue="#{idTrafoItem}"/>
-                        </p:selectOneMenu>
+                        <p:outputLabel id="idtrafo" value="#{plcMmsController.selected.idTrafo}"/>
                     </p:column>
 
                 </p:row>

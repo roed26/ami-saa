@@ -67,6 +67,14 @@ public class PlcMmsController implements Serializable {
         return ejbPlcMms;
     }
 
+    public Trafo getTrafo() {
+        return trafo;
+    }
+
+    public void setTrafo(Trafo trafo) {
+        this.trafo = trafo;
+    }
+
     public boolean isTrafoSeleccionado() {
         return trafoSeleccionado;
     }
@@ -110,11 +118,6 @@ public class PlcMmsController implements Serializable {
             items = getFacade().findAll();
         }
         return items;
-    }
-
-    public void seleccionarProducto(Trafo trafo) {
-        this.trafo = trafo;
-        trafoSeleccionado = true;
     }
 
     private void persist(PersistAction persistAction, String successMessage) {
@@ -207,9 +210,9 @@ public class PlcMmsController implements Serializable {
     public void seleccionarTrafo(Trafo trafo) {
         this.trafo = trafo;
         trafoSeleccionado = true;
-        RequestContext requestContext = RequestContext.getCurrentInstance();
+        /*RequestContext requestContext = RequestContext.getCurrentInstance();
         requestContext.update("PlcMmsListForm");
-        requestContext.execute("PF('seleccionarTrafo').hide()");
+        requestContext.execute("PF('seleccionarTrafo').hide()");*/
 
     }
     public void newObj() {
@@ -244,6 +247,10 @@ public class PlcMmsController implements Serializable {
     public void editarInfoPlcMms() {
         RequestContext requestContext = RequestContext.getCurrentInstance();
         if (this.objPlcMms != null) {
+            
+            if(this.objPlcMms.getNumeroCelular().equalsIgnoreCase("")){
+             this.objPlcMms.setNumeroCelular(null);
+            }            
             this.ejbPlcMms.edit(this.objPlcMms);
             requestContext.execute("PF('PlcMmsEditDialog').hide()");
             requestContext.execute("PF('edicionCorrecta').show()");

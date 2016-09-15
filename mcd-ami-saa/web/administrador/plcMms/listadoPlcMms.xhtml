@@ -23,8 +23,14 @@
                          rows="10"
                          style="text-align: center;"
                          rowsPerPageTemplate="10,20,30,40,50"
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
                          emptyMessage="No se encontraron dispositivos PLC_MMS"
                          >
+                
+                <f:facet name="header" >
+                    <h:outputLabel value="Listado de dispositivos PLC_MMS registrados en el sistema" style="font-size: 17px; font-weight: bold;"/>
+                </f:facet>
+                
                 <p:column>
                     <f:facet name="header">
                         <h:outputText value="Identificador PLC_MMS"/>
@@ -43,13 +49,7 @@
                     </f:facet>
                     <h:outputText value="#{item.versionFw}"/>
                 </p:column>
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText value="Estado"/>
-                    </f:facet>
-                    <h:outputText rendered="#{item.estado.equalsIgnoreCase('A')}" value="Activo"/>
-                    <h:outputText rendered="#{item.estado.equalsIgnoreCase('D')}" value="Desactivo"/>
-                </p:column>
+                
 
                 <p:column style="width: 120px; background: #EBEDEB;">
                     <f:facet name="header">

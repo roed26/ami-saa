@@ -7,7 +7,7 @@
       xmlns:p="http://primefaces.org/ui">
 
 
-    <p:dialog id="PlcMcViewDlg" widgetVar="PlcMcViewDialog" modal="true" resizable="false" header="Información plc_mc">
+    <p:dialog id="PlcMcViewDlg" closable="false" widgetVar="PlcMcViewDialog" modal="true" resizable="false" header="Información plc_mc">
         <h:form id="PlcMcViewForm">
             <p:panelGrid styleClass="panelgrid">
                 <p:row>
@@ -16,13 +16,13 @@
 
                     </p:column>
                     <p:column>
-                        <h:outputText value="#{plcMcController.selected.idPlcMc}" title="#{bundle.ViewPlcMcTitle_idPlcMc}"/>        
+                        <h:outputText value="#{plcMcController.selected.idPlcMc}" />        
                     </p:column>
                     <p:column style="background: #F2F5F9;">
                         <h:outputText value="Dirección MAC PLC_MC"/>
                     </p:column>
                     <p:column>
-                        <h:outputText value="#{plcMcController.selected.macPlcMc}" title="#{bundle.ViewPlcMcTitle_macPlcMc}"/>        
+                        <h:outputText value="#{plcMcController.selected.macPlcMc}" />        
                     </p:column>
                 </p:row>
                 <p:row>
@@ -30,13 +30,14 @@
                         <h:outputText value="Versión firmware"/>
                     </p:column>
                     <p:column>
-                        <h:outputText value="#{plcMcController.selected.versionFw}" title="#{bundle.ViewPlcMcTitle_versionFw}"/>        
+                        <h:outputText value="#{plcMcController.selected.versionFw}" />        
                     </p:column>
                     <p:column style="background: #F2F5F9;">
                         <h:outputText value="Estado"/>
                     </p:column>
                     <p:column>
-                        <h:outputText value="#{plcMcController.selected.estado}" title="#{bundle.ViewPlcMcTitle_estado}"/>        
+                        <h:outputText rendered="#{plcMcController.selected.estado.equalsIgnoreCase('A')}" value="Activo"/>
+                            <h:outputText rendered="#{plcMcController.selected.estado.equalsIgnoreCase('D')}" value="Desactivo"/>
                     </p:column>
                 </p:row>
                 <p:row>
@@ -44,13 +45,13 @@
                         <h:outputText value="Ganancia de transmisión (V)"/>
                     </p:column>
                     <p:column>
-                        <h:outputText value="#{plcMcController.selected.gtx}" title="#{bundle.ViewPlcMcTitle_gtx}"/>        
+                        <h:outputText value="#{plcMcController.selected.gtx}" />        
                     </p:column>
                     <p:column style="background: #F2F5F9;">
                         <h:outputText value="Ganancia de recepción (mV)"/>
                     </p:column>
                     <p:column>
-                        <h:outputText value="#{plcMcController.selected.grx}" title="#{bundle.ViewPlcMcTitle_grx}"/>
+                        <h:outputText value="#{plcMcController.selected.grx}" />
                     </p:column>
                 </p:row>
                 <p:row>
@@ -58,17 +59,17 @@
                         <h:outputText value="Tasa de transmisión (bps)"/>
                     </p:column>
                     <p:column>
-                        <h:outputText value="#{plcMcController.selected.bps}" title="#{bundle.ViewPlcMcTitle_bps}"/>
+                        <h:outputText value="#{plcMcController.selected.bps}" />
                     </p:column>
                     <p:column style="background: #F2F5F9;">
                         <h:outputText value="Retardo de transmisión (ms)"/>
                     </p:column>
                     <p:column>
-                        <h:outputText value="#{plcMcController.selected.rtx}" title="#{bundle.ViewPlcMcTitle_rtx}"/>
+                        <h:outputText value="#{plcMcController.selected.rtx}" />
                     </p:column>
                 </p:row>
             </p:panelGrid>
-            <p:commandButton value="Cerrar" onclick="PlcMcViewDialog.hide()"/>
+            <p:commandButton value="Cerrar" actionListener="#{plcMcController.newObj()}" onclick="PlcMcViewDialog.hide()"/>
 
         </h:form>
     </p:dialog>

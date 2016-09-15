@@ -13,14 +13,12 @@
     <h:body>
         <h:form id="datosIngreso">
             <h:panelGrid columns="2"> 
-                <p:outputLabel value="Seleccione un trafo para ver la lista de cliente de este " style="color: black;font-weight: bold; font-size: 14px;" />                    
-                <p:commandButton value="Seleccionar trafo" 
+                <p:commandButton style="left: 840px;" value="Seleccionar nuevo trafo" 
                                  onclick="PF('seleccionarTrafo').show()" />
-            </h:panelGrid>
-            
+            </h:panelGrid>            
         </h:form>
         <p:separator/>
-        <h:form id="trafoSeleccionado">
+        <h:form id="trafoSeleccionado" rendered="#{trafoController.trafoSeleccionado}">
             <p:outputLabel style="font-weight: bold; font-size: 16px; color: black;" value="Listado de clientes en el trafo " rendered="#{trafoController.trafoSeleccionado}"/>
             <p:outputLabel style="font-weight: bold; font-size: 18px; color: blue;" value=" #{trafoController.selected.idTrafo}" rendered="#{trafoController.trafoSeleccionado}"/>
             <p:separator/>
@@ -70,7 +68,8 @@
                     </p:dataTable>
             </h:form>
         </h:form>
-        <p:dialog header="Seleccionar trafo" resizable="false" width="850" position="center" modal="true"  widgetVar="seleccionarTrafo">
+        <p:dialog visible="#{!trafoController.trafoSeleccionado}" header="Seleccionar trafo" resizable="false" width="450" position="center" modal="true"  widgetVar="seleccionarTrafo">
+            <p:outputLabel value="Seleccione un trafo para visualizar la lista de cliente vinculados " style="color: black;font-weight: bold; font-size: 14px;" />                    
             <h:form id="ClienteListForm">
                 <br/>
                 <h:panelGrid columns="2">
@@ -92,18 +91,6 @@
                             </f:facet>
                             <h:outputText value="#{item.idTrafo}"/>
                         </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="Latitud"/>
-                            </f:facet>
-                            <h:outputText value="#{item.latitud}"/>
-                        </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="Longitud"/>
-                            </f:facet>
-                            <h:outputText value="#{item.longitud}"/>
-                        </p:column>
                         <p:column style="width: 120px; background: #EBEDEB;">
                             <f:facet name="header">
                                 <h:outputText value="Accion"/>
@@ -114,6 +101,121 @@
                     </p:dataTable>
                 
             </h:form>
+        </p:dialog>
+        
+        <p:dialog header="Seleccionar rango de fecha"  resizable="false" closable="false" position="center" modal="true"  widgetVar="seleccionarFecha">
+            <h:form id="formFecha" style="text-align: center; font-weight: bold; color: black;">
+                <p:outputLabel style="font-weight: bold; font-size: 14px; " value="Seleccione el rango de fecha para conocer el estado de amarre del cliente" />
+                <br/>
+                <br/>
+                <p:panelGrid id="panel">
+                    <p:row>
+                        <p:column colspan="2">
+                            <p:selectOneRadio id="rangoFecha" 
+                                              value="#{trafoController.rangoFecha}" 
+                                              valueChangeListener="#{trafoController.cambiarRangoFecha}"
+                                              required="true"
+                                              requiredMessage="Seleccione un rango de fecha"
+                                              >
+                                <f:selectItem itemValue="1" itemLabel=" Última semana " />
+                                <f:selectItem itemValue="2" itemLabel=" Último mes " />
+                                <f:selectItem itemValue="3" itemLabel="Seleccionar rango de fecha " />
+                                <f:ajax  execute="ocupacion"  render="panel"/>
+                            </p:selectOneRadio>
+                        </p:column>
+                        <p:column>
+                            <p:message for="rangoFecha"/>
+                        </p:column>
+
+                    </p:row>
+                    <p:row rendered="#{trafoController.rangoFechaCambiado1}">
+                        <p:column >
+                            <h:outputText value="Fecha de inicio"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{trafoController.formatoFecha.format(trafoController.fechaInicio)}"/>
+                        </p:column>
+
+                    </p:row>
+                    <p:row rendered="#{trafoController.rangoFechaCambiado1}">
+                        <p:column >
+                            <h:outputText value="Fecha de fin"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{trafoController.formatoFecha.format(trafoController.fechaFin)}"/>
+                        </p:column>
+
+                    </p:row>
+                    <p:row rendered="#{trafoController.rangoFechaCambiado2}">
+                        <p:column >
+                            <h:outputText value="Fecha de inicio"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{trafoController.formatoFecha.format(trafoController.fechaInicio)}"/>
+                        </p:column>
+
+                    </p:row>
+                    <p:row rendered="#{trafoController.rangoFechaCambiado2}">
+                        <p:column >
+                            <h:outputText value="Fecha de fin"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{trafoController.formatoFecha.format(trafoController.fechaFin)}"/>
+                        </p:column>
+
+                    </p:row>
+                    <p:row rendered="#{trafoController.rangoFechaCambiado3}">
+                        <p:column >
+                            <h:outputText value="Fecha de inicio"/>
+                        </p:column>
+                        <p:column>
+                            <p:calendar value="#{trafoController.fechaInicio}" size="14" id="fechaInicio"  required="true" 
+                                        requiredMessage="Seleccione una fecha de inicio."
+                                        showOn="button"
+                                        navigator="true" yearRange="c-100:c" pattern="yyyy-MM-dd" 
+                                        placeholder="aaaa-mm-dd"
+                                        >
+                                <f:validator validatorId="ValidarCampoFecha"/>
+                            </p:calendar>
+                        </p:column>
+                        <p:column>
+                            <p:message for="fechaInicio"/>
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{trafoController.rangoFechaCambiado3}">
+                        <p:column >
+                            <h:outputText value="Fecha de fin"/>
+                        </p:column>
+                        <p:column >
+                            <p:calendar value="#{trafoController.fechaFin}" size="14" id="fechaFin"  required="true" 
+                                        requiredMessage="Seleccione una fecha de fin." 
+                                        showOn="button" navigator="true" yearRange="c-100:c" pattern="yyyy-MM-dd" 
+                                        placeholder="aaaa-mm-dd"
+                                        >
+                                <f:validator validatorId="ValidarCampoFecha"/>                               
+                            </p:calendar>
+                        </p:column>
+                        <p:column>
+                            <p:message for="fechaFin"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="2" style="text-align: right;">
+                            <p:commandButton 
+                                value="Aceptar"  
+                                ajax="true" 
+                                update="panel"
+                                action="#{trafoController.procesarConsulta()}"/>
+                            <p:commandButton 
+                                value="Cancelar"  
+                                ajax="false" 
+                                action="#{trafoController.cancelarConsulta()}"/>
+                        </p:column>
+                    </p:row>                   
+                </p:panelGrid>
+
+            </h:form>
+
         </p:dialog>
         
 

@@ -23,7 +23,10 @@ import java.io.Serializable;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -41,6 +44,7 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import javax.faces.event.ValueChangeEvent;
 import org.primefaces.context.RequestContext;
 
 @Named("trafoController")
@@ -86,8 +90,16 @@ public class TrafoController implements Serializable {
     private ArrayList<String> resultado;
     private boolean clientes;
     private String trama;
+    private Date fechaInicio;
+    private Date fechaFin;
+    private String rangoFecha;
+    private boolean rangoFechaCambiado1;
+    private boolean rangoFechaCambiado2;
+    private boolean rangoFechaCambiado3;
+    private SimpleDateFormat formatoFecha;
 
     public TrafoController() {
+        this.formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
     }
 
     @PostConstruct
@@ -98,6 +110,7 @@ public class TrafoController implements Serializable {
         listaProductos = new ArrayList<>();
         resultado = new ArrayList<>();
         estadosDeAmarre = new ArrayList<>();
+        this.clientes = true;
 
     }
 
@@ -133,6 +146,62 @@ public class TrafoController implements Serializable {
 
     public void setClientes(boolean clientes) {
         this.clientes = clientes;
+    }
+
+    public SimpleDateFormat getFormatoFecha() {
+        return formatoFecha;
+    }
+
+    public void setFormatoFecha(SimpleDateFormat formatoFecha) {
+        this.formatoFecha = formatoFecha;
+    }
+
+    public Date getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(Date fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public Date getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(Date fechaFin) {
+        this.fechaFin = fechaFin;
+    }
+
+    public String getRangoFecha() {
+        return rangoFecha;
+    }
+
+    public void setRangoFecha(String rangoFecha) {
+        this.rangoFecha = rangoFecha;
+    }
+
+    public boolean isRangoFechaCambiado1() {
+        return rangoFechaCambiado1;
+    }
+
+    public void setRangoFechaCambiado1(boolean rangoFechaCambiado1) {
+        this.rangoFechaCambiado1 = rangoFechaCambiado1;
+    }
+
+    public boolean isRangoFechaCambiado2() {
+        return rangoFechaCambiado2;
+    }
+
+    public void setRangoFechaCambiado2(boolean rangoFechaCambiado2) {
+        this.rangoFechaCambiado2 = rangoFechaCambiado2;
+    }
+
+    public boolean isRangoFechaCambiado3() {
+        return rangoFechaCambiado3;
+    }
+
+    public void setRangoFechaCambiado3(boolean rangoFechaCambiado3) {
+        this.rangoFechaCambiado3 = rangoFechaCambiado3;
     }
 
     public boolean isTrafoSeleccionado() {
@@ -216,6 +285,37 @@ public class TrafoController implements Serializable {
         return items;
     }
 
+    public void cambiarRangoFecha(ValueChangeEvent e) {
+        String rangoSeleccionado = e.getNewValue().toString();
+        if (rangoSeleccionado.equals("1")) {
+            this.rangoFechaCambiado1 = true;
+            this.rangoFechaCambiado2 = false;
+            this.rangoFechaCambiado3 = false;
+            Calendar calendar = Calendar.getInstance();
+            this.fechaInicio = calendar.getTime();
+            calendar.setTime(fechaInicio);
+            calendar.add(Calendar.DAY_OF_YEAR, -7);
+            this.fechaFin = calendar.getTime();
+
+        } else if (rangoSeleccionado.equals("2")) {
+            this.rangoFechaCambiado1 = false;
+            this.rangoFechaCambiado2 = true;
+            this.rangoFechaCambiado3 = false;
+            Calendar calendar = Calendar.getInstance();
+            this.fechaInicio = calendar.getTime();
+            calendar.setTime(fechaInicio);
+            calendar.add(Calendar.DAY_OF_YEAR, -30);
+            this.fechaFin = calendar.getTime();
+
+        } else {
+            this.fechaInicio = null;
+            this.fechaFin = null;
+            this.rangoFechaCambiado1 = false;
+            this.rangoFechaCambiado2 = false;
+            this.rangoFechaCambiado3 = true;
+        }
+    }
+
     private void calcularEstadoAmarre() {
         /*
         for (int i = 0; i < listaMedidores.size(); i++) {
@@ -288,10 +388,26 @@ public class TrafoController implements Serializable {
     }
 
     public void seleccionarTrafo(Trafo trafo) {
-        reiniciarListas();
         this.selected = trafo;
         this.trafoSeleccionado = true;
-        this.clientes = false;
+        this.rangoFechaCambiado1 = false;
+        this.rangoFechaCambiado2 = false;
+        this.rangoFechaCambiado3 = false;
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        requestContext.execute("PF('seleccionarTrafo').hide()");
+        requestContext.execute("PF('seleccionarFecha').show()");
+
+    }
+
+    public void cancelarConsulta() {
+        this.selected = new Trafo();
+        this.trafoSeleccionado = false;
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        requestContext.execute("PF('seleccionarFecha').hide()");
+    }
+
+    public void procesarConsulta() {
+        reiniciarListas();
         this.macro = ejbMacro.buscarMacroPorTrafoObj(selected);
         if (macro != null) {
             this.cargarLista();
@@ -300,14 +416,37 @@ public class TrafoController implements Serializable {
 
         }
         RequestContext requestContext = RequestContext.getCurrentInstance();
-        requestContext.execute("PF('seleccionarTrafo').hide()");
+        requestContext.execute("PF('seleccionarFecha').hide()");
         requestContext.update("trafoSeleccionado");
         requestContext.update("tablaListadoClientes");
+    }
+
+    public void seleccionarTrafoSolicitud(Trafo trafo) {
+
+        this.selected = trafo;
+        this.trafoSeleccionado = true;
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        requestContext.execute("PF('seleccionarTrafo').hide()");
+        requestContext.execute("PF('enviarSolicitud').show()");
+
+    }
+
+    public void cancelarSolicitud() {
+        this.selected = null;
+        trafoSeleccionado = false;
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        requestContext.execute("PF('enviarSolicitud').hide()");
+        requestContext.update("@all");
 
     }
 
     public void enviarSolicitud() {
-        trama = "Trafo seleccionado: " + selected.getIdTrafo();
+        //trama = "Trafo seleccionado: " + selected.getIdTrafo();
+        this.macro = ejbMacro.buscarMacroPorTrafoObj(selected);
+        if (macro != null) {
+            this.trama = "$@A0x5101" + macro.getIdMacro();
+        }
+
         String numeroCelular = "3114760156";
 
         RequestContext requestContext = RequestContext.getCurrentInstance();
@@ -319,7 +458,7 @@ public class TrafoController implements Serializable {
         context.renderResponse();
 
         try {
-            
+
             String data = "";
 
             data += "username=" + URLEncoder.encode("roed26", "ISO-8859-1");
@@ -327,7 +466,7 @@ public class TrafoController implements Serializable {
             data += "&message=" + URLEncoder.encode(trama, "ISO-8859-1");
             data += "&want_report=1";
             data += "&msisdn=57" + numeroCelular;
-           
+
             URL url = new URL("https://bulksms.vsms.net/eapi/submission/send_sms/2/2.0");
 
             URLConnection conn = url.openConnection();
@@ -360,6 +499,8 @@ public class TrafoController implements Serializable {
                     clientes = true;
                 }
             }
+        } else {
+            this.clientes = false;
         }
         /* if (this.ejbMacro.buscarMacroPorTrafo(selected).size() > 0) {
             this.macro = this.ejbMacro.buscarMacroPorTrafo(selected).get(0);

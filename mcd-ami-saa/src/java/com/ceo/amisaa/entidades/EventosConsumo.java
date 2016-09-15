@@ -35,7 +35,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EventosConsumo.findByPotencia", query = "SELECT e FROM EventosConsumo e WHERE e.potencia = :potencia"),
     @NamedQuery(name = "EventosConsumo.findByVoltaje", query = "SELECT e FROM EventosConsumo e WHERE e.voltaje = :voltaje"),
     @NamedQuery(name = "EventosConsumo.findByCorriente", query = "SELECT e FROM EventosConsumo e WHERE e.corriente = :corriente"),
-    @NamedQuery(name = "EventosConsumo.findByFechaHora", query = "SELECT e FROM EventosConsumo e WHERE e.fechaHora = :fechaHora")})
+    @NamedQuery(name = "EventosConsumo.findByFechaHora", query = "SELECT e FROM EventosConsumo e WHERE e.fechaHora = :fechaHora"),
+    @NamedQuery(name = "EventosConsumo.findBylistaEventosPlcTu", query = "SELECT e FROM EventosConsumo e WHERE e.macPlcTu = :plcTu AND(e.fechaHora BETWEEN :fechaHoraInicio AND :fechaHoraFin)")
+
+})
 public class EventosConsumo implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -65,12 +68,6 @@ public class EventosConsumo implements Serializable {
     @Column(name = "fecha_hora")
     @Temporal(TemporalType.DATE)
     private Date fechaHora;
-    @JoinColumn(name = "id_macro", referencedColumnName = "id_macro")
-    @ManyToOne
-    private Macro idMacro;
-    @JoinColumn(name = "mac_plc_mc", referencedColumnName = "mac_plc_mc")
-    @ManyToOne(optional = false)
-    private PlcMc macPlcMc;
     @JoinColumn(name = "mac_plc_mms", referencedColumnName = "mac_plc_mms")
     @ManyToOne(optional = false)
     private PlcMms macPlcMms;
@@ -140,22 +137,6 @@ public class EventosConsumo implements Serializable {
 
     public void setFechaHora(Date fechaHora) {
         this.fechaHora = fechaHora;
-    }
-
-    public Macro getIdMacro() {
-        return idMacro;
-    }
-
-    public void setIdMacro(Macro idMacro) {
-        this.idMacro = idMacro;
-    }
-
-    public PlcMc getMacPlcMc() {
-        return macPlcMc;
-    }
-
-    public void setMacPlcMc(PlcMc macPlcMc) {
-        this.macPlcMc = macPlcMc;
     }
 
     public PlcMms getMacPlcMms() {

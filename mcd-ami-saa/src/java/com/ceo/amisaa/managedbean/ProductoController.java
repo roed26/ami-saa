@@ -98,8 +98,7 @@ public class ProductoController implements Serializable {
         for (int i = 0; i < items.size(); i++) {
             if (items.get(i).getEstado().equalsIgnoreCase("A")&&items.get(i).getCedula()!=null) {
                 lista.add(items.get(i));
-                Cliente cliente;
-                cliente = ejbCliente.buscarPorCedula(items.get(i).getCedula().getCedula());
+                Cliente cliente = ejbCliente.buscarPorCedula(items.get(i).getCedula().getCedula());
                 if(cliente!=null){
                  listaClientes.add(cliente);
                 }

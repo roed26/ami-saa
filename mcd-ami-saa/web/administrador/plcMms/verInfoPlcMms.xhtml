@@ -7,17 +7,16 @@
       xmlns:p="http://primefaces.org/ui">
 
 
-    <p:dialog id="PlcMmsViewDlg" widgetVar="PlcMmsViewDialog" modal="true" resizable="false" header="Informacion plc_mms">
+    <p:dialog id="PlcMmsViewDlg" widgetVar="PlcMmsViewDialog" closable="false" modal="true" resizable="false" header="Informacion plc_mms">
         <h:form id="PlcMmsViewForm">
             <h:panelGroup id="display">
                 <p:panelGrid styleClass="panelgrid" rendered="#{plcMmsController.selected != null}">
                     <p:row>
                         <p:column style="background: #F2F5F9;">
                             <h:outputText value="Identificador PLC_MMS"/>
-
                         </p:column>
                         <p:column>
-                            <h:outputText value="#{plcMmsController.selected.idPlcMms}" title="#{bundle.ViewPlcMmsTitle_idPlcMms}"/>
+                            <h:outputText value="#{plcMmsController.selected.idPlcMms}" />
 
                         </p:column>
                         <p:column style="background: #F2F5F9;">
@@ -25,7 +24,7 @@
 
                         </p:column>
                         <p:column >
-                            <h:outputText value="#{plcMmsController.selected.macPlcMms}" title="#{bundle.ViewPlcMmsTitle_macPlcMms}"/>
+                            <h:outputText value="#{plcMmsController.selected.macPlcMms}" />
                         </p:column>
                     </p:row>
 
@@ -35,7 +34,7 @@
 
                         </p:column>
                         <p:column>
-                            <h:outputText value="#{plcMmsController.selected.versionFw}" title="#{bundle.ViewPlcMmsTitle_versionFw}"/>
+                            <h:outputText value="#{plcMmsController.selected.versionFw}" />
 
                         </p:column>
                         <p:column style="background: #F2F5F9;">
@@ -43,7 +42,8 @@
 
                         </p:column>
                         <p:column >
-                            <h:outputText value="#{plcMmsController.selected.estado}" title="#{bundle.ViewPlcMmsTitle_estado}"/>
+                            <h:outputText rendered="#{plcMmsController.selected.estado.equalsIgnoreCase('A')}" value="Activo"/>
+                            <h:outputText rendered="#{plcMmsController.selected.estado.equalsIgnoreCase('D')}" value="Desactivo"/>
                         </p:column>
                     </p:row>
 

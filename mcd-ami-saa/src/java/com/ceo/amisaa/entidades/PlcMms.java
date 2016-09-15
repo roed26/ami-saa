@@ -93,7 +93,6 @@ public class PlcMms implements Serializable {
     @Size(min = 1, max = 5)
     @Column(name = "rtx")
     private String rtx;
-    @Size(min = 1, max = 10)
     @Column(name = "numero_celular")
     private String numeroCelular;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "macPlcMms")

@@ -1,7 +1,5 @@
 package com.ceo.amisaa.validadores;
 
-//import com.unicauca.gymadmdoc.sessionbeans.MuUsuarioFacade;
-
 import com.ceo.amisaa.sessionbeans.PlcMmsFacade;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;

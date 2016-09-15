@@ -37,7 +37,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "PlcMc.findByGtx", query = "SELECT p FROM PlcMc p WHERE p.gtx = :gtx"),
     @NamedQuery(name = "PlcMc.findByGrx", query = "SELECT p FROM PlcMc p WHERE p.grx = :grx"),
     @NamedQuery(name = "PlcMc.findByBps", query = "SELECT p FROM PlcMc p WHERE p.bps = :bps"),
-    @NamedQuery(name = "PlcMc.findByRtx", query = "SELECT p FROM PlcMc p WHERE p.rtx = :rtx")})
+    @NamedQuery(name = "PlcMc.findByRtx", query = "SELECT p FROM PlcMc p WHERE p.rtx = :rtx"),
+    @NamedQuery(name = "PlcMc.findByDato", query = "SELECT p FROM PlcMc p WHERE LOWER(CONCAT(CONCAT(CONCAT(CONCAT(p.idPlcMc,' '),p.macPlcMc),' '),p.versionFw)) LIKE :dato")
+})
 public class PlcMc implements Serializable {
 
     @OneToMany(mappedBy = "macPlcMc")
@@ -86,8 +88,7 @@ public class PlcMc implements Serializable {
     @Size(min = 1, max = 5)
     @Column(name = "rtx")
     private String rtx;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "macPlcMc")
-    private Collection<EventosConsumo> eventosConsumoCollection;
+
     @OneToMany(mappedBy = "macPlcMc")
     private Collection<Producto> productoCollection;
 
@@ -173,15 +174,6 @@ public class PlcMc implements Serializable {
     }
 
     @XmlTransient
-    public Collection<EventosConsumo> getEventosConsumoCollection() {
-        return eventosConsumoCollection;
-    }
-
-    public void setEventosConsumoCollection(Collection<EventosConsumo> eventosConsumoCollection) {
-        this.eventosConsumoCollection = eventosConsumoCollection;
-    }
-
-    @XmlTransient
     public Collection<Producto> getProductoCollection() {
         return productoCollection;
     }
@@ -232,5 +224,5 @@ public class PlcMc implements Serializable {
     public void setEventosConsumoMcCollection(Collection<EventosConsumoMc> eventosConsumoMcCollection) {
         this.eventosConsumoMcCollection = eventosConsumoMcCollection;
     }
-    
+
 }

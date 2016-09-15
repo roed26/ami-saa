@@ -48,7 +48,7 @@ body {
     float: top;
     background: linear-gradient(to right,rgb(17,177,230)0%,rgb(34, 126, 156)51%,rgb(17,177,230) 100%);
     padding: 12px;
-    
+
     min-width: 125px;
 }
 
@@ -121,3 +121,21 @@ body {
     border-style: none !important
 
 }
+
+.ui-datatable .ui-paginator {
+    background:  transparent;
+    border:0;
+}
+
+.ui-paginator-page{
+    border: 0;
+    
+}
+.ui-datatable .ui-datatable-header {
+    border-bottom: 0px none;
+    background: transparent;
+    border: 0;
+    text-align: left;
+}
+
+

@@ -20,14 +20,16 @@
                 </p:inputText>                 
             </h:panelGrid>
             
-            <p:dataTable style="text-align: center;" id="datalist" value="#{plcTuController.items}" var="item"
+            <p:dataTable  style="text-align: center;" id="datalist" value="#{plcTuController.items}" var="item"
                          paginator="true"
                          rowKey="#{item.idPlcTu}"
                          rows="10"
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
                          rowsPerPageTemplate="10,20,30,40,50"
                          emptyMessage="No se encontraron dispositivos PLC_TU"
+                         tableStyle="table-layout:auto"
                          >
-                <f:facet name="header">
+                <f:facet name="header" >
                     <h:outputLabel value="Listado de dispositivos PLC_TU registrados en el sistema" style="font-size: 17px; font-weight: bold;"/>
                 </f:facet>
 
@@ -48,13 +50,6 @@
                         <h:outputText value="Versión firmware"/>
                     </f:facet>
                     <h:outputText value="#{item.versionFw}"/>
-                </p:column>
-                <p:column style="width: 120px;">
-                    <f:facet name="header">
-                        <h:outputText value="Estado"/>
-                    </f:facet>
-                    <h:outputText rendered="#{item.estado.equalsIgnoreCase('A')}" value="Activo"/>
-                    <h:outputText rendered="#{item.estado.equalsIgnoreCase('D')}" value="Desactivo"/>
                 </p:column>
 
                 <p:column >

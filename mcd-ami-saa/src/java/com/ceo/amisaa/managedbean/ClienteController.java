@@ -2,6 +2,7 @@ package com.ceo.amisaa.managedbean;
 
 import com.ceo.amisaa.entidades.Cliente;
 import com.ceo.amisaa.entidades.EventosAmarre;
+import com.ceo.amisaa.entidades.EventosConsumo;
 import com.ceo.amisaa.entidades.Macro;
 import com.ceo.amisaa.entidades.Medidor;
 import com.ceo.amisaa.entidades.PlcMms;
@@ -12,6 +13,7 @@ import com.ceo.amisaa.managedbean.util.JsfUtil;
 import com.ceo.amisaa.managedbean.util.JsfUtil.PersistAction;
 import com.ceo.amisaa.sessionbeans.ClienteFacade;
 import com.ceo.amisaa.sessionbeans.EventosAmarreFacade;
+import com.ceo.amisaa.sessionbeans.EventosConsumoFacade;
 import com.ceo.amisaa.sessionbeans.MacroFacade;
 import com.ceo.amisaa.sessionbeans.MedidorFacade;
 import com.ceo.amisaa.sessionbeans.PlcMmsFacade;
@@ -64,6 +66,8 @@ public class ClienteController implements Serializable {
     private TrafoFacade ejbTrafo;
     @EJB
     private EventosAmarreFacade ejbEventosAmarre;
+    @EJB
+    private EventosConsumoFacade ejbEventoConsumo;
 
     private List<Cliente> items = null;
     private Cliente selected;
@@ -77,6 +81,7 @@ public class ClienteController implements Serializable {
     private Macro macro;
     private Trafo trafo;
     private List<EventosAmarre> eventoAmarre;
+    private List<EventosConsumo> eventoConsumo;
     private boolean existeTrafo;
     private boolean activo;
     private Date fechaInicio;
@@ -85,6 +90,7 @@ public class ClienteController implements Serializable {
     private boolean rangoFechaCambiado1;
     private boolean rangoFechaCambiado2;
     private boolean rangoFechaCambiado3;
+    private boolean sinConsumo;
     private SimpleDateFormat formatoFecha;
     private CartesianChartModel consumo;
 
@@ -112,6 +118,14 @@ public class ClienteController implements Serializable {
 
     public void setConsumo(CartesianChartModel consumo) {
         this.consumo = consumo;
+    }
+
+    public boolean isSinConsumo() {
+        return sinConsumo;
+    }
+
+    public void setSinConsumo(boolean sinConsumo) {
+        this.sinConsumo = sinConsumo;
     }
 
     public String getNombreOApellidos() {
@@ -374,6 +388,7 @@ public class ClienteController implements Serializable {
         requestContext.execute("PF('seleccionarFecha').hide()");
 
         this.clienteSeleccionado = true;
+        consultarConsumo();
         this.fechaInicio = null;
         this.fechaFin = null;
         this.rangoFechaCambiado1 = false;
@@ -381,18 +396,54 @@ public class ClienteController implements Serializable {
         this.rangoFechaCambiado3 = false;
         this.rangoFecha = "";
         requestContext.update("clienteSeleccionado");
-        
+        /*consumoCliente.set("26", 1100);
+                consumoCliente.set("27", 1700);
+                    consumoCliente.set("28", 1900);
+                    consumo.addSeries(consumoCliente);*/
+
+    }
+
+    public void consultarConsumo() {
         consumo = new CartesianChartModel();
-        
+
         final ChartSeries consumoCliente = new ChartSeries("Consumo");
-        
-        
-        
-        consumoCliente.set("25", 1200);
-        consumoCliente.set("26", 1100);
-        consumoCliente.set("27", 1700);
-        consumoCliente.set("28", 1900);
-        consumo.addSeries(consumoCliente);
+
+        this.producto = this.ejbProducto.buscarProductoDeCliente(selected);
+        if (this.producto != null) {
+            this.plcTu = this.ejbPlcTu.buscarIdProducto(this.producto);
+            if (this.plcTu != null) {
+                this.eventoConsumo = this.ejbEventoConsumo.listaEventos(this.plcTu, fechaInicio, fechaFin);
+                if (this.eventoConsumo.size() > 0) {
+
+                    for (int i = 0; i < eventoConsumo.size(); i++) {
+                        if (i == 0) {
+                            float energia = eventoConsumo.get(i).getEnergia();
+                            consumoCliente.set(eventoConsumo.get(i).getFechaHora(), energia);
+
+                        } else {
+                            float energia = 0;
+                            if (eventoConsumo.get(i - 1).getEnergia() > eventoConsumo.get(i).getEnergia()) {
+                                energia = eventoConsumo.get(i - 1).getEnergia() - eventoConsumo.get(i).getEnergia();
+                            } else {
+                                energia = eventoConsumo.get(i).getEnergia()-eventoConsumo.get(i - 1).getEnergia() ;
+                            }
+//eventoConsumo.get(i).getCorriente()-eventoConsumo.get(i-1).getCorriente()
+                            consumoCliente.set(eventoConsumo.get(i).getFechaHora(), energia);
+
+                        }
+
+                    }
+                    consumo.addSeries(consumoCliente);
+                    sinConsumo = false;
+                } else {
+                    consumoCliente.set(0, 0);
+                    consumo.addSeries(consumoCliente);
+                    sinConsumo = true;
+
+                }
+            }
+        }
+
     }
 
     public void consultarEstadoAmarre() {
@@ -416,15 +467,20 @@ public class ClienteController implements Serializable {
 
     }
 
+    public void cambiarEstadoSeleccion() {
+        this.clienteSeleccionado = false;
+    }
+
     private void calcularEstadoAmarre() {
         int tam = eventoAmarre.size();
         int contEstadoActivo = 0;
         for (int i = 0; i < tam; i++) {
-            if (eventoAmarre.get(i).getEstadoAmarre()== 1) {
+            if (eventoAmarre.get(i).getEstadoAmarre() == 1) {
                 contEstadoActivo++;
             }
         }
-        float porcetajeAmarre=(contEstadoActivo*100)/tam;
+        float porcetajeAmarre = (contEstadoActivo * 100) / tam;
+        
         if (porcetajeAmarre >= 70) {
             this.activo = true;
         } else {

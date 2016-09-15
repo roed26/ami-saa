@@ -11,24 +11,21 @@
     </h:head>
     <h:body >
         <h:form id="datosIngreso">
-            <h:panelGrid columns="2"> 
-                <p:outputLabel value="Seleccione el producto que desea vincular al PLC_TU " />                      
-                <p:commandButton value="Seleccionar producto" 
+                <p:commandButton style="left: 820px" value="Seleccionar un nuevo producto" 
                                  onclick="PF('seleccionarProducto').show()" />
-            </h:panelGrid>
         </h:form>
         <h:form id="informacionProducto" rendered="#{plcTuController.productoSeleccionado}">
-            <h:panelGrid columns="2"> 
-                <p:outputLabel styleClass="CampoLabel" value="Producto seleccionado: " />                      
-                <p:outputLabel styleClass="CampoLabel" value="#{plcTuController.producto.idProducto}" />                      
-            </h:panelGrid>
+                <p:outputLabel style="font-weight: bold; color: black; font-size: 18px;" 
+                               value="Seleccione el dispositivo PLC_TU que desea vincular al producto: "/> 
+                <p:outputLabel style="font-weight: bold; color: blue; font-size: 18px;" 
+                               value="#{plcTuController.producto.idProducto}"/> 
         </h:form>
-        <h:form id="PlcTuListForm" rendered="#{plcTuController.productoSeleccionado}">
-            <h:panelGrid style="margin-bottom: 5px;" columns="3">                      
+        <h:form id="plcTuListForm" rendered="#{plcTuController.productoSeleccionado}">
+            <h:panelGrid style="margin-bottom: 5px;" columns="3" id="panel">                      
 
-                <h:outputLabel style="font-size: 12px; font-weight: bold;" value="Buscar  " />
+                <h:outputLabel style="font-size: 14px; font-weight: bold;" value="Buscar PLC_TU " />
                 <p:inputText style="width: 500px;" value="#{plcTuController.dato}"  
-                             placeholder="Digite el identificador o la MAC del plc_tu">
+                             placeholder="Digite el identificador o la MAC del PLC_TU">
                     <p:ajax event="keyup" update="datalist" listener="#{plcTuController.buscarDato()}" />                                
                 </p:inputText>    
             </h:panelGrid>
@@ -40,7 +37,7 @@
                          emptyMessage="No se encontraron dispositivos PLC_TU"
                          >
                 <f:facet name="header">
-                    <h:outputLabel value="Listado de dispositivos plc_tu sin vinculo a un producto" style="font-size: 17px; font-weight: bold;"/>
+                    <h:outputLabel value="Listado de dispositivos PLC_TU sin vinculo a un producto" style="font-size: 17px; font-weight: bold;"/>
                 </f:facet>
 
                 <p:column>
@@ -61,26 +58,19 @@
                     </f:facet>
                     <h:outputText value="#{item.versionFw}"/>
                 </p:column>
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText value="Estado"/>
-                    </f:facet>
-                    <h:outputText value="#{item.estado}"/>
-                </p:column>
-
-                <p:column style="width:120px;text-align:center; background: #EBEDEB;" >
+                <p:column style="width:120px; text-align:center; background: #EBEDEB;" >
                     <f:facet name="header">
                         <h:outputText value="Acción"/>
                     </f:facet>
-                    <p:commandButton value="Vincular" action="#{plcTuController.vincularProducto(item)}" />                    
+                    <p:commandButton value="Vincular"
+                                     action="#{plcTuController.vincularProducto(item)}"
+                                     
+                                     />                    
                 </p:column>
             </p:dataTable>
-
         </h:form>
-
-    </h:body>
-    <p:dialog header="Seleccionar producto" visible="#{!plcTuController.productoSeleccionado}" resizable="false" width="850" position="center" modal="true"  widgetVar="seleccionarProducto">
-
+        <p:dialog id="seleccionProducto" header="Seleccionar producto" visible="#{!plcTuController.productoSeleccionado}" resizable="false" width="850" position="center" modal="true" widgetVar="seleccionarProducto">
+        <p:outputLabel value="Busque y seleccione el producto que desea vincular al PLC_TU" style="font-weight: bold; font-size: 16px;" />
         <h:form id="productoListForm">
             <br/>
             <h:panelGrid columns="2">
@@ -106,30 +96,34 @@
                     </p:column>
                     <p:column>
                         <f:facet name="header">
-                            <h:outputText value="Latitud"/>
+                            <h:outputText value="Nombre del cliente"/>
                         </f:facet>
-                        <h:outputText value="#{productoController.listaClientes[i]}"/>
+                        <h:outputText value="#{productoController.listaClientes[i].getNombres()}"/>
+                        <h:outputText value="#{productoController.listaClientes[i].getApellidos()}"/>
                     </p:column>
                     <p:column>
                         <f:facet name="header">
-                            <h:outputText value="Longitud"/>
+                            <h:outputText value="Dirección del cliente"/>
                         </f:facet>
-                        <h:outputText value="#{item.longitud}"/>
+                        <h:outputText value="#{productoController.listaClientes[i].getDireccion()}"/>
                     </p:column>
-                    <p:column>
+                    <p:column style="width:140px;text-align:center; background: #EBEDEB;" >
                         <f:facet name="header">
                             <h:outputText value="Accion"/>
                         </f:facet>
-                        <p:commandButton id="viewButton" actionListener="#{plcTuController.seleccionarProducto(item)}" icon="ui-icon-plus" value="Seleccionar"  
+                        <p:commandButton id="viewButton" 
+                                         actionListener="#{plcTuController.seleccionarProducto(item)}" 
+                                         icon="ui-icon-plus" value="Seleccionar"
+                                         ajax="false"
+                                         update="@all"
                                          />
                     </p:column>
-
                 </p:dataTable>
             </p:panel>
         </h:form>
     </p:dialog>
 
-    <p:dialog modal="true" header="Información" resizable="false" widgetVar="mensajeVinculo" closable="false">
+    <p:dialog modal="true" id="msjVinculo" header="Información" resizable="false" widgetVar="mensajeVinculo" closable="false">
         <h:form>
             <p:panelGrid style="text-align:left;" styleClass="panelgrid">
                 <p:row>
@@ -138,9 +132,11 @@
                     </p:column>                                
                 </p:row>
                 <p:row>
-                    <p:column width="200px;">
-                        <p:commandButton style="font-style: italic;margin-left: 60px;font-weight: normal;" 
+                    <p:column>
+                        <p:commandButton style="font-style: italic; font-weight: normal;" 
                                          value="Aceptar" onclick="PF('mensajeVinculo').hide()"
+                                         ajax="false"
+                                         update="@all"
                                          />                                    
                     </p:column>
 
@@ -148,4 +144,7 @@
             </p:panelGrid>
         </h:form>
     </p:dialog>
+    </h:body>
+
+    
 </html>

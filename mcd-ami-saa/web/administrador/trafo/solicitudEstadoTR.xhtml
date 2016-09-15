@@ -11,30 +11,14 @@
         <title>Lista de clientes</title>
     </h:head>
     <h:body>
-        <h:form id="datosIngreso">
-            <h:panelGrid columns="2"> 
-                <p:outputLabel styleClass="CampoLabel" value="Seleccione un trafo " />                      
-                <p:commandButton value="Seleccionar trafo" 
-                                 onclick="PF('seleccionarTrafo').show()" />
-            </h:panelGrid>
-        </h:form>
-        <p:separator/>
-        <h:form id="trafoSeleccionado">
-            <p:outputLabel style="font-weight: bold; font-size: 16px; color: black;" value="Se enviara la solicitud al trafo " rendered="#{trafoController.trafoSeleccionado}"/>
-            <p:outputLabel style="font-weight: bold; font-size: 18px; color: blue;" value=" #{trafoController.selected.idTrafo}" rendered="#{trafoController.trafoSeleccionado}"/>
-            <p:separator/>
-            <p:inputText style="width: 200px;" value="#{trafoController.trama}" placeholder="Trama" rendered="#{trafoController.trafoSeleccionado}"/>
-            <p:commandButton value="Enviar solicitud" rendered="#{trafoController.trafoSeleccionado}" action="#{trafoController.enviarSolicitud}"/>
-            <h:messages globalOnly="true"/>
-        </h:form>
-
-        <p:dialog header="Seleccionar trafo" resizable="false" width="850" position="center" modal="true"  widgetVar="seleccionarTrafo">
-
+        
+        <p:dialog visible="#{!trafoController.trafoSeleccionado}" header="Seleccionar trafo" resizable="false" width="500" position="center" modal="true"  widgetVar="seleccionarTrafo">
+            <p:outputLabel value="Busque y selecciones el trafo al cual desea enviar la solicitud" />
             <h:form id="ClienteListForm">
                 <br/>
                 <h:panelGrid columns="2">
-                    <p:outputLabel value="Buscar por:" />
-                    <p:inputText  placeholder="Identificador de trafo" style="width: 240px;"  value="#{trafoController.idTrafo}" >
+                    <p:outputLabel value="Buscar " />
+                    <p:inputText  placeholder="Digite el identificador del trafo" style="width: 240px;"  value="#{trafoController.idTrafo}" >
                         <p:ajax event="keyup" update="tablaTrafos" listener="#{trafoController.buscarPorId()}" />                                
                     </p:inputText>                          
                 </h:panelGrid>
@@ -52,38 +36,41 @@
                             </f:facet>
                             <h:outputText value="#{item.idTrafo}"/>
                         </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListTrafoTitle_latitud}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.latitud}"/>
-                        </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListTrafoTitle_longitud}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.longitud}"/>
-                        </p:column>
-                        <p:column>
+
+                        <p:column style="width: 120px; background: #EBEDEB;">
                             <f:facet name="header">
                                 <h:outputText value="Accion"/>
                             </f:facet>
-                            <p:commandButton id="viewButton"  actionListener="#{trafoController.seleccionarTrafo(item)}" icon="ui-icon-plus" value="Seleccionar"  
+                            <p:commandButton id="viewButton"  
+                                             actionListener="#{trafoController.seleccionarTrafoSolicitud(item)}" 
+                                             icon="ui-icon-plus" value="Seleccionar"  
 
                                              />
                         </p:column>
-
                     </p:dataTable>
                 </p:panel>
             </h:form>
         </p:dialog>
+
+        <p:dialog header="Enviar solicitud" closable="false" resizable="false"  position="center" modal="true"  widgetVar="enviarSolicitud">
+
+            <h:form id="envioSolicitud">
+                <p:outputLabel style="font-weight: bold; font-size: 16px; color: black;" value="La solicitud de estado de amarres sera enviada al trafo " />
+                <p:outputLabel style="font-weight: bold; font-size: 18px; color: blue;" value=" #{trafoController.selected.idTrafo}" />
+                <p:separator/>
+                <p:commandButton value="Enviar solicitud" action="#{trafoController.enviarSolicitud}"/>
+                <p:commandButton value="Cancelar"  action="#{trafoController.cancelarSolicitud}" ajax="false"/>
+                <h:messages globalOnly="true"/>
+            </h:form>
+        </p:dialog>
+
 
         <p:dialog modal="true" header="Información" resizable="false" widgetVar="exitoEnvioMensaje" closable="false">
             <h:form>
                 <p:panelGrid style="text-align:left;" styleClass="panelgrid">
                     <p:row>
                         <p:column>
-                            <h:outputLabel style="color: blue;" value="El producto fue vinculado al PLC_TU con exito."/>
+                            <h:outputLabel style="color: blue;" value="La solicitud fue enviada con exito."/>
                         </p:column>                                
                     </p:row>
                     <p:row>

@@ -6,7 +6,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 
-    <p:dialog id="PlcTuViewDlg" widgetVar="PlcTuViewDialog" modal="true" resizable="false" appendTo="@(body)" header="Información PLC_TU">
+    <p:dialog id="PlcTuViewDlg" widgetVar="PlcTuViewDialog" modal="true" resizable="false" closable="false" header="Información PLC_TU">
         <h:form id="PlcTuViewForm" style="text-align: left;">
             <h:panelGroup id="display">
                 <p:panelGrid styleClass="panelgrid" >
@@ -38,7 +38,8 @@
 
                         </p:column>
                         <p:column>
-                            <h:outputText value="#{plcTuController.selected.estado}" />        
+                            <h:outputText rendered="#{plcTuController.selected.estado.equalsIgnoreCase('A')}" value="Activo"/>
+                            <h:outputText rendered="#{plcTuController.selected.estado.equalsIgnoreCase('D')}" value="Desactivo"/>
                         </p:column>
                     </p:row>
 

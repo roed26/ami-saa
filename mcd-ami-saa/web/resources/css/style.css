@@ -8,17 +8,12 @@ fieldset#body {
     margin:0;
 }
 
-
-
 #body label {
     color:#3a454d;
     margin:9px 0 0 0;
     display:block;
     float:left;
 }
-
-
-
 input:focus {
     outline:none;
 }

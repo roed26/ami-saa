@@ -5,6 +5,7 @@ import com.ceo.amisaa.entidades.Producto;
 import com.ceo.amisaa.managedbean.util.JsfUtil;
 import com.ceo.amisaa.managedbean.util.JsfUtil.PersistAction;
 import com.ceo.amisaa.sessionbeans.PlcMcFacade;
+import com.ceo.amisaa.sessionbeans.ProductoFacade;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.inject.Named;
@@ -42,6 +44,12 @@ public class PlcMcController implements Serializable {
 
     public PlcMcController() {
         this.objPlcMc = new PlcMc();
+
+    }
+
+    @PostConstruct
+    private void init() {
+        this.ejbProducto = new ProductoFacade();
 
     }
 
@@ -258,7 +266,7 @@ public class PlcMcController implements Serializable {
         if (this.productos.size() > 0) {
             for (int i = 0; i < this.productos.size(); i++) {
                 this.productos.get(i).setMacPlcMc(objPlcMc);
-                ejbProducto.edit(this.productos.get(i));
+                this.ejbProducto.edit(this.productos.get(i));
             }
 
             RequestContext requestContext = RequestContext.getCurrentInstance();

@@ -35,18 +35,18 @@
                     <p:submenu label="Gestión de amarres">
                         <p:menuitem value="Por cliente" action="#{routingController.irEstadoAmarre()}" ajax="false"/>
                         <p:menuitem value="Por trafo" action="#{routingController.irListaClientes()}" ajax="false"/>
-                        <p:menuitem value="Solicitud estado de amarre" action="#{routingController.irSolicitudTiempoReal()}" ajax="false"/>
+                        <p:menuitem value="Solicitud de estado de amarre" action="#{routingController.irSolicitudTiempoReal()}" ajax="false"/>
                     </p:submenu>
                     <p:submenu label="Gestión consumo">
                         <p:menuitem value="Por cliente" action="#{routingController.irConsumoCliente()}" ajax="false"/>
-
+                        <p:menuitem value="Por trafo"  ajax="false"/>
                     </p:submenu>
-                    <p:submenu label="Gestión de clientes">
+                    <!--<p:submenu label="Gestión de clientes">
                         <p:menuitem value=""  ajax="false"/>
                     </p:submenu>
                     <p:submenu label="Trafo">
                         <p:menuitem value=""  ajax="false"/>
-                    </p:submenu>
+                    </p:submenu>-->
                 </p:tieredMenu>
             </h:form>
         </div>
