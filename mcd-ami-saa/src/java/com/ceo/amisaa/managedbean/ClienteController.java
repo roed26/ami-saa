@@ -20,8 +20,14 @@ import com.ceo.amisaa.sessionbeans.PlcMmsFacade;
 import com.ceo.amisaa.sessionbeans.PlcTuFacade;
 import com.ceo.amisaa.sessionbeans.ProductoFacade;
 import com.ceo.amisaa.sessionbeans.TrafoFacade;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 
 import java.io.Serializable;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -35,6 +41,7 @@ import javax.ejb.EJBException;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.Application;
+import javax.faces.application.FacesMessage;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
@@ -42,6 +49,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.faces.event.ValueChangeEvent;
+import javax.faces.validator.ValidatorException;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
@@ -68,6 +76,8 @@ public class ClienteController implements Serializable {
     private EventosAmarreFacade ejbEventosAmarre;
     @EJB
     private EventosConsumoFacade ejbEventoConsumo;
+    @EJB
+    private ClienteFacade ejbCliente;
 
     private List<Cliente> items = null;
     private Cliente selected;
@@ -85,6 +95,7 @@ public class ClienteController implements Serializable {
     private boolean existeTrafo;
     private boolean activo;
     private Date fechaInicio;
+    private Date fechaInicioUsar;
     private Date fechaFin;
     private String rangoFecha;
     private boolean rangoFechaCambiado1;
@@ -93,6 +104,7 @@ public class ClienteController implements Serializable {
     private boolean sinConsumo;
     private SimpleDateFormat formatoFecha;
     private CartesianChartModel consumo;
+    private String trama;
 
     public ClienteController() {
         this.formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
@@ -256,6 +268,15 @@ public class ClienteController implements Serializable {
         return selected;
     }
 
+    public void cambiarFechaInicio(Date fechaInicio) {
+        Calendar calendar = Calendar.getInstance();
+        this.fechaInicio = fechaInicio;
+        calendar.setTime(fechaInicio);
+        calendar.add(Calendar.DAY_OF_YEAR, -1);
+
+        this.fechaInicioUsar = calendar.getTime();
+    }
+
     public void create() {
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ClienteCreated"));
         if (!JsfUtil.isValidationFailed()) {
@@ -293,20 +314,28 @@ public class ClienteController implements Serializable {
             this.rangoFechaCambiado2 = false;
             this.rangoFechaCambiado3 = false;
             Calendar calendar = Calendar.getInstance();
-            this.fechaInicio = calendar.getTime();
-            calendar.setTime(fechaInicio);
-            calendar.add(Calendar.DAY_OF_YEAR, -7);
             this.fechaFin = calendar.getTime();
+            calendar.setTime(fechaFin);
+            calendar.add(Calendar.DAY_OF_YEAR, -7);
+            this.fechaInicio = calendar.getTime();
+
+            calendar.setTime(fechaFin);
+            calendar.add(Calendar.DAY_OF_YEAR, -1);
+            this.fechaInicioUsar = calendar.getTime();
 
         } else if (rangoSeleccionado.equals("2")) {
             this.rangoFechaCambiado1 = false;
             this.rangoFechaCambiado2 = true;
             this.rangoFechaCambiado3 = false;
             Calendar calendar = Calendar.getInstance();
-            this.fechaInicio = calendar.getTime();
-            calendar.setTime(fechaInicio);
-            calendar.add(Calendar.DAY_OF_YEAR, -30);
             this.fechaFin = calendar.getTime();
+            calendar.setTime(fechaFin);
+            calendar.add(Calendar.DAY_OF_YEAR, -30);
+            this.fechaInicio = calendar.getTime();
+
+            calendar.setTime(fechaFin);
+            calendar.add(Calendar.DAY_OF_YEAR, -1);
+            this.fechaInicioUsar = calendar.getTime();
 
         } else {
             this.fechaInicio = null;
@@ -376,6 +405,13 @@ public class ClienteController implements Serializable {
         requestContext.execute("PF('seleccionarFecha').show()");
     }
 
+    public void seleccionarClienteSolicitud(Cliente cliente) {
+        this.selected = cliente;
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        requestContext.execute("PF('seleccionarCliente').hide()");
+        requestContext.execute("PF('enviarSolicitud').show()");
+    }
+
     public void procesarConsulta() {
         RequestContext requestContext = RequestContext.getCurrentInstance();
         FacesContext context = FacesContext.getCurrentInstance();
@@ -384,23 +420,27 @@ public class ClienteController implements Serializable {
         UIViewRoot viewRoot = viewHandler.createView(context, context.getViewRoot().getViewId());
         context.setViewRoot(viewRoot);
         context.renderResponse();
-        this.consultarEstadoAmarre();
-        requestContext.execute("PF('seleccionarFecha').hide()");
 
-        this.clienteSeleccionado = true;
-        consultarConsumo();
-        this.fechaInicio = null;
-        this.fechaFin = null;
-        this.rangoFechaCambiado1 = false;
-        this.rangoFechaCambiado2 = false;
-        this.rangoFechaCambiado3 = false;
-        this.rangoFecha = "";
-        requestContext.update("clienteSeleccionado");
+        if (fechaInicio.after(fechaFin)) {
+            FacesContext.getCurrentInstance().addMessage("formFecha:fechaInicio", new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "la fecha de inicio no puede ser mayor a la fecha de fin."));
+        } else {
+
+            this.consultarEstadoAmarre();
+            requestContext.execute("PF('seleccionarFecha').hide()");
+            this.clienteSeleccionado = true;
+            consultarConsumo();
+            this.fechaInicio = null;
+            this.fechaFin = null;
+            this.rangoFechaCambiado1 = false;
+            this.rangoFechaCambiado2 = false;
+            this.rangoFechaCambiado3 = false;
+            this.rangoFecha = "";
+            requestContext.update("clienteSeleccionado");
+        }
         /*consumoCliente.set("26", 1100);
                 consumoCliente.set("27", 1700);
                     consumoCliente.set("28", 1900);
                     consumo.addSeries(consumoCliente);*/
-
     }
 
     public void consultarConsumo() {
@@ -412,23 +452,24 @@ public class ClienteController implements Serializable {
         if (this.producto != null) {
             this.plcTu = this.ejbPlcTu.buscarIdProducto(this.producto);
             if (this.plcTu != null) {
-                this.eventoConsumo = this.ejbEventoConsumo.listaEventos(this.plcTu, fechaInicio, fechaFin);
+                cambiarFechaInicio(fechaInicio);
+                this.eventoConsumo = this.ejbEventoConsumo.listaEventos(this.plcTu, fechaInicioUsar, fechaFin);
                 if (this.eventoConsumo.size() > 0) {
 
                     for (int i = 0; i < eventoConsumo.size(); i++) {
                         if (i == 0) {
                             float energia = eventoConsumo.get(i).getEnergia();
-                            consumoCliente.set(eventoConsumo.get(i).getFechaHora(), energia);
+                            //consumoCliente.set(eventoConsumo.get(i).getFechaHora(), energia);
 
                         } else {
                             float energia = 0;
                             if (eventoConsumo.get(i - 1).getEnergia() > eventoConsumo.get(i).getEnergia()) {
                                 energia = eventoConsumo.get(i - 1).getEnergia() - eventoConsumo.get(i).getEnergia();
                             } else {
-                                energia = eventoConsumo.get(i).getEnergia()-eventoConsumo.get(i - 1).getEnergia() ;
+                                energia = eventoConsumo.get(i).getEnergia() - eventoConsumo.get(i - 1).getEnergia();
                             }
 //eventoConsumo.get(i).getCorriente()-eventoConsumo.get(i-1).getCorriente()
-                            consumoCliente.set(eventoConsumo.get(i).getFechaHora(), energia);
+                            consumoCliente.set(formatoFecha.format(eventoConsumo.get(i).getFechaHora()), energia);
 
                         }
 
@@ -471,6 +512,301 @@ public class ClienteController implements Serializable {
         this.clienteSeleccionado = false;
     }
 
+    public void cancelarProceso() {
+        this.fechaInicio = null;
+        this.fechaFin = null;
+        this.rangoFechaCambiado1 = false;
+        this.rangoFechaCambiado2 = false;
+        this.rangoFechaCambiado3 = false;
+        this.rangoFecha = "";
+        this.clienteSeleccionado = false;
+    }
+
+    public void enviarSolicitud() {
+        //trama = "Trafo seleccionado: " + selected.getIdTrafo();
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        FacesContext context = FacesContext.getCurrentInstance();
+        Application application = context.getApplication();
+        ViewHandler viewHandler = application.getViewHandler();
+        UIViewRoot viewRoot = viewHandler.createView(context, context.getViewRoot().getViewId());
+        context.setViewRoot(viewRoot);
+        context.renderResponse();
+
+        this.producto = ejbProducto.buscarProductoDeCliente(selected);
+
+        if (producto != null) {
+            this.trafo = ejbTrafo.buscarPorIdObj(this.producto.getIdTrafo().getIdTrafo());
+            if (this.trafo != null) {
+                this.macro = ejbMacro.buscarMacroPorTrafoObj(trafo);
+                if (macro != null) {
+                    this.trama = "$@A0x5101" + macro.getIdMacro();
+                    this.plcMms = ejbPlcMms.buscarPorIdTrafo(trafo.getIdTrafo());
+                    if (this.plcMms != null) {
+
+                        if (this.plcMms.getNumeroCelular() != null) {
+                            String numeroCelular = "&msisdn=57" + this.plcMms.getNumeroCelular();
+                            //String numeroCelular = "&msisdn=57" + "3114760156";
+
+                            try {
+
+                                String data = "";
+
+                                data += "username=" + URLEncoder.encode("roed26", "ISO-8859-1");
+                                data += "&password=" + URLEncoder.encode("rosario26@", "ISO-8859-1");
+                                data += "&message=" + URLEncoder.encode(trama, "ISO-8859-1");
+                                data += "&want_report=1";
+                                data += numeroCelular;
+
+                                URL url = new URL("https://bulksms.vsms.net/eapi/submission/send_sms/2/2.0");
+
+                                URLConnection conn = url.openConnection();
+                                conn.setDoOutput(true);
+                                OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+                                wr.write(data);
+                                wr.flush();
+
+                                // Get the response
+                                BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                                String line;
+                                String dat = null;
+                                while ((line = rd.readLine()) != null) {
+                                    String respuesta[] = line.split("\\|");
+
+                                    if (!respuesta[0].equalsIgnoreCase("25")) {
+                                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
+                                        requestContext.execute("PF('exitoEnvioMensaje').show()");
+                                    } else {
+                                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "No hay creditos"));
+                                        requestContext.execute("PF('errorCreditos').show()");
+                                    }
+
+                                }
+
+                                wr.close();
+                                rd.close();
+
+                                this.clienteSeleccionado = false;
+
+                            } catch (Exception e) {
+                                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
+                                requestContext.execute("PF('errorEnvioMensaje').show()");
+                                this.clienteSeleccionado = false;
+                            }
+
+                        } else {
+                            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
+                            requestContext.execute("PF('errorEnvioMensaje').show()");
+                            this.clienteSeleccionado = false;
+                        }
+
+                    } else {
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
+                        requestContext.execute("PF('errorEnvioMensaje').show()");
+                        this.clienteSeleccionado = false;
+                    }
+                } else {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
+                    requestContext.execute("PF('errorEnvioMensaje').show()");
+                    this.clienteSeleccionado = false;
+                }
+            }
+        }
+
+    }
+
+    public void enviarSolicitudSuspension() {
+        //trama = "Trafo seleccionado: " + selected.getIdTrafo();
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        FacesContext context = FacesContext.getCurrentInstance();
+        Application application = context.getApplication();
+        ViewHandler viewHandler = application.getViewHandler();
+        UIViewRoot viewRoot = viewHandler.createView(context, context.getViewRoot().getViewId());
+        context.setViewRoot(viewRoot);
+        context.renderResponse();
+
+        this.producto = ejbProducto.buscarProductoDeCliente(selected);
+
+        if (producto != null) {
+            this.trafo = ejbTrafo.buscarPorIdObj(this.producto.getIdTrafo().getIdTrafo());
+            if (this.trafo != null) {
+                this.macro = ejbMacro.buscarMacroPorTrafoObj(trafo);
+                if (macro != null) {
+                    this.trama = "$@A0x5101" + macro.getIdMacro();
+                    this.plcMms = ejbPlcMms.buscarPorIdTrafo(trafo.getIdTrafo());
+                    if (this.plcMms != null) {
+
+                        if (this.plcMms.getNumeroCelular() != null) {
+                            String numeroCelular = "&msisdn=57" + this.plcMms.getNumeroCelular();
+                            //String numeroCelular = "&msisdn=57" + "3114760156";
+
+                            try {
+
+                                String data = "";
+
+                                data += "username=" + URLEncoder.encode("roed26", "ISO-8859-1");
+                                data += "&password=" + URLEncoder.encode("rosario26@", "ISO-8859-1");
+                                data += "&message=" + URLEncoder.encode(trama, "ISO-8859-1");
+                                data += "&want_report=1";
+                                data += numeroCelular;
+
+                                URL url = new URL("https://bulksms.vsms.net/eapi/submission/send_sms/2/2.0");
+
+                                URLConnection conn = url.openConnection();
+                                conn.setDoOutput(true);
+                                OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+                                wr.write(data);
+                                wr.flush();
+
+                                // Get the response
+                                BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                                String line;
+                                String dat = null;
+                                while ((line = rd.readLine()) != null) {
+                                    String respuesta[] = line.split("\\|");
+
+                                    if (!respuesta[0].equalsIgnoreCase("25")) {
+                                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
+                                        requestContext.execute("PF('exitoEnvioMensaje').show()");
+                                    } else {
+                                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "No hay creditos"));
+                                        requestContext.execute("PF('errorCreditos').show()");
+                                    }
+
+                                }
+
+                                wr.close();
+                                rd.close();
+
+                                this.clienteSeleccionado = false;
+
+                            } catch (Exception e) {
+                                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
+                                requestContext.execute("PF('errorEnvioMensaje').show()");
+                                this.clienteSeleccionado = false;
+                            }
+
+                        } else {
+                            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
+                            requestContext.execute("PF('errorEnvioMensaje').show()");
+                            this.clienteSeleccionado = false;
+                        }
+
+                    } else {
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
+                        requestContext.execute("PF('errorEnvioMensaje').show()");
+                        this.clienteSeleccionado = false;
+                    }
+                } else {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
+                    requestContext.execute("PF('errorEnvioMensaje').show()");
+                    this.clienteSeleccionado = false;
+                }
+            }
+        }
+
+    }
+
+    public void enviarSolicitudReconexion() {
+        //trama = "Trafo seleccionado: " + selected.getIdTrafo();
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        FacesContext context = FacesContext.getCurrentInstance();
+        Application application = context.getApplication();
+        ViewHandler viewHandler = application.getViewHandler();
+        UIViewRoot viewRoot = viewHandler.createView(context, context.getViewRoot().getViewId());
+        context.setViewRoot(viewRoot);
+        context.renderResponse();
+
+        this.producto = ejbProducto.buscarProductoDeCliente(selected);
+
+        if (producto != null) {
+            this.trafo = ejbTrafo.buscarPorIdObj(this.producto.getIdTrafo().getIdTrafo());
+            if (this.trafo != null) {
+                this.macro = ejbMacro.buscarMacroPorTrafoObj(trafo);
+                if (macro != null) {
+                    this.trama = "$@A0x5101" + macro.getIdMacro();
+                    this.plcMms = ejbPlcMms.buscarPorIdTrafo(trafo.getIdTrafo());
+                    if (this.plcMms != null) {
+
+                        if (this.plcMms.getNumeroCelular() != null) {
+                            String numeroCelular = "&msisdn=57" + this.plcMms.getNumeroCelular();
+                            //String numeroCelular = "&msisdn=57" + "3114760156";
+
+                            try {
+
+                                String data = "";
+
+                                data += "username=" + URLEncoder.encode("roed26", "ISO-8859-1");
+                                data += "&password=" + URLEncoder.encode("rosario26@", "ISO-8859-1");
+                                data += "&message=" + URLEncoder.encode(trama, "ISO-8859-1");
+                                data += "&want_report=1";
+                                data += numeroCelular;
+
+                                URL url = new URL("https://bulksms.vsms.net/eapi/submission/send_sms/2/2.0");
+
+                                URLConnection conn = url.openConnection();
+                                conn.setDoOutput(true);
+                                OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+                                wr.write(data);
+                                wr.flush();
+
+                                // Get the response
+                                BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                                String line;
+                                String dat = null;
+                                while ((line = rd.readLine()) != null) {
+                                    String respuesta[] = line.split("\\|");
+
+                                    if (!respuesta[0].equalsIgnoreCase("25")) {
+                                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
+                                        requestContext.execute("PF('exitoEnvioMensaje').show()");
+                                    } else {
+                                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "No hay creditos"));
+                                        requestContext.execute("PF('errorCreditos').show()");
+                                    }
+
+                                }
+
+                                wr.close();
+                                rd.close();
+
+                                this.clienteSeleccionado = false;
+
+                            } catch (Exception e) {
+                                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
+                                requestContext.execute("PF('errorEnvioMensaje').show()");
+                                this.clienteSeleccionado = false;
+                            }
+
+                        } else {
+                            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
+                            requestContext.execute("PF('errorEnvioMensaje').show()");
+                            this.clienteSeleccionado = false;
+                        }
+
+                    } else {
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
+                        requestContext.execute("PF('errorEnvioMensaje').show()");
+                        this.clienteSeleccionado = false;
+                    }
+                } else {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
+                    requestContext.execute("PF('errorEnvioMensaje').show()");
+                    this.clienteSeleccionado = false;
+                }
+            }
+        }
+
+    }
+
+    public void cancelarSolicitud() {
+        this.selected = null;
+        clienteSeleccionado = false;
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        requestContext.execute("PF('enviarSolicitud').hide()");
+        requestContext.update("@all");
+
+    }
+
     private void calcularEstadoAmarre() {
         int tam = eventoAmarre.size();
         int contEstadoActivo = 0;
@@ -480,7 +816,7 @@ public class ClienteController implements Serializable {
             }
         }
         float porcetajeAmarre = (contEstadoActivo * 100) / tam;
-        
+
         if (porcetajeAmarre >= 70) {
             this.activo = true;
         } else {

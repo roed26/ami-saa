@@ -44,6 +44,7 @@ public class PlcTuFacade extends AbstractFacade<PlcTu> {
         Query query = getEntityManager().createNamedQuery("PlcTu.findByProducto");
         query.setParameter("idProducto", idProducto);
         List<PlcTu> resultList = query.getResultList();
+        
         return resultList;
  
     }

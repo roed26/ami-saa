@@ -6,7 +6,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 
-    <p:dialog id="PlcMcEditDlg" widgetVar="PlcMcEditDialog" closable="false" modal="true" resizable="false"  header="Editar información plc_mc">
+    <p:dialog id="PlcMcEditDlg" widgetVar="PlcMcEditDialog" closable="false" modal="true" resizable="false"  header="Editar información PLC_MC">
         <h:form id="PlcMcEditForm">
             <p:panelGrid styleClass="panelgrid" id="panel" >
                 <p:row>
@@ -68,9 +68,10 @@
                 </p:row>
                 <p:row>
                     <p:column>
-                        <p:outputLabel value="Ganancia de transmisión (V)" for="gtx" />
+                        <p:outputLabel value="Ganancia de transmisión (V)"/>
                         <h:outputLabel style="font-style: italic;font-size: 16px;text-align: left; color:red;" 
                                        value="*" />
+                        
                     </p:column>
                     <p:column>
                         <p:selectOneMenu id="gtx"  value="#{plcMcController.selected.gtx}">
@@ -99,7 +100,7 @@
                 </p:row>
                 <p:row>
                     <p:column>
-                        <p:outputLabel value="Ganancia de recepción (mV)" for="grx" />
+                        <p:outputLabel value="Ganancia de recepción (mV)" />
                         <h:outputLabel style="font-style: italic;font-size: 16px;text-align: left; color:red;" 
                                        value="*" />
                     </p:column>
@@ -161,8 +162,8 @@
                     </p:column>
                 </p:row>
             </p:panelGrid>
-            <p:commandButton actionListener="#{plcMcController.editarInfoPlcMc}" value="Guardar" update="panel,:PlcMcListForm:datalist" ajax="true"/>
-            <p:commandButton value="Cacelar" onclick="PlcMcEditDialog.hide()" action="#{plcMcController.newObj()}"/>
+            <p:commandButton actionListener="#{plcMcController.editarInfoPlcMc}"  value="Guardar" update="panel,:PlcMcListForm:datalist" ajax="true"/>
+            <p:commandButton value="Cacelar" onclick="PF('PlcMcEditDialog').hide()" actionListener="#{plcMcController.newObj()}"/>
         </h:form>
     </p:dialog>
 </html>

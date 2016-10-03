@@ -38,6 +38,7 @@ public class TrafoFacade extends AbstractFacade<Trafo> {
         return resultList;
     }
     
+    
     public Trafo buscarPorIdObj(String idTrafo) {
         Trafo trafo= new Trafo();
         Query query = getEntityManager().createNamedQuery("Trafo.findByTrafos");
@@ -51,5 +52,7 @@ public class TrafoFacade extends AbstractFacade<Trafo> {
         
         return trafo;
     }
+    
+    
     
 }

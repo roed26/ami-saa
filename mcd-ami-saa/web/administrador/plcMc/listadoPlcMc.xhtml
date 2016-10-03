@@ -8,7 +8,7 @@
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     </h:head>
-    <h:body>
+    <h:body >
         <h:form id="PlcMcListForm">
             <h:panelGrid style="margin-bottom: 10px;" columns="3">                      
                 <h:outputLabel class="CampoLabel" value="Buscar " />
@@ -55,8 +55,8 @@
                     <f:facet name="header">
                         <h:outputText value="Acciones"/>
                     </f:facet>
-                    <p:commandButton id="viewButton"  action="#{plcMcController.setSelected(item)}" icon="ver-icon" title="Ver" update=":PlcMcViewForm" oncomplete="PF('PlcMcViewDialog').show()" />
-                    <p:commandButton id="editButton"  action="#{plcMcController.setSelected(item)}" icon="ui-icon-pencil" title="Editar" update=":PlcMcEditForm" oncomplete="PF('PlcMcEditDialog').show()" />
+                    <p:commandButton id="viewButton" icon="ver-icon" action="#{plcMcController.setSelected(item)}"  title="Ver" update=":PlcMcViewForm" oncomplete="PF('PlcMcViewDialog').show()" />
+                    <p:commandButton id="editButton" icon="ui-icon-pencil" action="#{plcMcController.setSelected(item)}"  title="Editar" update=":PlcMcEditForm" oncomplete="PF('PlcMcEditDialog').show()" />
                     <p:commandButton id="deleteButton" icon="ui-icon-trash"  title="Eliminar" actionListener="#{plcMcController.ventanaEliminar(item)}" update="datalist" />
                 </p:column>
             </p:dataTable>
@@ -64,6 +64,7 @@
 
         <ui:include src="editarInfoPlcMc.xhtml"/>
         <ui:include src="verInfoPlcMc.xhtml"/>
+        
         <p:dialog modal="true" header="Información" resizable="false" widgetVar="edicionCorrecta" closable="false">
             <h:form>
                 <p:panelGrid style="text-align:left;" styleClass="panelgrid">
@@ -94,7 +95,7 @@
                         <p:column width="200px;">
                             <p:commandButton style="font-style: italic;margin-left: 170px;font-weight: normal; color: black;" 
                                              value="Si" action="#{plcMcController.eliminarPlcMc}"/>
-                            <p:commandButton style="font-style: italic; margin-left: 10px;font-weight: normal; color: black;" value="No" onclick="PF('eliminarPlcTu').hide()"/>
+                            <p:commandButton style="font-style: italic; margin-left: 10px;font-weight: normal; color: black;" value="No" onclick="PF('eliminarPlcTu').hide()" action="#{plcMcController.newObj()}"/>
                         </p:column>
 
                     </p:row>

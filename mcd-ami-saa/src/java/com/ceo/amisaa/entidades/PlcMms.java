@@ -41,7 +41,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "PlcMms.findByBps", query = "SELECT p FROM PlcMms p WHERE p.bps = :bps"),
     @NamedQuery(name = "PlcMms.findByRtx", query = "SELECT p FROM PlcMms p WHERE p.rtx = :rtx"),
     @NamedQuery(name = "PlcMms.findByNumeroCelular", query = "SELECT p FROM PlcMms p WHERE p.numeroCelular = :numeroCelular"),
-    @NamedQuery(name = "PlcMms.findByDato", query = "SELECT p FROM PlcMms p WHERE LOWER(CONCAT(CONCAT(CONCAT(CONCAT(p.idPlcMms,' '),p.macPlcMms),' '),p.versionFw)) LIKE :dato")
+    @NamedQuery(name = "PlcMms.findByDato", query = "SELECT p FROM PlcMms p WHERE LOWER(CONCAT(CONCAT(CONCAT(CONCAT(p.idPlcMms,' '),p.macPlcMms),' '),p.versionFw)) LIKE :dato"),
+    @NamedQuery(name = "PlcMms.findByIdTrafo", query = "SELECT p FROM PlcMms p WHERE p.idTrafo.idTrafo = :idTrafo")
 })
 public class PlcMms implements Serializable {
 

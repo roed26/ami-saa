@@ -18,12 +18,7 @@
                                      value="#{plcTuController.selected.macPlcTu}" 
                                      disabled="true"
                                      title="Dirección MAC" 
-                                     required="true" 
-                                     requiredMessage="Campo requerido"
-                                     converter="toUpperCaseConverter"
-                                     placeholder="16 caracteres"
                                      >
-                            <f:ajax event="blur" render="@this" />
                             
                         </p:inputText>
 
@@ -35,7 +30,7 @@
 
                 <p:row>
                     <p:column>
-                        <p:outputLabel value="Versión firmware" for="versionFw" />
+                        <p:outputLabel value="Versión firmware"/>
                         <h:outputLabel style="font-style: italic;font-size: 16px;text-align: left; color:red;" 
                                        value="*" />
                     </p:column>
@@ -83,11 +78,6 @@
                     <p:column>
                         <p:selectOneMenu id="gtx"  value="#{plcTuController.selected.gtx}">
                             <f:selectItem itemLabel="Seleccione..." itemValue="0" />
-                            <f:selectItem itemLabel="1.25" itemValue="1.25"  />                              
-                            <f:selectItem itemLabel="1.55" itemValue="1.55"/>                              
-                            <f:selectItem itemLabel="2.25" itemValue="2.25"/>                              
-                            <f:selectItem itemLabel="3" itemValue="3"/>                              
-                            <f:selectItem itemLabel="3.25" itemValue="3.25"/>                              
                             <f:selectItem itemLabel="55" itemValue="55"/>                              
                             <f:selectItem itemLabel="75" itemValue="75"/>
                             <f:selectItem itemLabel="100" itemValue="100"/>
@@ -98,6 +88,11 @@
                             <f:selectItem itemLabel="480" itemValue="480"/>
                             <f:selectItem itemLabel="660" itemValue="660"/>
                             <f:selectItem itemLabel="900" itemValue="900"/>
+                            <f:selectItem itemLabel="1.25" itemValue="1.25"/>                              
+                            <f:selectItem itemLabel="1.55" itemValue="1.55"/>                              
+                            <f:selectItem itemLabel="2.25" itemValue="2.25"/>                              
+                            <f:selectItem itemLabel="3" itemValue="3"/>                              
+                            <f:selectItem itemLabel="3.25" itemValue="3.25"/>                              
                             <f:validator validatorId="ValidarCamposSeleccionar"/>
                         </p:selectOneMenu> 
                     </p:column>
@@ -178,7 +173,7 @@
                 <p:row>
                     <p:column colspan="3" style="text-align: center;">
                         <p:commandButton actionListener="#{plcTuController.editarInfoPlcTu}"  value="Guardar" update=":PlcTuListForm:datalist,panel" ajax="true"/>
-                        <p:commandButton value="Cancelar" onclick="PF('PlcTuEditDialog').hide()" actionListener="#{plcTuController.newObj()}"/>
+                        <p:commandButton value="Cancelar" onclick="PF('PlcTuEditDialog').hide()" action="#{plcTuController.newObj()}" update=":PlcTuListForm:datalist,panel" ajax="true"/>
                     </p:column>
 
                 </p:row>

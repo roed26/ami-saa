@@ -16,6 +16,7 @@
                                  onclick="PF('seleccionarPlcMc').show()" />
             </h:panelGrid>
         </h:form>
+        
 
         <h:form  rendered="#{plcMcController.plcMcSeleccionado}" id="ProductosListForm">
             <h:panelGrid columns="2">
@@ -74,6 +75,7 @@
             </h:panelGrid>
 
         </h:form>
+        
         <p:dialog header="Seleccionar PLC_MC" visible="#{!plcMcController.plcMcSeleccionado}" resizable="false" width="850" position="center" modal="true"  widgetVar="seleccionarPlcMc">
             <p:outputLabel value="Busque y seleccione el PLC_MC al cual desea vinculas el (los) producto(s) " style="font-weight: bold; font-size: 16px;" />
             <br/>

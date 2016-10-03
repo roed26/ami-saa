@@ -231,6 +231,7 @@ public class PlcMmsController implements Serializable {
 
     public void registrarPlcMms() {
         this.ejbPlcMms.create(objPlcMms);
+        
         RequestContext requestContext = RequestContext.getCurrentInstance();
         FacesContext context = FacesContext.getCurrentInstance();
         Application application = context.getApplication();
@@ -238,6 +239,7 @@ public class PlcMmsController implements Serializable {
         UIViewRoot viewRoot = viewHandler.createView(context, context.getViewRoot().getViewId());
         context.setViewRoot(viewRoot);
         context.renderResponse();
+        
         this.objPlcMms = new PlcMms();
         this.items = getFacade().findAll();
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El PLC_MMS se registro con exito."));

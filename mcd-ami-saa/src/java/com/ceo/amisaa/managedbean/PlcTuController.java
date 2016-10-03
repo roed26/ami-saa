@@ -128,6 +128,13 @@ public class PlcTuController implements Serializable {
     public void newObj() {
         this.objPlcTu = new PlcTu();
     }
+    
+    public void cancelarEditar(){
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        requestContext.execute("PF('PlcTuEditDialog').hide()");
+        this.objPlcTu = new PlcTu();
+    
+    }
 
     public String getDato() {
         return dato;
@@ -158,6 +165,7 @@ public class PlcTuController implements Serializable {
                 this.objPlcTu = new PlcTu();
                 this.items = getFacade().findAll();
             } else {
+                this.objPlcTu = new PlcTu();
                 requestContext.execute("PF('eliminarPlcTu').hide()");
                 requestContext.execute("PF('noSePuedeEliminar').show()");
             }
@@ -172,14 +180,13 @@ public class PlcTuController implements Serializable {
     }
 
     public void vincularProducto(PlcTu plcTu) {
-        this.objPlcTu=plcTu;
+        this.objPlcTu = plcTu;
         this.objPlcTu.setIdProducto(producto);
         this.ejbPlcTu.edit(this.objPlcTu);
         RequestContext requestContext = RequestContext.getCurrentInstance();
-        productoSeleccionado=false;
-        requestContext.execute("PF('mensajeVinculo').show()");     
-        
-        
+        productoSeleccionado = false;
+        requestContext.execute("PF('mensajeVinculo').show()");
+
     }
 
     private void persist(PersistAction persistAction, String successMessage) {
@@ -227,18 +234,29 @@ public class PlcTuController implements Serializable {
     }
 
     public void seleccionarProducto(Producto producto) {
+       
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        FacesContext context = FacesContext.getCurrentInstance();
+        Application application = context.getApplication();
+        ViewHandler viewHandler = application.getViewHandler();
+        UIViewRoot viewRoot = viewHandler.createView(context, context.getViewRoot().getViewId());
+        context.setViewRoot(viewRoot);
+        context.renderResponse();
         
-            this.producto = producto;
-            productoSeleccionado = true;
-            /*RequestContext requestContext = RequestContext.getCurrentInstance();
-            requestContext.execute("PF('seleccionarProducto').hide()");
-            requestContext.update("informacionProducto");
-            requestContext.update("plcTuListForm");*/
+        requestContext.execute("PF('seleccionarProducto').hide()"); 
         
-      
+        this.producto = producto;
+        this.productoSeleccionado = true;
+        requestContext.update("plcTuListForm");
+        requestContext.update("informacionProducto");
+        requestContext.update("panel");
         
-        
-        
+
+    }
+
+    public void reiniciarVariables() {
+        productoSeleccionado = false;
+
     }
 
     @FacesConverter(forClass = PlcTu.class)

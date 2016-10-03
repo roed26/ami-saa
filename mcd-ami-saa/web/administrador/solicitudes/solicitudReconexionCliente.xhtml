@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Lista de clientes</title>
+    </h:head>
+    <h:body>
+        <p:dialog header="Seleccionar cliente" visible="#{!clienteController.clienteSeleccionado}" resizable="false" width="850" position="center" modal="true"  widgetVar="seleccionarCliente">
+            <p:outputLabel style="font-weight: bold; font-size: 16px" value="Busque y seleccione el cliente que desea reconectar" />
+            <h:form id="ClienteListForm">
+                <br/>
+                <h:panelGrid columns="2">
+                    <p:outputLabel value="Buscar por:" />
+                    <p:inputText  placeholder="Nombres, apellidos o cédula " style="width: 240px;"  value="#{clienteController.nombreOApellidos}" >
+                        <p:ajax event="keyup" update="datalist" listener="#{clienteController.buscarPorNombresOApellidos()}" />                                
+                    </p:inputText>                          
+                </h:panelGrid>
+                <br/>
+
+                <p:dataTable id="datalist" value="#{clienteController.listaClientes}" var="item"
+                             paginator="true"
+                             rowKey="#{item.cedula}"
+                             rows="10"
+                             rowsPerPageTemplate="5,10"
+                             >
+
+                    <p:column >
+                        <f:facet name="header">
+                            <h:outputText value="Cédula"/>
+                        </f:facet>
+                        <h:outputText value="#{item.cedula}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Nombres"/>
+                        </f:facet>
+                        <h:outputText value="#{item.nombres}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Apellidos"/>
+                        </f:facet>
+                        <h:outputText value="#{item.apellidos}"/>
+                    </p:column>
+
+                    <p:column style="text-align: center; width: 120px; background: #EBEDEB;">
+                        <f:facet name="header">
+                            <h:outputText value="Accion"/>
+                        </f:facet>
+                        <p:commandButton id="viewButton"  actionListener="#{clienteController.seleccionarClienteSolicitud(item)}" icon="ui-icon-plus" value="Seleccionar"  />
+                    </p:column>
+                </p:dataTable>
+
+            </h:form>
+        </p:dialog>
+        <p:dialog header="Enviar solicitud" closable="false" resizable="false"  position="center" modal="true"  widgetVar="enviarSolicitud">
+
+            <h:form id="envioSolicitud">
+                <p:outputLabel style="font-weight: bold; font-size: 16px; color: black;" value="La reconexion se hara al cliente: " />
+                <p:outputLabel style="font-weight: bold; font-size: 18px; color: blue;" value=" #{clienteController.selected.nombres}" />
+                
+                <p:separator/>
+                <p:commandButton value="Enviar solicitud" action="#{clienteController.enviarSolicitudReconexion()}"/>
+                <p:commandButton value="Cancelar"  action="#{clienteController.cancelarSolicitud}" ajax="false"/>
+                <h:messages globalOnly="true"/>
+            </h:form>
+        </p:dialog>
+
+
+        <p:dialog modal="true" header="Información" resizable="false" widgetVar="exitoEnvioMensaje" closable="false">
+            <h:form>
+                <p:panelGrid style="text-align:left;" styleClass="panelgrid">
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="color: blue;" value="La solicitud fue enviada con exito."/>
+                        </p:column>                                
+                    </p:row>
+                    <p:row>
+                        <p:column width="200px;">
+                            <p:commandButton style="font-style: italic;margin-left: 60px;font-weight: normal;" 
+                                             value="Aceptar" onclick="PF('mensajeVinculo').hide()"
+                                             />                                    
+                        </p:column>
+
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+        <p:dialog modal="true" header="Información" resizable="false" widgetVar="errorEnvioMensaje" closable="false">
+            <h:form>
+                <p:panelGrid style="text-align:left;" styleClass="panelgrid">
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="color: red;" value="Error al enviar la solicitud, intente nuevamente."/>
+                        </p:column>                                
+                    </p:row>
+                    <p:row>
+                        <p:column width="200px;">
+                            <p:commandButton style="font-style: italic;margin-left: 60px;font-weight: normal;" 
+                                             value="Aceptar" onclick="PF('mensajeVinculo').hide()"
+                                             />                                    
+                        </p:column>
+
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog header="Información" resizable="false" widgetVar="errorCreditos" closable="false">
+            <h:form>
+                <p:panelGrid style="text-align:left;" styleClass="panelgrid">
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="color: red;" value="Error al enviar la solicitud, debe cargar su cuenta."/>
+                        </p:column>                                
+                    </p:row>
+                    <p:row>
+                        <p:column width="100%">
+                            <p:commandButton style="font-style: italic;margin-left: 60px;font-weight: normal;" 
+                                             value="Aceptar" onclick="PF('mensajeVinculo').hide()"
+                                             />                                    
+                        </p:column>
+
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+
+    </h:body>    
+</html>

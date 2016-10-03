@@ -54,7 +54,7 @@ public class PlcMcController implements Serializable {
     }
 
     public PlcMc getSelected() {
-        return objPlcMc;
+        return this.objPlcMc;
     }
 
     public void setSelected(PlcMc selected) {

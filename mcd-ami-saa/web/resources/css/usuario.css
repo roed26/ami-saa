@@ -138,4 +138,7 @@ body {
     text-align: left;
 }
 
+.ui-widget .ui-widget {
+  border:none;
+}
 

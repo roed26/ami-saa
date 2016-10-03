@@ -61,11 +61,25 @@ public class RoutingController implements Serializable {
        this.ruta = "/administrador/trafo/listaClientes.xhtml";
    }
    public void irSolicitudTiempoReal(){
-       this.ruta = "/administrador/trafo/solicitudEstadoTR.xhtml";
+       this.ruta = "/administrador/solicitudes/solicitudEstadoTR.xhtml";
+   }
+   public void irSolicitudTiempoRealCliente(){
+       this.ruta = "/administrador/solicitudes/solicitudEstadoCliente.xhtml";
+   }
+   public void irSolicitudSuspensionCliente(){
+       this.ruta = "/administrador/solicitudes/solicitudSuspensionCliente.xhtml";
+   }
+   public void irSolicitudReconexionCliente(){
+       this.ruta = "/administrador/solicitudes/solicitudReconexionCliente.xhtml";
    }
    public void irConsumoCliente(){
        this.ruta = "/administrador/eventosConsumo/consumoPorCliente.xhtml";
    }
-   
+   public void irConsumoTrafo(){
+       this.ruta = "/administrador/eventosConsumo/consumoPorTrafo.xhtml";
+   }
+   public void irGeoTrafo(){
+       this.ruta = "/administrador/mapas/trafosGeo.xhtml";
+   }
    
 }

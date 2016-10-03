@@ -27,7 +27,7 @@
             <p:outputLabel style="font-weight: bold; font-size: 16px; color: black;" value="Información de estado de amarre del cliente" rendered="#{clienteController.clienteSeleccionado}"/>
             <p:separator/>
             <br/>
-            <p:panelGrid  rendered="#{clienteController.clienteSeleccionado}">
+            <p:panelGrid id="panel"  rendered="#{clienteController.clienteSeleccionado}">
                 <p:row>
                     <p:column>
                         <p:outputLabel value="Nombre del cliente: " style="font-weight: bold; color: black;"/>
@@ -162,7 +162,7 @@
             </h:form>
         </p:dialog>
 
-        <p:dialog header="Seleccionar rango de fecha"  resizable="false"  position="center" modal="true"  widgetVar="seleccionarFecha">
+        <p:dialog header="Seleccionar rango de fecha" closable="false" resizable="false"  position="center" modal="true"  widgetVar="seleccionarFecha">
             <h:form id="formFecha" style="text-align: center; font-weight: bold; color: black;">
                 <p:outputLabel style="font-weight: bold; font-size: 14px; " value="Seleccione el rango de fecha para conocer el estado de amarre del cliente" />
                 <br/>
@@ -238,7 +238,7 @@
                             </p:calendar>
                         </p:column>
                         <p:column>
-                            <p:message for="fechaInicio"/>
+                            <p:message for="fechaInicio" />
                         </p:column>
                     </p:row>
                     <p:row rendered="#{clienteController.rangoFechaCambiado3}">
@@ -255,7 +255,7 @@
                             </p:calendar>
                         </p:column>
                         <p:column>
-                            <p:message for="fechaFin"/>
+                            <p:message for="fechaFin" />
                         </p:column>
                     </p:row>
                     <p:row>
@@ -264,7 +264,18 @@
                                 value="Aceptar"  
                                 ajax="true" 
                                 update="panel"
-                                action="#{clienteController.procesarConsulta()}"/>
+                                actionListener="#{clienteController.procesarConsulta()}"
+
+                                oncomplete="#{clienteController.cambiarEstadoSeleccion()}"
+                                />
+                        
+                            <p:commandButton 
+                                value="Cancelar"  
+                                onclick="PF('seleccionarFecha').hide()"
+                                actionListener="#{clienteController.cancelarProceso()}"
+
+
+                                />
                         </p:column>
                     </p:row>                   
                 </p:panelGrid>

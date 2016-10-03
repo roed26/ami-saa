@@ -23,8 +23,7 @@ public class ValidarCampoFecha implements Validator {
     @Override
     public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
        
-        Date fechaFin= (Date)component.getAttributes().get("fechaFin"); 
-        
+       
         if (value != null) {
             Date fecha = (Date) value;
             if (!validarFechaNacimiento(fecha)) {

@@ -7,6 +7,7 @@ package com.ceo.amisaa.sessionbeans;
 
 import com.ceo.amisaa.entidades.Producto;
 import com.ceo.amisaa.entidades.Cliente;
+import com.ceo.amisaa.entidades.Trafo;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -51,12 +52,14 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         return resultList;
     }
     
-    public List<Producto> buscarListaProductosTrafo(String idTrafo) {
+    public List<Producto> buscarListaProductosTrafo(Trafo idTrafo) {
         Query query = getEntityManager().createNamedQuery("Producto.findByProductosTrafo");
-        query.setParameter("trafo", "%" + idTrafo + "%");
+        query.setParameter("idTrafo", idTrafo );
         List<Producto> resultList = query.getResultList();
         return resultList;
     }
+    
+    
     
     
 }

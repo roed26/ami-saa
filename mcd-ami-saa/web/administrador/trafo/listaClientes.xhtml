@@ -18,55 +18,57 @@
             </h:panelGrid>            
         </h:form>
         <p:separator/>
-        <h:form id="trafoSeleccionado" rendered="#{trafoController.trafoSeleccionado}">
+        <h:form id="trafoSeleccionado" >
+            <p:outputLabel style="font-weight: bold; font-size: 14px; color: red;" value="Aun no ha seleccionado un trafo " rendered="#{!trafoController.trafoSeleccionado}"/>
+            <br/>
             <p:outputLabel style="font-weight: bold; font-size: 16px; color: black;" value="Listado de clientes en el trafo " rendered="#{trafoController.trafoSeleccionado}"/>
             <p:outputLabel style="font-weight: bold; font-size: 18px; color: blue;" value=" #{trafoController.selected.idTrafo}" rendered="#{trafoController.trafoSeleccionado}"/>
             <p:separator/>
             <p:outputLabel style="font-weight: bold; font-size: 14px; color: red;" value="No hay clientes vinculados a este trafo" rendered="#{!trafoController.clientes}"/>
-            <h:form id="listado" rendered="#{trafoController.clientes}">
-                <br/>
-                
-                    <p:dataTable id="datalist"  
-                                 value="#{trafoController.listaClientes}"
-                                 var="cliente"
-                                 paginator="true"    
-                                 rowIndexVar="i"
-                                 rows="10"
-                                 rowsPerPageTemplate="10,20,30,40,50"
-                                 >
-                        <p:column style="width: 320px">
-                            <f:facet name="header">
-                                <h:outputText value="Nombre del cliente"/>
-                            </f:facet>
-                            <h:outputText value="#{cliente.nombres} "/>
-                            <h:outputText value="#{cliente.apellidos} "/>
-                        </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="Dirección"/>
-                            </f:facet>
-                            <h:outputText value="#{cliente.direccion}"/>
-                        </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="Producto"/>
-                            </f:facet>
-                            <h:outputText value="#{trafoController.listaProductos[i]}"/>
-                        </p:column>
+            <br/>
+            <p:dataTable id="datalist"  
+                         value="#{trafoController.listaClientes}"
+                         var="cliente"
+                         paginator="true"    
+                         rowIndexVar="i"
+                         rows="10"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         rendered="#{trafoController.trafoSeleccionado}"
+                         >
+                <p:column style="width: 320px">
+                    <f:facet name="header">
+                        <h:outputText value="Nombre del cliente"/>
+                    </f:facet>
+                    <h:outputText value="#{cliente.nombres} "/>
+                    <h:outputText value="#{cliente.apellidos} "/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Dirección"/>
+                    </f:facet>
+                    <h:outputText value="#{cliente.direccion}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Producto"/>
+                    </f:facet>
+                    <h:outputText value="#{trafoController.listaProductos[i]}"/>
+                </p:column>
 
-                        <p:column style="width: 80px; text-align: center;">
-                            <f:facet name="header">
-                                <h:outputText value="Estado de amarre"/>
-                            </f:facet>
-                            <p:column colspan="2" rendered="#{trafoController.estadosDeAmarre[i]}">
-                                <p:graphicImage width="20" height="20" value="./../resources/img/estado/activo.png"/>
-                            </p:column>
-                            <p:column colspan="2" style="vertical-align: middle;" rendered="#{!trafoController.estadosDeAmarre[i]}">
-                                <p:graphicImage width="20" height="20" value="./../resources/img/estado/inactivo.png"/>
-                            </p:column>
-                        </p:column>
-                    </p:dataTable>
-            </h:form>
+                <p:column style="width: 80px; text-align: center;">
+                    <f:facet name="header">
+                        <h:outputText value="Estado de amarre"/>
+                    </f:facet>
+                    <p:column colspan="2" rendered="#{trafoController.estadosDeAmarre[i]}">
+                        <p:graphicImage title="Con amarre" width="20" height="20" value="./../resources/img/estado/activo.png"/>
+                    </p:column>
+                    <p:column colspan="2" style="vertical-align: middle;" rendered="#{!trafoController.estadosDeAmarre[i]}">
+                        <p:graphicImage title="Sin amarre" width="20" height="20" value="./../resources/img/estado/inactivo.png"/>
+                    </p:column>
+                </p:column>
+            </p:dataTable>
+
+
         </h:form>
         <p:dialog visible="#{!trafoController.trafoSeleccionado}" header="Seleccionar trafo" resizable="false" width="450" position="center" modal="true"  widgetVar="seleccionarTrafo">
             <p:outputLabel value="Seleccione un trafo para visualizar la lista de cliente vinculados " style="color: black;font-weight: bold; font-size: 14px;" />                    
@@ -79,30 +81,30 @@
                     </p:inputText>                          
                 </h:panelGrid>
                 <br/>
-                    <p:dataTable id="datalist" value="#{trafoController.listaTrafos}" var="item"
-                                 paginator="true"
-                                 rowKey="#{item.idTrafo}"
-                                 rows="10"
-                                 rowsPerPageTemplate="5,10"
-                                 >
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="Identificador del trafo"/>
-                            </f:facet>
-                            <h:outputText value="#{item.idTrafo}"/>
-                        </p:column>
-                        <p:column style="width: 120px; background: #EBEDEB;">
-                            <f:facet name="header">
-                                <h:outputText value="Accion"/>
-                            </f:facet>
-                            <p:commandButton id="viewButton"  actionListener="#{trafoController.seleccionarTrafo(item)}" icon="ui-icon-plus" value="Seleccionar"  
-                                             />
-                        </p:column>
-                    </p:dataTable>
-                
+                <p:dataTable id="datalist" value="#{trafoController.listaTrafos}" var="item"
+                             paginator="true"
+                             rowKey="#{item.idTrafo}"
+                             rows="10"
+                             rowsPerPageTemplate="5,10"
+                             >
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Identificador del trafo"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idTrafo}"/>
+                    </p:column>
+                    <p:column style="width: 120px; background: #EBEDEB;">
+                        <f:facet name="header">
+                            <h:outputText value="Accion"/>
+                        </f:facet>
+                        <p:commandButton id="viewButton"  actionListener="#{trafoController.seleccionarTrafo(item)}" icon="ui-icon-plus" value="Seleccionar"  
+                                         />
+                    </p:column>
+                </p:dataTable>
+
             </h:form>
         </p:dialog>
-        
+
         <p:dialog header="Seleccionar rango de fecha"  resizable="false" closable="false" position="center" modal="true"  widgetVar="seleccionarFecha">
             <h:form id="formFecha" style="text-align: center; font-weight: bold; color: black;">
                 <p:outputLabel style="font-weight: bold; font-size: 14px; " value="Seleccione el rango de fecha para conocer el estado de amarre del cliente" />
@@ -205,7 +207,10 @@
                                 value="Aceptar"  
                                 ajax="true" 
                                 update="panel"
-                                action="#{trafoController.procesarConsulta()}"/>
+                                actionListener="#{trafoController.procesarConsulta()}"
+                                oncomplete="#{trafoController.cambiarEstadoSeleccionado()}"
+                                />
+
                             <p:commandButton 
                                 value="Cancelar"  
                                 ajax="false" 
@@ -217,7 +222,7 @@
             </h:form>
 
         </p:dialog>
-        
+
 
     </h:body>    
 </html>
