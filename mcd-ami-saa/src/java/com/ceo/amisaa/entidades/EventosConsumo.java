@@ -10,6 +10,8 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -43,8 +45,8 @@ public class EventosConsumo implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id_consumo")
     private Integer idConsumo;
     @Basic(optional = false)
@@ -74,6 +76,9 @@ public class EventosConsumo implements Serializable {
     @JoinColumn(name = "mac_plc_tu", referencedColumnName = "mac_plc_tu")
     @ManyToOne(optional = false)
     private PlcTu macPlcTu;
+    @JoinColumn(name = "id_notificacion", referencedColumnName = "id_notificacion")
+    @ManyToOne(optional = false)
+    private Notificacion idNotificacion;
 
     public EventosConsumo() {
     }
@@ -175,6 +180,13 @@ public class EventosConsumo implements Serializable {
         return true;
     }
 
+     public Notificacion getIdNotificacion() {
+        return idNotificacion;
+    }
+
+    public void setIdNotificacion(Notificacion idNotificacion) {
+        this.idNotificacion = idNotificacion;
+    }
     @Override
     public String toString() {
         return "com.ceo.amisaa.managedbean.EventosConsumo[ idConsumo=" + idConsumo + " ]";

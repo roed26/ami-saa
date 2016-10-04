@@ -59,7 +59,10 @@ public class EventosAmarre implements Serializable {
     private PlcMms macPlcMms;
     @JoinColumn(name = "mac_plc_tu", referencedColumnName = "mac_plc_tu")
     @ManyToOne(optional = false)
-    private PlcTu macPlcTu;
+    private PlcTu macPlcTu;    
+    @JoinColumn(name = "id_notificacion", referencedColumnName = "id_notificacion")
+    @ManyToOne(optional = false)
+    private Notificacion idNotificacion;
 
     public EventosAmarre() {
     }
@@ -136,9 +139,18 @@ public class EventosAmarre implements Serializable {
         return true;
     }
 
+    public Notificacion getIdNotificacion() {
+        return idNotificacion;
+    }
+
+    public void setIdNotificacion(Notificacion idNotificacion) {
+        this.idNotificacion = idNotificacion;
+    }
     @Override
     public String toString() {
         return "com.ceo.amisaa.entidades.EventosAmarre[ idAmarre=" + idAmarre + " ]";
     }
+    
+   
     
 }

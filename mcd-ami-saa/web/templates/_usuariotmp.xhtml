@@ -12,12 +12,50 @@
         <h:outputStylesheet name="./css/cssLayout.css"/>
         <h:outputStylesheet name="./css/usuario.css"/>
         <h:outputStylesheet name="./css/style.css"/>
+        <h:outputScript library="js" name="javascript.js" />
 
         <title></title>
     </h:head>
     <h:body>
-
+         <h:form>
+            <p:poll autoStart="true"  listener="#{notificacionController.comprobarNotificaciones()}"
+         oncomplete="handleComplete(xhr, status, args)" interval="10" />
+        </h:form>
         <div id="header">
+            <div class="notificaciones">
+                <h:form id="formNotificacion">
+                    <h:link rendered="#{!notificacionController.mostrarnotificacion}" id="opcionesnotificacion1" style="text-decoration: none;color:#0080FF ;font-size: 13pt; ">
+                                 
+                            <p:graphicImage style="width: 35px;float: left;" value="/faces/resources/img/notificaciones/notificacion.png"/>  
+                           
+                            
+                               
+                          
+                        </h:link>
+                     <p:menu  overlay="true" trigger="opcionesnotificacion1"  my="left top" at="left bottom">        
+
+                            
+                            <p:menuitem  value="Ver notificaciones" 
+                                         action="#{routingController.irNotificaciones()}" ajax="false"  />
+                        </p:menu>
+                        <h:link rendered="#{notificacionController.mostrarnotificacion}"  id="opcionesnotificacion2" style="text-decoration: none;color:#0080FF ;font-size: 13pt; ">
+                                 
+                            <p:graphicImage style="width: 35px;float: left;" value="/faces/resources/img/notificaciones/notificacion.png"/>  
+                           
+                            <div id="ciruculonotificacionconteo">
+                                #{notificacionController.conteoNotificacionesNuevas}
+                            </div>
+                               
+                          
+                        </h:link>
+                     <p:menu  overlay="true" trigger="opcionesnotificacion2"  my="left top" at="left bottom">        
+
+                            
+                            <p:menuitem  value="Ver notificaciones" 
+                                         action="#{routingController.irNotificaciones()}" ajax="false"  />
+                        </p:menu>
+                   </h:form>
+            </div>
             <div class="con_escudo_titulo">
                 <div class="bkg">
                     <div class="logo">

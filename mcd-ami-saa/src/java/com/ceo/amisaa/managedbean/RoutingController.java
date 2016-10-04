@@ -81,5 +81,8 @@ public class RoutingController implements Serializable {
    public void irGeoTrafo(){
        this.ruta = "/administrador/mapas/trafosGeo.xhtml";
    }
-   
+   public void irNotificaciones()
+   {
+       this.ruta = "/administrador/notificaciones/notificaciones.xhtml";
+   }
 }

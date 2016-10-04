@@ -74,6 +74,9 @@ public class EventosConsumoMc implements Serializable {
     @JoinColumn(name = "mac_plc_mms", referencedColumnName = "mac_plc_mms")
     @ManyToOne(optional = false)
     private PlcMms macPlcMms;
+    @JoinColumn(name = "id_notificacion", referencedColumnName = "id_notificacion")
+    @ManyToOne(optional = false)
+    private Notificacion idNotificacion;
 
     public EventosConsumoMc() {
     }
@@ -183,6 +186,13 @@ public class EventosConsumoMc implements Serializable {
         return true;
     }
 
+    public Notificacion getIdNotificacion() {
+        return idNotificacion;
+    }
+
+    public void setIdNotificacion(Notificacion idNotificacion) {
+        this.idNotificacion = idNotificacion;
+    }
     @Override
     public String toString() {
         return "com.ceo.amisaa.entidades.EventosConsumoMc[ idConsumo=" + idConsumo + " ]";
