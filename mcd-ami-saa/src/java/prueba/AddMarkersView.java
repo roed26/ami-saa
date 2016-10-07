@@ -35,21 +35,21 @@ public class AddMarkersView implements Serializable {
     private double lng;
     @EJB
     private TrafoFacade ejbTrafo;
-    
+
     @EJB
     private ProductoFacade ejbProducto;
 
     private String idTrafo;
+
     public AddMarkersView() {
         this.ejbTrafo = new TrafoFacade();
-        
+
     }
 
     @PostConstruct
     public void init() {
-emptyModel = new DefaultMapModel();
+        emptyModel = new DefaultMapModel();
         cargarInformacion();
-        
 
     }
 
@@ -95,23 +95,24 @@ emptyModel = new DefaultMapModel();
                 emptyModel.addOverlay(marker);
             }
         }*/
-        
-        trafo = this.ejbTrafo.buscarPorIdObj("T2769");
-        Marker marker = new Marker(new LatLng(trafo.getLatitud(), trafo.getLongitud()), trafo.getIdTrafo());
-        emptyModel.addOverlay(marker);
-        
+        trafo = this.ejbTrafo.buscarPorIdObj("T2755");
+
         listaProductos = this.ejbProducto.buscarListaProductosTrafo(trafo);
-        
+
         if (listaProductos.size() > 0) {
+            Marker marker = new Marker(new LatLng(trafo.getLatitud(), trafo.getLongitud()), trafo.getIdTrafo());
+            marker.setIcon("../resources/img/iconos/icon-trafo.png");
+
+            emptyModel.addOverlay(marker);
+            
             for (int i = 0; i < listaProductos.size(); i++) {
 
                 marker = new Marker(new LatLng(listaProductos.get(i).getLatitud(), listaProductos.get(i).getLongitud()), listaProductos.get(i).getCedula().getNombres());
+            
                 emptyModel.addOverlay(marker);
             }
         }
-        
-        
-        
+
     }
 
     public void addMarker() {

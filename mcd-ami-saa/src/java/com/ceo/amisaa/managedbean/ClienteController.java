@@ -105,6 +105,7 @@ public class ClienteController implements Serializable {
     private SimpleDateFormat formatoFecha;
     private CartesianChartModel consumo;
     private String trama;
+    private String mensajeError;
 
     public ClienteController() {
         this.formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
@@ -218,6 +219,14 @@ public class ClienteController implements Serializable {
 
     public void setExisteTrafo(boolean existeTrafo) {
         this.existeTrafo = existeTrafo;
+    }
+
+    public String getMensajeError() {
+        return mensajeError;
+    }
+
+    public void setMensajeError(String mensajeError) {
+        this.mensajeError = mensajeError;
     }
 
     public Producto getProducto() {
@@ -408,6 +417,7 @@ public class ClienteController implements Serializable {
     public void seleccionarClienteSolicitud(Cliente cliente) {
         this.selected = cliente;
         RequestContext requestContext = RequestContext.getCurrentInstance();
+        requestContext.update("envioSolicitud");
         requestContext.execute("PF('seleccionarCliente').hide()");
         requestContext.execute("PF('enviarSolicitud').show()");
     }
@@ -437,10 +447,6 @@ public class ClienteController implements Serializable {
             this.rangoFecha = "";
             requestContext.update("clienteSeleccionado");
         }
-        /*consumoCliente.set("26", 1100);
-                consumoCliente.set("27", 1700);
-                    consumoCliente.set("28", 1900);
-                    consumo.addSeries(consumoCliente);*/
     }
 
     public void consultarConsumo() {
@@ -468,11 +474,9 @@ public class ClienteController implements Serializable {
                             } else {
                                 energia = eventoConsumo.get(i).getEnergia() - eventoConsumo.get(i - 1).getEnergia();
                             }
-//eventoConsumo.get(i).getCorriente()-eventoConsumo.get(i-1).getCorriente()
                             consumoCliente.set(formatoFecha.format(eventoConsumo.get(i).getFechaHora()), energia);
 
                         }
-
                     }
                     consumo.addSeries(consumoCliente);
                     sinConsumo = false;
@@ -484,7 +488,6 @@ public class ClienteController implements Serializable {
                 }
             }
         }
-
     }
 
     public void consultarEstadoAmarre() {
@@ -523,7 +526,7 @@ public class ClienteController implements Serializable {
     }
 
     public void enviarSolicitud() {
-        //trama = "Trafo seleccionado: " + selected.getIdTrafo();
+
         RequestContext requestContext = RequestContext.getCurrentInstance();
         FacesContext context = FacesContext.getCurrentInstance();
         Application application = context.getApplication();
@@ -540,12 +543,11 @@ public class ClienteController implements Serializable {
                 this.macro = ejbMacro.buscarMacroPorTrafoObj(trafo);
                 if (macro != null) {
                     this.trama = "$@A0x5101" + macro.getIdMacro();
-                    this.plcMms = ejbPlcMms.buscarPorIdTrafo(trafo.getIdTrafo());
+                    this.plcMms = ejbPlcMms.buscarPorIdTrafoObj(trafo);
                     if (this.plcMms != null) {
 
                         if (this.plcMms.getNumeroCelular() != null) {
                             String numeroCelular = "&msisdn=57" + this.plcMms.getNumeroCelular();
-                            //String numeroCelular = "&msisdn=57" + "3114760156";
 
                             try {
 
@@ -573,49 +575,61 @@ public class ClienteController implements Serializable {
                                     String respuesta[] = line.split("\\|");
 
                                     if (!respuesta[0].equalsIgnoreCase("25")) {
-                                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
                                         requestContext.execute("PF('exitoEnvioMensaje').show()");
+                                        this.clienteSeleccionado = false;
                                     } else {
-                                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "No hay creditos"));
-                                        requestContext.execute("PF('errorCreditos').show()");
+                                        this.mensajeError = "No cuenta con suficiente saldo para enviar la solicitud";
+                                        requestContext.update("errorEnvioSolicitud");
+                                        requestContext.execute("PF('errorEnvioMensaje').show()");
+                                        this.clienteSeleccionado = false;
                                     }
-
                                 }
-
                                 wr.close();
                                 rd.close();
-
                                 this.clienteSeleccionado = false;
 
                             } catch (Exception e) {
-                                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
+                                this.mensajeError = "Error inesperado, intente nuevamente";
+                                requestContext.update("errorEnvioSolicitud");
                                 requestContext.execute("PF('errorEnvioMensaje').show()");
                                 this.clienteSeleccionado = false;
                             }
 
                         } else {
-                            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
+                            this.mensajeError = "El maestro no tiene asociado un número de celular";
+                            requestContext.update("errorEnvioSolicitud");
                             requestContext.execute("PF('errorEnvioMensaje').show()");
                             this.clienteSeleccionado = false;
                         }
 
                     } else {
-                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
+                        this.mensajeError = "El cliente no esta asociado a un maestro";
+                        requestContext.update("errorEnvioSolicitud");
                         requestContext.execute("PF('errorEnvioMensaje').show()");
                         this.clienteSeleccionado = false;
                     }
                 } else {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
+                    this.mensajeError = "El cliente no esta vinculado a un macro";
+                    requestContext.update("errorEnvioSolicitud");
                     requestContext.execute("PF('errorEnvioMensaje').show()");
                     this.clienteSeleccionado = false;
                 }
+            } else {
+                this.mensajeError = "El cliente no esta vinculado a un trafo";
+                requestContext.update("errorEnvioSolicitud");
+                requestContext.execute("PF('errorEnvioMensaje').show()");
+                this.clienteSeleccionado = false;
             }
+        } else {
+            this.mensajeError = "El cliente no tiene un producto asociado";
+            requestContext.update("errorEnvioSolicitud");
+            requestContext.execute("PF('errorEnvioMensaje').show()");
+            this.clienteSeleccionado = false;
         }
 
     }
 
     public void enviarSolicitudSuspension() {
-        //trama = "Trafo seleccionado: " + selected.getIdTrafo();
         RequestContext requestContext = RequestContext.getCurrentInstance();
         FacesContext context = FacesContext.getCurrentInstance();
         Application application = context.getApplication();
@@ -632,17 +646,14 @@ public class ClienteController implements Serializable {
                 this.macro = ejbMacro.buscarMacroPorTrafoObj(trafo);
                 if (macro != null) {
                     this.trama = "$@A0x5101" + macro.getIdMacro();
-                    this.plcMms = ejbPlcMms.buscarPorIdTrafo(trafo.getIdTrafo());
+                    this.plcMms = ejbPlcMms.buscarPorIdTrafoObj(trafo);
                     if (this.plcMms != null) {
 
                         if (this.plcMms.getNumeroCelular() != null) {
                             String numeroCelular = "&msisdn=57" + this.plcMms.getNumeroCelular();
-                            //String numeroCelular = "&msisdn=57" + "3114760156";
 
                             try {
-
                                 String data = "";
-
                                 data += "username=" + URLEncoder.encode("roed26", "ISO-8859-1");
                                 data += "&password=" + URLEncoder.encode("rosario26@", "ISO-8859-1");
                                 data += "&message=" + URLEncoder.encode(trama, "ISO-8859-1");
@@ -665,49 +676,61 @@ public class ClienteController implements Serializable {
                                     String respuesta[] = line.split("\\|");
 
                                     if (!respuesta[0].equalsIgnoreCase("25")) {
-                                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
                                         requestContext.execute("PF('exitoEnvioMensaje').show()");
+                                        this.clienteSeleccionado = false;
                                     } else {
-                                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "No hay creditos"));
-                                        requestContext.execute("PF('errorCreditos').show()");
+                                        this.mensajeError = "No cuenta con suficiente saldo para enviar la solicitud";
+                                        requestContext.update("errorEnvioSolicitud");
+                                        requestContext.execute("PF('errorEnvioMensaje').show()");
+                                        this.clienteSeleccionado = false;
                                     }
-
                                 }
-
                                 wr.close();
                                 rd.close();
-
                                 this.clienteSeleccionado = false;
 
                             } catch (Exception e) {
-                                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
+                                this.mensajeError = "Error inesperado, intente nuevamente";
+                                requestContext.update("errorEnvioSolicitud");
                                 requestContext.execute("PF('errorEnvioMensaje').show()");
                                 this.clienteSeleccionado = false;
                             }
 
                         } else {
-                            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
+                            this.mensajeError = "El maestro no tiene asociado un número de celular";
+                            requestContext.update("errorEnvioSolicitud");
                             requestContext.execute("PF('errorEnvioMensaje').show()");
                             this.clienteSeleccionado = false;
                         }
 
                     } else {
-                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
+                        this.mensajeError = "El cliente no esta asociado a un maestro";
+                        requestContext.update("errorEnvioSolicitud");
                         requestContext.execute("PF('errorEnvioMensaje').show()");
                         this.clienteSeleccionado = false;
                     }
                 } else {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
+                    this.mensajeError = "El cliente no esta vinculado a un macro";
+                    requestContext.update("errorEnvioSolicitud");
                     requestContext.execute("PF('errorEnvioMensaje').show()");
                     this.clienteSeleccionado = false;
                 }
+            } else {
+                this.mensajeError = "El cliente no esta vinculado a un trafo";
+                requestContext.update("errorEnvioSolicitud");
+                requestContext.execute("PF('errorEnvioMensaje').show()");
+                this.clienteSeleccionado = false;
             }
+        } else {
+            this.mensajeError = "El cliente no tiene un producto asociado";
+            requestContext.update("errorEnvioSolicitud");
+            requestContext.execute("PF('errorEnvioMensaje').show()");
+            this.clienteSeleccionado = false;
         }
 
     }
 
     public void enviarSolicitudReconexion() {
-        //trama = "Trafo seleccionado: " + selected.getIdTrafo();
         RequestContext requestContext = RequestContext.getCurrentInstance();
         FacesContext context = FacesContext.getCurrentInstance();
         Application application = context.getApplication();
@@ -724,7 +747,7 @@ public class ClienteController implements Serializable {
                 this.macro = ejbMacro.buscarMacroPorTrafoObj(trafo);
                 if (macro != null) {
                     this.trama = "$@A0x5101" + macro.getIdMacro();
-                    this.plcMms = ejbPlcMms.buscarPorIdTrafo(trafo.getIdTrafo());
+                    this.plcMms = ejbPlcMms.buscarPorIdTrafoObj(trafo);
                     if (this.plcMms != null) {
 
                         if (this.plcMms.getNumeroCelular() != null) {
@@ -757,43 +780,56 @@ public class ClienteController implements Serializable {
                                     String respuesta[] = line.split("\\|");
 
                                     if (!respuesta[0].equalsIgnoreCase("25")) {
-                                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
                                         requestContext.execute("PF('exitoEnvioMensaje').show()");
+                                        this.clienteSeleccionado = false;
                                     } else {
-                                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "No hay creditos"));
-                                        requestContext.execute("PF('errorCreditos').show()");
+                                        this.mensajeError = "No cuenta con suficiente saldo para enviar la solicitud";
+                                        requestContext.update("errorEnvioSolicitud");
+                                        requestContext.execute("PF('errorEnvioMensaje').show()");
+                                        this.clienteSeleccionado = false;
                                     }
-
                                 }
-
                                 wr.close();
                                 rd.close();
-
-                                this.clienteSeleccionado = false;
+                                
 
                             } catch (Exception e) {
-                                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
+                                this.mensajeError = "Error inesperado, intente nuevamente";
+                                requestContext.update("errorEnvioSolicitud");
                                 requestContext.execute("PF('errorEnvioMensaje').show()");
                                 this.clienteSeleccionado = false;
                             }
 
                         } else {
-                            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
+                            this.mensajeError = "El maestro no tiene asociado un número de celular";
+                            requestContext.update("errorEnvioSolicitud");
                             requestContext.execute("PF('errorEnvioMensaje').show()");
                             this.clienteSeleccionado = false;
                         }
 
                     } else {
-                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
+                        this.mensajeError = "El cliente no esta asociado a un maestro";
+                        requestContext.update("errorEnvioSolicitud");
                         requestContext.execute("PF('errorEnvioMensaje').show()");
                         this.clienteSeleccionado = false;
                     }
                 } else {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
+                    this.mensajeError = "El cliente no esta vinculado a un macro";
+                    requestContext.update("errorEnvioSolicitud");
                     requestContext.execute("PF('errorEnvioMensaje').show()");
                     this.clienteSeleccionado = false;
                 }
+            } else {
+                this.mensajeError = "El cliente no esta vinculado a un trafo";
+                requestContext.update("errorEnvioSolicitud");
+                requestContext.execute("PF('errorEnvioMensaje').show()");
+                this.clienteSeleccionado = false;
             }
+        } else {
+            this.mensajeError = "El cliente no tiene un producto asociado";
+            requestContext.update("errorEnvioSolicitud");
+            requestContext.execute("PF('errorEnvioMensaje').show()");
+            this.clienteSeleccionado = false;
         }
 
     }

@@ -45,19 +45,19 @@
                         <p:menuitem value="Solicitud de estado de amarre y consumo de un cliente" action="#{routingController.irSolicitudTiempoRealCliente()}" ajax="false"/>
                         <p:menuitem value="Solicitud de suspención de servicio"  action="#{routingController.irSolicitudSuspensionCliente()}" ajax="false"/>
                         <p:menuitem value="Solicitud de reconexión de servicio"  action="#{routingController.irSolicitudReconexionCliente()}" ajax="false"/>
-                        <p:menuitem value="Solicitud de configuración paramatros PLC_MMS"  action="#{routingController.irSolicitudReconexionCliente()}" ajax="false"/>
+                        <p:menuitem value="Solicitud de configuración paramatros PLC_MMS"  ajax="false"/>
                     </p:submenu>
                     <p:submenu label="Ubicación trafos y clientes">
                         <p:menuitem value="Trafos y clientes" action="#{routingController.irGeoTrafo()}" ajax="false"/>
                         <p:menuitem value="Geoamarre"  ajax="false"/>
 
                     </p:submenu>
-                    <!--<p:submenu label="Gestión de clientes">
-                        <p:menuitem value=""  ajax="false"/>
+                    <p:submenu label="Gestión de clientes">
+                       <p:menuitem value="Registrar cliente"  ajax="false"/>
+                       <p:menuitem value="Gestionar cliente"   ajax="false"/>
+
                     </p:submenu>
-                    <p:submenu label="Trafo">
-                        <p:menuitem value=""  ajax="false"/>
-                    </p:submenu>-->
+                    
                 </p:tieredMenu>
             </h:form>
         </div>

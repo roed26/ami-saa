@@ -29,7 +29,6 @@
                              rows="10"
                              rowsPerPageTemplate="5,10"
                              >
-
                     <p:column >
                         <f:facet name="header">
                             <h:outputText value="Cédula"/>
@@ -53,18 +52,34 @@
                         <f:facet name="header">
                             <h:outputText value="Accion"/>
                         </f:facet>
-                        <p:commandButton id="viewButton"  actionListener="#{clienteController.seleccionarClienteSolicitud(item)}" icon="ui-icon-plus" value="Seleccionar"  />
+                        <p:commandButton id="viewButton" actionListener="#{clienteController.seleccionarClienteSolicitud(item)}" icon="ui-icon-plus" value="Seleccionar"  />
                     </p:column>
                 </p:dataTable>
 
             </h:form>
         </p:dialog>
-        <p:dialog header="Enviar solicitud" closable="false" resizable="false"  position="center" modal="true"  widgetVar="enviarSolicitud">
-
+        <p:dialog header="Enviar solicitud de estado de ammarre y consumo" closable="false" resizable="false"  position="center" modal="true"  widgetVar="enviarSolicitud">
             <h:form id="envioSolicitud">
-                <p:outputLabel style="font-weight: bold; font-size: 16px; color: black;" value="La consulta de estado de amarre y consumo se solicitara al cliente: " />
-                <p:outputLabel style="font-weight: bold; font-size: 18px; color: blue;" value=" #{clienteController.selected.nombres}" />
-                
+                <p:panelGrid>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel style="font-weight: bold; font-size: 16px; color: black;" value="La consulta de estado de amarre y consumo se solicitara para el cliente " />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel style="font-weight: bold; font-size: 18px; color: black;" value="Cédula: " />
+                            <p:outputLabel style="font-weight: bold; font-size: 18px; color: blue;" value="#{clienteController.selected.cedula} " />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel style="font-weight: bold; font-size: 18px; color: black;" value="Nombres y apellidos: " />
+                            <p:outputLabel style="font-weight: bold; font-size: 18px; color: blue;" value=" #{clienteController.selected.nombres} #{clienteController.selected.apellidos}" />
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+
                 <p:separator/>
                 <p:commandButton value="Enviar solicitud" action="#{clienteController.enviarSolicitud}"/>
                 <p:commandButton value="Cancelar"  action="#{clienteController.cancelarSolicitud}" ajax="false"/>
@@ -84,26 +99,25 @@
                     <p:row>
                         <p:column width="200px;">
                             <p:commandButton style="font-style: italic;margin-left: 60px;font-weight: normal;" 
-                                             value="Aceptar" onclick="PF('mensajeVinculo').hide()"
+                                             value="Aceptar" onclick="PF('exitoEnvioMensaje').hide()" update="@all"
                                              />                                    
                         </p:column>
-
                     </p:row>
                 </p:panelGrid>
             </h:form>
         </p:dialog>
         <p:dialog modal="true" header="Información" resizable="false" widgetVar="errorEnvioMensaje" closable="false">
-            <h:form>
+            <h:form id="errorEnvioSolicitud">
                 <p:panelGrid style="text-align:left;" styleClass="panelgrid">
                     <p:row>
                         <p:column>
-                            <h:outputLabel style="color: red;" value="Error al enviar la solicitud, intente nuevamente."/>
+                            <h:outputLabel style="color: red;" value="#{clienteController.mensajeError}"/>
                         </p:column>                                
                     </p:row>
                     <p:row>
                         <p:column width="200px;">
                             <p:commandButton style="font-style: italic;margin-left: 60px;font-weight: normal;" 
-                                             value="Aceptar" onclick="PF('mensajeVinculo').hide()"
+                                             value="Aceptar" onclick="PF('errorEnvioMensaje').hide()" 
                                              />                                    
                         </p:column>
 
@@ -111,26 +125,5 @@
                 </p:panelGrid>
             </h:form>
         </p:dialog>
-
-        <p:dialog header="Información" resizable="false" widgetVar="errorCreditos" closable="false">
-            <h:form>
-                <p:panelGrid style="text-align:left;" styleClass="panelgrid">
-                    <p:row>
-                        <p:column>
-                            <h:outputLabel style="color: red;" value="Error al enviar la solicitud, debe cargar su cuenta."/>
-                        </p:column>                                
-                    </p:row>
-                    <p:row>
-                        <p:column width="100%">
-                            <p:commandButton style="font-style: italic;margin-left: 60px;font-weight: normal;" 
-                                             value="Aceptar" onclick="PF('mensajeVinculo').hide()"
-                                             />                                    
-                        </p:column>
-
-                    </p:row>
-                </p:panelGrid>
-            </h:form>
-        </p:dialog>
-
     </h:body>    
 </html>

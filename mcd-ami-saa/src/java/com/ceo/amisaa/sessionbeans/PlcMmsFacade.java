@@ -7,6 +7,7 @@ package com.ceo.amisaa.sessionbeans;
 
 import com.ceo.amisaa.entidades.PlcMms;
 import com.ceo.amisaa.entidades.PlcTu;
+import com.ceo.amisaa.entidades.Trafo;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -50,6 +51,19 @@ public class PlcMmsFacade extends AbstractFacade<PlcMms> {
          plcMms=resultList.get(0);
         }else{
          plcMms=null;
+        }
+        return plcMms;
+    }
+    
+    public PlcMms buscarPorIdTrafoObj(Trafo idTrafo) {
+        PlcMms plcMms;
+        Query query = getEntityManager().createNamedQuery("PlcMms.findByIdTrafoObj");
+        query.setParameter("idTrafo", idTrafo);
+        List<PlcMms> resultList = query.getResultList();
+        if (resultList.size() > 0) {
+            plcMms = resultList.get(0);
+        } else {
+            plcMms = null;
         }
         return plcMms;
     }

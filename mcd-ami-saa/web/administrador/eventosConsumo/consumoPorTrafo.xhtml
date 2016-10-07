@@ -8,7 +8,8 @@
 
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Estado amarre clientes </title>
+        <title>Estado amarre clientes
+        </title>
     </h:head>
     <h:body>
         <h:form id="datosIngreso" >
@@ -126,56 +127,10 @@
                 </p:row>
             </p:panelGrid>
         </h:form>
-        <p:dialog visible="#{!clienteController.clienteSeleccionado}" header="Seleccionar cliente" resizable="false" width="850" position="center" modal="true"  widgetVar="seleccionarCliente">
-            <p:outputLabel value="Seleccione un cliente para conocer su consumo en un determinado periodo de tiempo " style="background: #c2dfef; color: black;font-weight: bold; font-size: 16px;" />                    
-            <h:form id="ClienteListForm">
-                <br/>
-                <h:panelGrid columns="2">
-                    <p:outputLabel value="Buscar por:" />
-                    <p:inputText  placeholder="Nombres, apellidos o cédula " style="width: 240px;"  value="#{clienteController.nombreOApellidos}" >
-                        <p:ajax event="keyup" update="datalist" listener="#{clienteController.buscarPorNombresOApellidos()}" />                                
-                    </p:inputText>                          
-                </h:panelGrid>
-                <br/>
-
-                <p:dataTable id="datalist" value="#{clienteController.listaClientes}" var="item"
-                             paginator="true"
-                             rowKey="#{item.cedula}"
-                             rows="10"
-                             rowsPerPageTemplate="5,10"
-                             >
-                    <p:column >
-                        <f:facet name="header">
-                            <h:outputText value="Cédula"/>
-                        </f:facet>
-                        <h:outputText value="#{item.cedula}"/>
-                    </p:column>
-                    <p:column>
-                        <f:facet name="header">
-                            <h:outputText value="Nombres"/>
-                        </f:facet>
-                        <h:outputText value="#{item.nombres}"/>
-                    </p:column>
-                    <p:column>
-                        <f:facet name="header">
-                            <h:outputText value="Apellidos"/>
-                        </f:facet>
-                        <h:outputText value="#{item.apellidos}"/>
-                    </p:column>
-
-                    <p:column style="text-align: center; width: 120px; background: #EBEDEB;">
-                        <f:facet name="header">
-                            <h:outputText value="Accion"/>
-                        </f:facet>
-                        <p:commandButton id="viewButton"  actionListener="#{clienteController.seleccionarCliente(item)}" icon="ui-icon-plus" value="Seleccionar"  />
-                    </p:column>
-                </p:dataTable>
-
-            </h:form>
-        </p:dialog>
+        
 <p:dialog visible="#{!trafoController.trafoSeleccionado}" header="Seleccionar trafo" resizable="false" width="400" position="center"  widgetVar="seleccionarTrafo">
             <p:outputLabel style="font-weight: bold; font-size: 16px" value="Busque y selecciones el trafo al cual desea enviar la solicitud" />
-            <h:form id="ClienteListForm">
+            <h:form id="listaTrafos">
                 <br/>
                 <h:panelGrid columns="2">
                     <p:outputLabel value="Buscar " />

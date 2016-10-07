@@ -99,6 +99,7 @@ public class TrafoController implements Serializable {
     private boolean rangoFechaCambiado2;
     private boolean rangoFechaCambiado3;
     private SimpleDateFormat formatoFecha;
+    private String mensajeError;
 
     public TrafoController() {
         this.formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
@@ -173,6 +174,14 @@ public class TrafoController implements Serializable {
 
     public void setFechaFin(Date fechaFin) {
         this.fechaFin = fechaFin;
+    }
+
+    public String getMensajeError() {
+        return mensajeError;
+    }
+
+    public void setMensajeError(String mensajeError) {
+        this.mensajeError = mensajeError;
     }
 
     public String getRangoFecha() {
@@ -418,13 +427,13 @@ public class TrafoController implements Serializable {
         UIViewRoot viewRoot = viewHandler.createView(context, context.getViewRoot().getViewId());
         context.setViewRoot(viewRoot);
         context.renderResponse();
-        
+
         reiniciarListas();
         this.macro = ejbMacro.buscarMacroPorTrafoObj(selected);
         if (macro != null) {
             if (fechaInicio.after(fechaFin)) {
                 FacesContext.getCurrentInstance().addMessage("formFecha:fechaInicio", new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "la fecha de inicio no puede ser mayor a la fecha de fin."));
-            } else {                
+            } else {
                 this.cargarLista();
                 this.calcularEstadoAmarre();
                 requestContext.execute("PF('seleccionarFecha').hide()");
@@ -519,7 +528,6 @@ public class TrafoController implements Serializable {
     }
 
     public void enviarSolicitud() {
-        //trama = "Trafo seleccionado: " + selected.getIdTrafo();
         RequestContext requestContext = RequestContext.getCurrentInstance();
         FacesContext context = FacesContext.getCurrentInstance();
         Application application = context.getApplication();
@@ -531,17 +539,13 @@ public class TrafoController implements Serializable {
         this.macro = ejbMacro.buscarMacroPorTrafoObj(selected);
         if (macro != null) {
             this.trama = "$@A0x5101" + macro.getIdMacro();
-            this.plcMms = ejbPlcMms.buscarPorIdTrafo(selected.getIdTrafo());
+            this.plcMms = ejbPlcMms.buscarPorIdTrafoObj(selected);
             if (this.plcMms != null) {
-
                 if (this.plcMms.getNumeroCelular() != null) {
                     String numeroCelular = "&msisdn=57" + this.plcMms.getNumeroCelular();
-                    //String numeroCelular = "&msisdn=57" + "3114760156";
 
                     try {
-
                         String data = "";
-
                         data += "username=" + URLEncoder.encode("roed26", "ISO-8859-1");
                         data += "&password=" + URLEncoder.encode("rosario26@", "ISO-8859-1");
                         data += "&message=" + URLEncoder.encode(trama, "ISO-8859-1");
@@ -564,11 +568,11 @@ public class TrafoController implements Serializable {
                             String respuesta[] = line.split("\\|");
 
                             if (!respuesta[0].equalsIgnoreCase("25")) {
-                                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
                                 requestContext.execute("PF('exitoEnvioMensaje').show()");
                             } else {
-                                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "No hay creditos"));
-                                requestContext.execute("PF('errorCreditos').show()");
+                                this.mensajeError = "No cuenta con suficiente saldo para enviar la solicitud";
+                                requestContext.update("formMensajeError");
+                                requestContext.execute("PF('errorEnvioMensaje').show()");
                             }
 
                         }
@@ -579,25 +583,30 @@ public class TrafoController implements Serializable {
                         this.trafoSeleccionado = false;
 
                     } catch (Exception e) {
-                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
+                        this.mensajeError = "Error inesperado, intente nuevamente";
+                        requestContext.update("formMensajeError");
                         requestContext.execute("PF('errorEnvioMensaje').show()");
                         this.trafoSeleccionado = false;
                     }
 
                 } else {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
+                    this.mensajeError = "El maestro asociado al trafo no tiene un número de celular";
+                    requestContext.update("formMensajeError");
                     requestContext.execute("PF('errorEnvioMensaje').show()");
                     this.trafoSeleccionado = false;
                 }
 
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
+                this.mensajeError = "El trafo no tiene asociado a un maestro";
+                requestContext.update("formMensajeError");
                 requestContext.execute("PF('errorEnvioMensaje').show()");
                 this.trafoSeleccionado = false;
             }
         } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
+            this.mensajeError = "El trafo no tiene vinculado a un macro";
+            requestContext.update("formMensajeError");
             requestContext.execute("PF('errorEnvioMensaje').show()");
+
             this.trafoSeleccionado = false;
         }
 

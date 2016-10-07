@@ -12,8 +12,8 @@
     </h:head>
     <h:body>
         
-        <p:dialog visible="#{!trafoController.trafoSeleccionado}" header="Seleccionar trafo" resizable="false" width="400" position="center"  widgetVar="seleccionarTrafo">
-            <p:outputLabel style="font-weight: bold; font-size: 16px" value="Busque y selecciones el trafo al cual desea enviar la solicitud" />
+        <p:dialog visible="#{!trafoController.trafoSeleccionado}" header="Seleccionar trafo" resizable="false" width="500" position="center"  widgetVar="seleccionarTrafo">
+            <p:outputLabel style="font-weight: bold; font-size: 16px" value="Busque y selecciones el trafo al cual desea enviar la solicitud de estado de amarre" />
             <h:form id="ClienteListForm">
                 <br/>
                 <h:panelGrid columns="2">
@@ -58,7 +58,7 @@
                 <p:outputLabel style="font-weight: bold; font-size: 16px; color: black;" value="La solicitud de estado de amarres sera enviada al trafo " />
                 <p:outputLabel style="font-weight: bold; font-size: 18px; color: blue;" value=" #{trafoController.selected.idTrafo}" />
                 <p:separator/>
-                <p:commandButton value="Enviar solicitud" action="#{trafoController.enviarSolicitudPrueba()}"/>
+                <p:commandButton value="Enviar solicitud" action="#{trafoController.enviarSolicitud()}"/>
                 <p:commandButton value="Cancelar"  action="#{trafoController.cancelarSolicitud}" ajax="false"/>
                 <h:messages globalOnly="true"/>
             </h:form>
@@ -76,7 +76,7 @@
                     <p:row>
                         <p:column width="200px;">
                             <p:commandButton style="font-style: italic;margin-left: 60px;font-weight: normal;" 
-                                             value="Aceptar" onclick="PF('mensajeVinculo').hide()"
+                                             value="Aceptar" onclick="PF('exitoEnvioMensaje').hide()"
                                              />                                    
                         </p:column>
 
@@ -85,17 +85,17 @@
             </h:form>
         </p:dialog>
         <p:dialog modal="true" header="Información" resizable="false" widgetVar="errorEnvioMensaje" closable="false">
-            <h:form>
+            <h:form id="formMensajeError">
                 <p:panelGrid style="text-align:left;" styleClass="panelgrid">
                     <p:row>
                         <p:column>
-                            <h:outputLabel style="color: red;" value="Error al enviar la solicitud, intente nuevamente."/>
+                            <h:outputLabel style="color: red;" value="#{trafoController.mensajeError}"/>
                         </p:column>                                
                     </p:row>
                     <p:row>
                         <p:column width="200px;">
                             <p:commandButton style="font-style: italic;margin-left: 60px;font-weight: normal;" 
-                                             value="Aceptar" onclick="PF('mensajeVinculo').hide()"
+                                             value="Aceptar" onclick="PF('errorEnvioMensaje').hide()"
                                              />                                    
                         </p:column>
 
@@ -103,26 +103,6 @@
                 </p:panelGrid>
             </h:form>
         </p:dialog>
-
-        <p:dialog header="Información" resizable="false" widgetVar="errorCreditos" closable="false">
-            <h:form>
-                <p:panelGrid style="text-align:left;" styleClass="panelgrid">
-                    <p:row>
-                        <p:column>
-                            <h:outputLabel style="color: red;" value="Error al enviar la solicitud, debe cargar su cuenta."/>
-                        </p:column>                                
-                    </p:row>
-                    <p:row>
-                        <p:column width="100%">
-                            <p:commandButton style="font-style: italic;margin-left: 60px;font-weight: normal;" 
-                                             value="Aceptar" onclick="PF('mensajeVinculo').hide()"
-                                             />                                    
-                        </p:column>
-
-                    </p:row>
-                </p:panelGrid>
-            </h:form>
-        </p:dialog>
-
+       
     </h:body>    
 </html>
