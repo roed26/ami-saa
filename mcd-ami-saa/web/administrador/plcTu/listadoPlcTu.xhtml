@@ -12,23 +12,21 @@
     <h:body>
         <h:form id="PlcTuListForm">
             <h:panelGrid style="margin-bottom: 5px;" columns="3">                      
-
                 <h:outputLabel style="font-size: 14px; font-weight: bold;" value="Buscar PLC_TU " />
                 <p:inputText style="width: 500px;" value="#{plcTuController.dato}"  
                              placeholder="Digite el identificador o la MAC del PLC_TU">
                     <p:ajax event="keyup" update="datalist" listener="#{plcTuController.buscarDato()}" />                                
                 </p:inputText>                 
-            </h:panelGrid>
-            
+            </h:panelGrid>            
             <p:dataTable  style="text-align: center;" id="datalist" value="#{plcTuController.items}" var="item"
-                         paginator="true"
-                         rowKey="#{item.idPlcTu}"
-                         rows="10"
-                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
-                         rowsPerPageTemplate="10,20,30,40,50"
-                         emptyMessage="No se encontraron dispositivos PLC_TU"
-                         tableStyle="table-layout:auto"
-                         >
+                          paginator="true"
+                          rowKey="#{item.idPlcTu}"
+                          rows="10"
+                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+                          rowsPerPageTemplate="10,20,30,40,50"
+                          emptyMessage="No se encontraron dispositivos PLC_TU"
+                          tableStyle="table-layout:auto"
+                          >
                 <f:facet name="header" >
                     <h:outputLabel value="Listado de dispositivos PLC_TU registrados en el sistema" style="font-size: 17px; font-weight: bold;"/>
                 </f:facet>
@@ -73,7 +71,7 @@
         </h:form>
         <ui:include src="editarInfoPlcTu.xhtml"/>
         <ui:include src="verInfoPlcTu.xhtml"/>
-        
+
         <p:dialog modal="true" resizable="false" header="Confirmar" widgetVar="eliminarPlcTu" closable="false" position="center">
             <h:form>
                 <p:panelGrid style="text-align:left;" styleClass="panelgrid">

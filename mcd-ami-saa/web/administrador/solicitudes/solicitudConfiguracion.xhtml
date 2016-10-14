@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Lista de clientes</title>
+    </h:head>
+    <h:body>
+        <p:outputLabel style="font-weight: bold; font-size: 16px" value="Pamaetros actuales" />
+        <h:form id="PlcMmsEditForm">  
+            <p:panelGrid styleClass="panelgrid" id="panel">
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Dirección MAC PLC_MMS"/>                
+                        <h:outputLabel style="font-style: italic;font-size: 16px;text-align: left; color:red;" 
+                                       value="*" />
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="macPlcMms" 
+                                     value="#{plcMmsController.selected.macPlcMms}" 
+                                     disabled="true"
+                                     title="Dirección MAC" 
+                                     required="true" 
+                                     requiredMessage="Campo requerido"
+                                     converter="toUpperCaseConverter"
+                                     placeholder="16 caracteres"
+                                     >
+                            <f:ajax event="blur" render="@this" />
+                            
+                        </p:inputText>        
+                    </p:column>
+                    <p:column>
+                        <p:message for="macPlcMms"/>        
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Versión firmware"/>                
+                        <h:outputLabel style="font-style: italic;font-size: 16px;text-align: left; color:red;" 
+                                       value="*" />
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="versionFw" 
+                                     value="#{plcMmsController.selected.versionFw}" 
+                                     title="Versión firmware"
+                                     required="true"
+                                     requiredMessage="Campo requerido"
+                                     placeholder="Ejemplo 1.4 ó 1.2.0"
+                                     >
+                            <f:validator validatorId="ValidarCampoVersionNumeroInicio"/>
+                            <f:validator validatorId="ValidarCampoSoloNumerosYPuntos"/>
+                        </p:inputText>        
+                    </p:column>
+                    <p:column>
+                        <p:message for="versionFw"/>        
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Estado" />
+                        <h:outputLabel style="font-style: italic;font-size: 16px;text-align: left; color:red;" 
+                                       value="*" />
+                    </p:column>
+                    <p:column>
+                        <p:selectOneMenu id="estado"  value="#{plcMmsController.selected.estado}">
+                            <f:selectItem itemLabel="Seleccione..." itemValue="0" />
+                            <f:selectItem itemLabel="Activo" itemValue="A" />                              
+                            <f:selectItem itemLabel="Desactivo" itemValue="D"/>  
+                            <f:validator validatorId="ValidarCamposSeleccionar"/>                            
+                        </p:selectOneMenu> 
+                    </p:column>
+                    <p:column>
+                        <p:message for="estado"/>        
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Ganancia de transmisión (V)" for="gtx" />
+                        <h:outputLabel style="font-style: italic;font-size: 16px;text-align: left; color:red;" 
+                                       value="*" />
+                    </p:column>
+                    <p:column>
+                        <p:selectOneMenu id="gtx"  value="#{plcMmsController.selected.gtx}">
+                            <f:selectItem itemLabel="Seleccione..." itemValue="0" />
+                            <f:selectItem itemLabel="55" itemValue="55"/>                              
+                            <f:selectItem itemLabel="75" itemValue="75"/>
+                            <f:selectItem itemLabel="100" itemValue="100"/>
+                            <f:selectItem itemLabel="125" itemValue="125"/>
+                            <f:selectItem itemLabel="180" itemValue="180"/>
+                            <f:selectItem itemLabel="250" itemValue="250"/>
+                            <f:selectItem itemLabel="360" itemValue="360"/>
+                            <f:selectItem itemLabel="480" itemValue="480"/>
+                            <f:selectItem itemLabel="660" itemValue="660"/>
+                            <f:selectItem itemLabel="900" itemValue="900"/>
+                            <f:selectItem itemLabel="1.25" itemValue="1.25"  />                              
+                            <f:selectItem itemLabel="1.55" itemValue="1.55"/>                              
+                            <f:selectItem itemLabel="2.25" itemValue="2.25"/>                              
+                            <f:selectItem itemLabel="3" itemValue="3"/>                              
+                            <f:selectItem itemLabel="3.25" itemValue="3.25"/>                              
+                            <f:validator validatorId="ValidarCamposSeleccionar"/>
+                        </p:selectOneMenu> 
+                    </p:column>
+                    <p:column>
+                        <p:message for="gtx"/>        
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Ganancia de recepción (mV)" for="grx" />
+                        <h:outputLabel style="font-style: italic;font-size: 16px;text-align: left; color:red;" 
+                                       value="*" />
+                    </p:column>
+                    <p:column>
+                        <p:selectOneMenu id="grx"  value="#{plcMmsController.selected.grx}">
+                            <f:selectItem itemLabel="Seleccione..." itemValue="0" />
+                            <f:selectItem itemLabel="5" itemValue="5"/>
+                            <f:selectItem itemLabel="2.5" itemValue="2.5"/>
+                            <f:selectItem itemLabel="1.25" itemValue="1.25"/>
+                            <f:selectItem itemLabel="0.6" itemValue="0.6"/>                              
+                            <f:selectItem itemLabel="0.35" itemValue="0.35"/>                              
+                            <f:selectItem itemLabel="0.25" itemValue="0.25"/>                              
+                            <f:selectItem itemLabel="0.125" itemValue="0.125"  />    
+                            <f:validator validatorId="ValidarCamposSeleccionar"/>
+                        </p:selectOneMenu> 
+                    </p:column>
+                    <p:column>
+                        <p:message for="grx"/> 
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Tasa de transmisión (bps)" for="bps" />
+                        <h:outputLabel style="font-style: italic;font-size: 16px;text-align: left; color:red;" 
+                                       value="*" />
+                    </p:column>
+                    <p:column>
+                        <p:selectOneMenu id="bps"  value="#{plcMmsController.selected.bps}">
+                            <f:selectItem itemLabel="Seleccione..." itemValue="0" />
+                            <f:selectItem itemLabel="600" itemValue="600"  />                              
+                            <f:selectItem itemLabel="1200" itemValue="1200"/>                              
+                            <f:selectItem itemLabel="2400" itemValue="2400"/>  
+                            <f:validator validatorId="ValidarCamposSeleccionar"/>
+                        </p:selectOneMenu> 
+                    </p:column>
+                    <p:column>
+                        <p:message for="bps"/> 
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Retardo de transmisión (ms)" />
+                        <h:outputLabel style="font-style: italic;font-size: 16px;text-align: left; color:red;" 
+                                       value="*" />
+                    </p:column>
+                    <p:column>
+                        <p:selectOneMenu id="rtx"  value="#{plcMmsController.selected.rtx}">
+                            <f:selectItem itemLabel="Seleccione..." itemValue="0" />
+                            <f:selectItem itemLabel="100" itemValue="100"  />                              
+                            <f:selectItem itemLabel="200" itemValue="200"/>                              
+                            <f:selectItem itemLabel="300" itemValue="300"/>                              
+                            <f:selectItem itemLabel="400" itemValue="400"/>
+                            <f:selectItem itemLabel="500" itemValue="500"/>
+                            <f:validator validatorId="ValidarCamposSeleccionar"/>
+                        </p:selectOneMenu> 
+                    </p:column>
+                    <p:column>
+                        <p:message for="rtx"/> 
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column >
+                        <p:outputLabel value="Número de celular" />                        
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="numerocelular" value="#{plcMmsController.selected.numeroCelular}" 
+                                     title="Número de celular" 
+                                     placeholder="Solo números"
+                                     >
+                            <f:validator validatorId="ValidarCampoNumericoCelular"/>
+                            <f:validator validatorId="ValidarCampo10Numeros"/>
+                            <f:validator validatorId="ValidarCampoNumeroCelular"/>
+
+
+                        </p:inputText>
+
+                    </p:column>
+                    <p:column>
+                        <p:message for="numerocelular"/>
+                    </p:column>
+                </p:row>  
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Vinculado al trafo" />
+                    </p:column>
+                    <p:column>
+                        <p:outputLabel id="idtrafo" value="#{plcMmsController.selected.idTrafo}"/>
+                    </p:column>
+
+                </p:row>
+                <p:row>
+                    <p:column colspan="3" style="text-align: center;">
+                        <p:commandButton actionListener="#{plcMmsController.enviarSolicitudConfiguracion}" value="Enviar solicitud" update="panel,:PlcMmsListForm:datalist" />
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+        </h:form>
+        
+        
+        <p:dialog header="Seleccionar PLC_MMS" visible="#{!plcMmsController.maestroSeleccionado}" resizable="false" width="850" position="center" modal="true"  widgetVar="seleccionarPlcMms">
+            <p:outputLabel style="font-weight: bold; font-size: 16px" value="Busque y seleccione el cliente del cual desea conocer estado de amarre y consumo actual" />
+            <h:form id="PlcMmsListForm">
+            <h:panelGrid style="margin-bottom: 10px;" columns="3">                      
+                <h:outputLabel style="font-size: 14px; font-weight: bold;" value="Buscar PLC_MMS" />
+                <p:inputText style="width: 500px;" value="#{plcMmsController.dato}"  
+                             placeholder="Digite el identificador o la MAC del PLC_MMS">
+                    <p:ajax event="keyup" update="datalist" listener="#{plcMmsController.buscarDato()}" />                                
+                </p:inputText>  
+            </h:panelGrid>
+            <p:dataTable id="datalist" value="#{plcMmsController.items}" var="item"
+                         paginator="true"
+                         rowKey="#{item.idPlcMms}"
+                         rows="10"
+                         style="text-align: center;"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+                         emptyMessage="No se encontraron dispositivos PLC_MMS"
+                         >
+                
+                <f:facet name="header" >
+                    <h:outputLabel value="Listado de dispositivos PLC_MMS registrados en el sistema" style="font-size: 17px; font-weight: bold;"/>
+                </f:facet>
+                
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Identificador PLC_MMS"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idPlcMms}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Dirección MAC PLC_MMS"/>
+                    </f:facet>
+                    <h:outputText value="#{item.macPlcMms}"/>
+                </p:column>
+                <p:column style="text-align: center; width: 120px; background: #EBEDEB;">
+                        <f:facet name="header">
+                            <h:outputText value="Accion"/>
+                        </f:facet>
+                        <p:commandButton id="viewButton" actionListener="#{plcMmsController.seleccionarClienteSolicitud(item)}" icon="ui-icon-plus" value="Seleccionar"  />
+                    </p:column>       
+
+            </p:dataTable>
+        </h:form>
+        </p:dialog>
+        <p:dialog header="Enviar solicitud configuración de parametros" closable="false" resizable="false"  position="center" modal="true"  widgetVar="enviarSolicitud">
+            <h:form id="envioSolicitud">
+                <p:panelGrid>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel style="font-weight: bold; font-size: 16px; color: black;" value="La configuracion  " />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel style="font-weight: bold; font-size: 18px; color: black;" value="Cédula: " />
+                            <p:outputLabel style="font-weight: bold; font-size: 18px; color: blue;" value="#{clienteController.selected.cedula} " />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel style="font-weight: bold; font-size: 18px; color: black;" value="Nombres y apellidos: " />
+                            <p:outputLabel style="font-weight: bold; font-size: 18px; color: blue;" value=" #{clienteController.selected.nombres} #{clienteController.selected.apellidos}" />
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+
+                <p:separator/>
+                <p:commandButton value="Enviar solicitud" action="#{clienteController.enviarSolicitud}"/>
+                <p:commandButton value="Cancelar"  action="#{clienteController.cancelarSolicitud}" ajax="false"/>
+                <h:messages globalOnly="true"/>
+            </h:form>
+        </p:dialog>
+
+
+        <p:dialog modal="true" header="Información" resizable="false" widgetVar="exitoEnvioMensaje" closable="false">
+            <h:form>
+                <p:panelGrid style="text-align:left;" styleClass="panelgrid">
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="color: blue;" value="La solicitud fue enviada con exito."/>
+                        </p:column>                                
+                    </p:row>
+                    <p:row>
+                        <p:column width="200px;">
+                            <p:commandButton style="font-style: italic;margin-left: 60px;font-weight: normal;" 
+                                             value="Aceptar" onclick="PF('exitoEnvioMensaje').hide()" update="@all"
+                                             />                                    
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+        <p:dialog modal="true" header="Información" resizable="false" widgetVar="errorEnvioMensaje" closable="false">
+            <h:form id="errorEnvioSolicitud">
+                <p:panelGrid style="text-align:left;" styleClass="panelgrid">
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="color: red;" value="#{clienteController.mensajeError}"/>
+                        </p:column>                                
+                    </p:row>
+                    <p:row>
+                        <p:column width="200px;">
+                            <p:commandButton style="font-style: italic;margin-left: 60px;font-weight: normal;" 
+                                             value="Aceptar" onclick="PF('errorEnvioMensaje').hide()" 
+                                             />                                    
+                        </p:column>
+
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+    </h:body>    
+</html>

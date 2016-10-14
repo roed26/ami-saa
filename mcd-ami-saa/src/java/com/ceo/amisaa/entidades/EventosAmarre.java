@@ -53,7 +53,7 @@ public class EventosAmarre implements Serializable {
     @NotNull
     @Column(name = "fecha_hora")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaHora;    
+    private Date fechaHora;
     @JoinColumn(name = "mac_plc_mms", referencedColumnName = "mac_plc_mms")
     @ManyToOne(optional = false)
     private PlcMms macPlcMms;

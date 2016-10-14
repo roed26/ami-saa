@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package prueba;
+package com.ceo.amisaa.managedbean;
 
 import com.ceo.amisaa.entidades.Producto;
 import com.ceo.amisaa.entidades.Trafo;
@@ -24,7 +24,7 @@ import org.primefaces.model.map.MapModel;
 import org.primefaces.model.map.Marker;
 
 @ManagedBean
-public class AddMarkersView implements Serializable {
+public class MarcadoresController implements Serializable {
 
     private MapModel emptyModel;
 
@@ -33,6 +33,8 @@ public class AddMarkersView implements Serializable {
     private double lat;
 
     private double lng;
+    private Trafo trafo;
+    private boolean trafoSeleccionado;
     @EJB
     private TrafoFacade ejbTrafo;
 
@@ -41,7 +43,7 @@ public class AddMarkersView implements Serializable {
 
     private String idTrafo;
 
-    public AddMarkersView() {
+    public MarcadoresController() {
         this.ejbTrafo = new TrafoFacade();
 
     }
@@ -49,8 +51,6 @@ public class AddMarkersView implements Serializable {
     @PostConstruct
     public void init() {
         emptyModel = new DefaultMapModel();
-        cargarInformacion();
-
     }
 
     public MapModel getEmptyModel() {
@@ -82,33 +82,26 @@ public class AddMarkersView implements Serializable {
         this.lng = lng;
     }
 
+    public boolean isTrafoSeleccionado() {
+        return trafoSeleccionado;
+    }
+
+    public void setTrafoSeleccionado(boolean trafoSeleccionado) {
+        this.trafoSeleccionado = trafoSeleccionado;
+    }
+
     public void cargarInformacion() {
-        Trafo trafo = new Trafo();
+
         List<Producto> listaProductos = new ArrayList();
 
-        /*listaTrafos = this.ejbTrafo.findAll();
-        
-        if (listaTrafos.size() > 0) {
-            for (int i = 0; i < listaTrafos.size(); i++) {
-
-                Marker marker = new Marker(new LatLng(listaTrafos.get(i).getLatitud(), listaTrafos.get(i).getLongitud()), listaTrafos.get(i).getIdTrafo());
-                emptyModel.addOverlay(marker);
-            }
-        }*/
-        trafo = this.ejbTrafo.buscarPorIdObj("T2755");
-
         listaProductos = this.ejbProducto.buscarListaProductosTrafo(trafo);
+        Marker marker = new Marker(new LatLng(trafo.getLatitud(), trafo.getLongitud()), trafo.getIdTrafo());
+        marker.setIcon("../resources/img/iconos/icon-trafo.png");
 
+        emptyModel.addOverlay(marker);
         if (listaProductos.size() > 0) {
-            Marker marker = new Marker(new LatLng(trafo.getLatitud(), trafo.getLongitud()), trafo.getIdTrafo());
-            marker.setIcon("../resources/img/iconos/icon-trafo.png");
-
-            emptyModel.addOverlay(marker);
-            
             for (int i = 0; i < listaProductos.size(); i++) {
-
                 marker = new Marker(new LatLng(listaProductos.get(i).getLatitud(), listaProductos.get(i).getLongitud()), listaProductos.get(i).getCedula().getNombres());
-            
                 emptyModel.addOverlay(marker);
             }
         }
@@ -121,5 +114,12 @@ public class AddMarkersView implements Serializable {
         emptyModel.addOverlay(marker);
 
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Marker Added", "Lat:" + lat + ", Lng:" + lng));
+    }
+
+    public void seleccionarTrafo(Trafo trafo) {
+        this.trafo = trafo;
+        trafoSeleccionado = true;
+        cargarInformacion();
+
     }
 }

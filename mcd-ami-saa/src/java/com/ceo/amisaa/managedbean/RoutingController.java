@@ -72,14 +72,17 @@ public class RoutingController implements Serializable {
    public void irSolicitudReconexionCliente(){
        this.ruta = "/administrador/solicitudes/solicitudReconexionCliente.xhtml";
    }
+   public void irSolicitudConfiguracion(){
+       this.ruta = "/administrador/solicitudes/solicitudConfiguracion.xhtml";
+   }
    public void irConsumoCliente(){
        this.ruta = "/administrador/eventosConsumo/consumoPorCliente.xhtml";
    }
    public void irConsumoTrafo(){
        this.ruta = "/administrador/eventosConsumo/consumoPorTrafo.xhtml";
    }
-   public void irGeoTrafo(){
-       this.ruta = "/administrador/mapas/trafosGeo.xhtml";
+   public void irTrafoClientes(){
+       this.ruta = "/administrador/mapas/trafoClientes.xhtml";
    }
    public void irNotificaciones()
    {

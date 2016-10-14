@@ -10,22 +10,21 @@
     </h:head>
     <h:body >
         <h:form id="PlcMcListForm">
-            <h:panelGrid style="margin-bottom: 10px;" columns="3">                      
-                <h:outputLabel class="CampoLabel" value="Buscar " />
+            <h:panelGrid style="margin-bottom: 5px;" columns="3">                      
+                <h:outputLabel style="font-size: 14px; font-weight: bold;" value="Buscar PLC_MC" />
                 <p:inputText style="width: 500px;" value="#{plcMcController.dato}"  
                              placeholder="Digite el identificador o la MAC del PLC_MC">
                     <p:ajax event="keyup" update="datalist" listener="#{plcMcController.buscarDato()}" />                                
                 </p:inputText>    
             </h:panelGrid>
-            <p:dataTable id="datalist" value="#{plcMcController.items}" var="item"
+            <p:dataTable style="text-align: center;" id="datalist" value="#{plcMcController.items}" var="item"
                          paginator="true"
                          rowKey="#{item.idPlcMc}"
                          rows="10"
-                         style="text-align: center;"
                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
                          rowsPerPageTemplate="10,20,30,40,50"
-                         emptyMessage="No se encontraron dispositivos PLC_MC"
-                         
+                         emptyMessage="No se encontraron dispositivos PLC_MC" 
+                         tableStyle="table-layout:auto"
                          >    
                 <f:facet name="header" >
                     <h:outputLabel value="Listado de dispositivos PLC_MC registrados en el sistema" style="font-size: 17px; font-weight: bold;"/>
@@ -49,7 +48,7 @@
                     </f:facet>
                     <h:outputText value="#{item.versionFw}"/>
                 </p:column>
-                
+
 
                 <p:column style="width: 120px; background: #EBEDEB;">
                     <f:facet name="header">
@@ -57,14 +56,14 @@
                     </f:facet>
                     <p:commandButton id="viewButton" icon="ver-icon" action="#{plcMcController.setSelected(item)}"  title="Ver" update=":PlcMcViewForm" oncomplete="PF('PlcMcViewDialog').show()" />
                     <p:commandButton id="editButton" icon="ui-icon-pencil" action="#{plcMcController.setSelected(item)}"  title="Editar" update=":PlcMcEditForm" oncomplete="PF('PlcMcEditDialog').show()" />
-                    <p:commandButton id="deleteButton" icon="ui-icon-trash"  title="Eliminar" actionListener="#{plcMcController.ventanaEliminar(item)}" update="datalist" />
+                    <p:commandButton id="deleteButton" icon="ui-icon-trash"  title="Eliminar" actionListener="#{plcMcController.ventanaEliminar(item)}" />
                 </p:column>
             </p:dataTable>
         </h:form>
 
         <ui:include src="editarInfoPlcMc.xhtml"/>
         <ui:include src="verInfoPlcMc.xhtml"/>
-        
+
         <p:dialog modal="true" header="Información" resizable="false" widgetVar="edicionCorrecta" closable="false">
             <h:form>
                 <p:panelGrid style="text-align:left;" styleClass="panelgrid">
@@ -95,7 +94,7 @@
                         <p:column width="200px;">
                             <p:commandButton style="font-style: italic;margin-left: 170px;font-weight: normal; color: black;" 
                                              value="Si" action="#{plcMcController.eliminarPlcMc}"/>
-                            <p:commandButton style="font-style: italic; margin-left: 10px;font-weight: normal; color: black;" value="No" onclick="PF('eliminarPlcTu').hide()" action="#{plcMcController.newObj()}"/>
+                            <p:commandButton style="font-style: italic; margin-left: 10px;font-weight: normal; color: black;" value="No" onclick="PF('eliminarPlcMc').hide()" action="#{plcMcController.newObj()}"/>
                         </p:column>
 
                     </p:row>

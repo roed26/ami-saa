@@ -538,7 +538,7 @@ public class TrafoController implements Serializable {
 
         this.macro = ejbMacro.buscarMacroPorTrafoObj(selected);
         if (macro != null) {
-            this.trama = "$@A0x5101" + macro.getIdMacro();
+            this.trama = "$@1";
             this.plcMms = ejbPlcMms.buscarPorIdTrafoObj(selected);
             if (this.plcMms != null) {
                 if (this.plcMms.getNumeroCelular() != null) {

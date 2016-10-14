@@ -17,44 +17,35 @@
         <title></title>
     </h:head>
     <h:body>
-         <h:form>
+        <h:form>
             <p:poll autoStart="true"  listener="#{notificacionController.comprobarNotificaciones()}"
-         oncomplete="handleComplete(xhr, status, args)" interval="10" />
+                    oncomplete="handleComplete(xhr, status, args)" interval="10" />
         </h:form>
         <div id="header">
             <div class="notificaciones">
                 <h:form id="formNotificacion">
                     <h:link rendered="#{!notificacionController.mostrarnotificacion}" id="opcionesnotificacion1" style="text-decoration: none;color:#0080FF ;font-size: 13pt; ">
-                                 
-                            <p:graphicImage style="width: 35px;float: left;" value="/faces/resources/img/notificaciones/notificacion.png"/>  
-                           
-                            
-                               
-                          
-                        </h:link>
-                     <p:menu  overlay="true" trigger="opcionesnotificacion1"  my="left top" at="left bottom">        
+                        <p:graphicImage style="width: 35px;float: left;" value="/faces/resources/img/notificaciones/notificacion.png"/>  
+                    </h:link>
+                    <p:menu  overlay="true" trigger="opcionesnotificacion1"  my="left top" at="left bottom">        
+                        <p:menuitem  value="Ver notificaciones" 
+                                     action="#{routingController.irNotificaciones()}" ajax="false"  />
+                    </p:menu>
+                    <h:link rendered="#{notificacionController.mostrarnotificacion}"  id="opcionesnotificacion2" style="text-decoration: none;color:#0080FF ;font-size: 13pt; ">
 
-                            
-                            <p:menuitem  value="Ver notificaciones" 
-                                         action="#{routingController.irNotificaciones()}" ajax="false"  />
-                        </p:menu>
-                        <h:link rendered="#{notificacionController.mostrarnotificacion}"  id="opcionesnotificacion2" style="text-decoration: none;color:#0080FF ;font-size: 13pt; ">
-                                 
-                            <p:graphicImage style="width: 35px;float: left;" value="/faces/resources/img/notificaciones/notificacion.png"/>  
-                           
-                            <div id="ciruculonotificacionconteo">
-                                #{notificacionController.conteoNotificacionesNuevas}
-                            </div>
-                               
-                          
-                        </h:link>
-                     <p:menu  overlay="true" trigger="opcionesnotificacion2"  my="left top" at="left bottom">        
+                        <p:graphicImage style="width: 35px;float: left;" value="/faces/resources/img/notificaciones/notificacion.png"/>  
 
-                            
-                            <p:menuitem  value="Ver notificaciones" 
-                                         action="#{routingController.irNotificaciones()}" ajax="false"  />
-                        </p:menu>
-                   </h:form>
+                        <div id="ciruculonotificacionconteo">
+                            #{notificacionController.conteoNotificacionesNuevas}
+                        </div>
+                    </h:link>
+                    <p:menu  overlay="true" trigger="opcionesnotificacion2"  my="left top" at="left bottom">        
+                        <p:menuitem  value="Ver notificaciones" 
+                                     action="#{routingController.irNotificaciones()}" 
+                                     actionListener="#{addNavegacionController.addNotificacion()}"
+                                     ajax="false"  />
+                    </p:menu>
+                </h:form>
             </div>
             <div class="con_escudo_titulo">
                 <div class="bkg">
@@ -67,6 +58,13 @@
             <div class="bottom">
 
             </div>
+        </div>
+        <div >
+            <h:form>
+                <p:breadCrumb  model="#{addNavegacionController.ruta}">
+                    
+                </p:breadCrumb>
+            </h:form> 
         </div>
         <div>
             <div id="menu">

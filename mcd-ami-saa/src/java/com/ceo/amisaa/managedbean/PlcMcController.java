@@ -127,7 +127,9 @@ public class PlcMcController implements Serializable {
     }
 
     public List<PlcMc> getItems() {
-        items = getFacade().findAll();
+        if (items == null) {
+            items = getFacade().findAll();
+        }
         return items;
     }
 
@@ -224,6 +226,7 @@ public class PlcMcController implements Serializable {
 
     public void buscarDato() {
         this.items = ejbPlcMc.buscarPorDato(this.dato.toLowerCase());
+
     }
 
     public void ventanaEliminar(PlcMc selected) {

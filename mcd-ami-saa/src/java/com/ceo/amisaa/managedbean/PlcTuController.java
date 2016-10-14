@@ -259,6 +259,8 @@ public class PlcTuController implements Serializable {
 
     }
 
+    
+
     @FacesConverter(forClass = PlcTu.class)
     public static class PlcTuControllerConverter implements Converter {
 

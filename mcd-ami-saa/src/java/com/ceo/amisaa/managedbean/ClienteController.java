@@ -486,6 +486,8 @@ public class ClienteController implements Serializable {
                     sinConsumo = true;
 
                 }
+            } else {
+
             }
         }
     }
@@ -542,58 +544,13 @@ public class ClienteController implements Serializable {
             if (this.trafo != null) {
                 this.macro = ejbMacro.buscarMacroPorTrafoObj(trafo);
                 if (macro != null) {
-                    this.trama = "$@A0x5101" + macro.getIdMacro();
+                    this.trama = "$@1";
                     this.plcMms = ejbPlcMms.buscarPorIdTrafoObj(trafo);
                     if (this.plcMms != null) {
 
                         if (this.plcMms.getNumeroCelular() != null) {
                             String numeroCelular = "&msisdn=57" + this.plcMms.getNumeroCelular();
-
-                            try {
-
-                                String data = "";
-
-                                data += "username=" + URLEncoder.encode("roed26", "ISO-8859-1");
-                                data += "&password=" + URLEncoder.encode("rosario26@", "ISO-8859-1");
-                                data += "&message=" + URLEncoder.encode(trama, "ISO-8859-1");
-                                data += "&want_report=1";
-                                data += numeroCelular;
-
-                                URL url = new URL("https://bulksms.vsms.net/eapi/submission/send_sms/2/2.0");
-
-                                URLConnection conn = url.openConnection();
-                                conn.setDoOutput(true);
-                                OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-                                wr.write(data);
-                                wr.flush();
-
-                                // Get the response
-                                BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                                String line;
-                                String dat = null;
-                                while ((line = rd.readLine()) != null) {
-                                    String respuesta[] = line.split("\\|");
-
-                                    if (!respuesta[0].equalsIgnoreCase("25")) {
-                                        requestContext.execute("PF('exitoEnvioMensaje').show()");
-                                        this.clienteSeleccionado = false;
-                                    } else {
-                                        this.mensajeError = "No cuenta con suficiente saldo para enviar la solicitud";
-                                        requestContext.update("errorEnvioSolicitud");
-                                        requestContext.execute("PF('errorEnvioMensaje').show()");
-                                        this.clienteSeleccionado = false;
-                                    }
-                                }
-                                wr.close();
-                                rd.close();
-                                this.clienteSeleccionado = false;
-
-                            } catch (Exception e) {
-                                this.mensajeError = "Error inesperado, intente nuevamente";
-                                requestContext.update("errorEnvioSolicitud");
-                                requestContext.execute("PF('errorEnvioMensaje').show()");
-                                this.clienteSeleccionado = false;
-                            }
+                            enviarMensajeTexto(numeroCelular, trama);
 
                         } else {
                             this.mensajeError = "El maestro no tiene asociado un número de celular";
@@ -641,86 +598,55 @@ public class ClienteController implements Serializable {
         this.producto = ejbProducto.buscarProductoDeCliente(selected);
 
         if (producto != null) {
-            this.trafo = ejbTrafo.buscarPorIdObj(this.producto.getIdTrafo().getIdTrafo());
-            if (this.trafo != null) {
-                this.macro = ejbMacro.buscarMacroPorTrafoObj(trafo);
-                if (macro != null) {
-                    this.trama = "$@A0x5101" + macro.getIdMacro();
-                    this.plcMms = ejbPlcMms.buscarPorIdTrafoObj(trafo);
-                    if (this.plcMms != null) {
+            this.plcTu = ejbPlcTu.buscarIdProducto(producto);
+            if (this.plcTu != null) {
+                this.trafo = ejbTrafo.buscarPorIdObj(this.producto.getIdTrafo().getIdTrafo());
+                if (this.trafo != null) {
+                    this.macro = ejbMacro.buscarMacroPorTrafoObj(trafo);
+                    if (macro != null) {
 
-                        if (this.plcMms.getNumeroCelular() != null) {
-                            String numeroCelular = "&msisdn=57" + this.plcMms.getNumeroCelular();
+                        this.trama = "$@2" + plcTu.getMacPlcTu();
 
-                            try {
-                                String data = "";
-                                data += "username=" + URLEncoder.encode("roed26", "ISO-8859-1");
-                                data += "&password=" + URLEncoder.encode("rosario26@", "ISO-8859-1");
-                                data += "&message=" + URLEncoder.encode(trama, "ISO-8859-1");
-                                data += "&want_report=1";
-                                data += numeroCelular;
+                        this.plcMms = ejbPlcMms.buscarPorIdTrafoObj(trafo);
+                        if (this.plcMms != null) {
 
-                                URL url = new URL("https://bulksms.vsms.net/eapi/submission/send_sms/2/2.0");
+                            if (this.plcMms.getNumeroCelular() != null) {
+                                String numeroCelular = "&msisdn=57" + this.plcMms.getNumeroCelular();
+                                enviarMensajeTexto(numeroCelular, trama);
 
-                                URLConnection conn = url.openConnection();
-                                conn.setDoOutput(true);
-                                OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-                                wr.write(data);
-                                wr.flush();
-
-                                // Get the response
-                                BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                                String line;
-                                String dat = null;
-                                while ((line = rd.readLine()) != null) {
-                                    String respuesta[] = line.split("\\|");
-
-                                    if (!respuesta[0].equalsIgnoreCase("25")) {
-                                        requestContext.execute("PF('exitoEnvioMensaje').show()");
-                                        this.clienteSeleccionado = false;
-                                    } else {
-                                        this.mensajeError = "No cuenta con suficiente saldo para enviar la solicitud";
-                                        requestContext.update("errorEnvioSolicitud");
-                                        requestContext.execute("PF('errorEnvioMensaje').show()");
-                                        this.clienteSeleccionado = false;
-                                    }
-                                }
-                                wr.close();
-                                rd.close();
-                                this.clienteSeleccionado = false;
-
-                            } catch (Exception e) {
-                                this.mensajeError = "Error inesperado, intente nuevamente";
+                            } else {
+                                this.mensajeError = "El maestro no tiene asociado un número de celular";
                                 requestContext.update("errorEnvioSolicitud");
                                 requestContext.execute("PF('errorEnvioMensaje').show()");
                                 this.clienteSeleccionado = false;
                             }
 
                         } else {
-                            this.mensajeError = "El maestro no tiene asociado un número de celular";
+                            this.mensajeError = "El cliente no esta asociado a un maestro";
                             requestContext.update("errorEnvioSolicitud");
                             requestContext.execute("PF('errorEnvioMensaje').show()");
                             this.clienteSeleccionado = false;
                         }
-
                     } else {
-                        this.mensajeError = "El cliente no esta asociado a un maestro";
+                        this.mensajeError = "El cliente no esta vinculado a un macro";
                         requestContext.update("errorEnvioSolicitud");
                         requestContext.execute("PF('errorEnvioMensaje').show()");
                         this.clienteSeleccionado = false;
                     }
                 } else {
-                    this.mensajeError = "El cliente no esta vinculado a un macro";
+                    this.mensajeError = "El cliente no esta vinculado a un trafo";
                     requestContext.update("errorEnvioSolicitud");
                     requestContext.execute("PF('errorEnvioMensaje').show()");
                     this.clienteSeleccionado = false;
                 }
+
             } else {
-                this.mensajeError = "El cliente no esta vinculado a un trafo";
+                this.mensajeError = "El producto no esta asociado a un PLC_TU";
                 requestContext.update("errorEnvioSolicitud");
                 requestContext.execute("PF('errorEnvioMensaje').show()");
                 this.clienteSeleccionado = false;
             }
+
         } else {
             this.mensajeError = "El cliente no tiene un producto asociado";
             requestContext.update("errorEnvioSolicitud");
@@ -742,89 +668,56 @@ public class ClienteController implements Serializable {
         this.producto = ejbProducto.buscarProductoDeCliente(selected);
 
         if (producto != null) {
-            this.trafo = ejbTrafo.buscarPorIdObj(this.producto.getIdTrafo().getIdTrafo());
-            if (this.trafo != null) {
-                this.macro = ejbMacro.buscarMacroPorTrafoObj(trafo);
-                if (macro != null) {
-                    this.trama = "$@A0x5101" + macro.getIdMacro();
-                    this.plcMms = ejbPlcMms.buscarPorIdTrafoObj(trafo);
-                    if (this.plcMms != null) {
+            this.plcTu = ejbPlcTu.buscarIdProducto(producto);
+            if (this.plcTu != null) {
+                this.trafo = ejbTrafo.buscarPorIdObj(this.producto.getIdTrafo().getIdTrafo());
+                if (this.trafo != null) {
+                    this.macro = ejbMacro.buscarMacroPorTrafoObj(trafo);
+                    if (macro != null) {
 
-                        if (this.plcMms.getNumeroCelular() != null) {
-                            String numeroCelular = "&msisdn=57" + this.plcMms.getNumeroCelular();
-                            //String numeroCelular = "&msisdn=57" + "3114760156";
+                        this.trama = "$@3" + plcTu.getMacPlcTu();
 
-                            try {
+                        this.plcMms = ejbPlcMms.buscarPorIdTrafoObj(trafo);
+                        if (this.plcMms != null) {
 
-                                String data = "";
+                            if (this.plcMms.getNumeroCelular() != null) {
+                                String numeroCelular = "&msisdn=57" + this.plcMms.getNumeroCelular();
 
-                                data += "username=" + URLEncoder.encode("roed26", "ISO-8859-1");
-                                data += "&password=" + URLEncoder.encode("rosario26@", "ISO-8859-1");
-                                data += "&message=" + URLEncoder.encode(trama, "ISO-8859-1");
-                                data += "&want_report=1";
-                                data += numeroCelular;
+                                enviarMensajeTexto(numeroCelular, trama);
 
-                                URL url = new URL("https://bulksms.vsms.net/eapi/submission/send_sms/2/2.0");
-
-                                URLConnection conn = url.openConnection();
-                                conn.setDoOutput(true);
-                                OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-                                wr.write(data);
-                                wr.flush();
-
-                                // Get the response
-                                BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                                String line;
-                                String dat = null;
-                                while ((line = rd.readLine()) != null) {
-                                    String respuesta[] = line.split("\\|");
-
-                                    if (!respuesta[0].equalsIgnoreCase("25")) {
-                                        requestContext.execute("PF('exitoEnvioMensaje').show()");
-                                        this.clienteSeleccionado = false;
-                                    } else {
-                                        this.mensajeError = "No cuenta con suficiente saldo para enviar la solicitud";
-                                        requestContext.update("errorEnvioSolicitud");
-                                        requestContext.execute("PF('errorEnvioMensaje').show()");
-                                        this.clienteSeleccionado = false;
-                                    }
-                                }
-                                wr.close();
-                                rd.close();
-                                
-
-                            } catch (Exception e) {
-                                this.mensajeError = "Error inesperado, intente nuevamente";
+                            } else {
+                                this.mensajeError = "El maestro no tiene asociado un número de celular";
                                 requestContext.update("errorEnvioSolicitud");
                                 requestContext.execute("PF('errorEnvioMensaje').show()");
                                 this.clienteSeleccionado = false;
                             }
 
                         } else {
-                            this.mensajeError = "El maestro no tiene asociado un número de celular";
+                            this.mensajeError = "El cliente no esta asociado a un maestro";
                             requestContext.update("errorEnvioSolicitud");
                             requestContext.execute("PF('errorEnvioMensaje').show()");
                             this.clienteSeleccionado = false;
                         }
-
                     } else {
-                        this.mensajeError = "El cliente no esta asociado a un maestro";
+                        this.mensajeError = "El cliente no esta vinculado a un macro";
                         requestContext.update("errorEnvioSolicitud");
                         requestContext.execute("PF('errorEnvioMensaje').show()");
                         this.clienteSeleccionado = false;
                     }
                 } else {
-                    this.mensajeError = "El cliente no esta vinculado a un macro";
+                    this.mensajeError = "El cliente no esta vinculado a un trafo";
                     requestContext.update("errorEnvioSolicitud");
                     requestContext.execute("PF('errorEnvioMensaje').show()");
                     this.clienteSeleccionado = false;
                 }
+
             } else {
-                this.mensajeError = "El cliente no esta vinculado a un trafo";
+                this.mensajeError = "El producto no esta asociado a un PLC_TU";
                 requestContext.update("errorEnvioSolicitud");
                 requestContext.execute("PF('errorEnvioMensaje').show()");
                 this.clienteSeleccionado = false;
             }
+
         } else {
             this.mensajeError = "El cliente no tiene un producto asociado";
             requestContext.update("errorEnvioSolicitud");
@@ -857,6 +750,59 @@ public class ClienteController implements Serializable {
             this.activo = true;
         } else {
             this.activo = false;
+        }
+    }
+
+    private void enviarMensajeTexto(String numeroCelular, String trama) {
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        FacesContext context = FacesContext.getCurrentInstance();
+        Application application = context.getApplication();
+        ViewHandler viewHandler = application.getViewHandler();
+        UIViewRoot viewRoot = viewHandler.createView(context, context.getViewRoot().getViewId());
+        context.setViewRoot(viewRoot);
+        context.renderResponse();
+        try {
+            String data = "";
+            data += "username=" + URLEncoder.encode("roed26", "ISO-8859-1");
+            data += "&password=" + URLEncoder.encode("rosario26@", "ISO-8859-1");
+            data += "&message=" + URLEncoder.encode(trama, "ISO-8859-1");
+            data += "&want_report=1";
+            data += numeroCelular;
+
+            URL url = new URL("https://bulksms.vsms.net/eapi/submission/send_sms/2/2.0");
+
+            URLConnection conn = url.openConnection();
+            conn.setDoOutput(true);
+            OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+            wr.write(data);
+            wr.flush();
+
+            // Get the response
+            BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String line;
+            String dat = null;
+            while ((line = rd.readLine()) != null) {
+                String respuesta[] = line.split("\\|");
+
+                if (!respuesta[0].equalsIgnoreCase("25")) {
+                    requestContext.execute("PF('exitoEnvioMensaje').show()");
+                    this.clienteSeleccionado = false;
+                } else {
+                    this.mensajeError = "No cuenta con suficiente saldo para enviar la solicitud";
+                    requestContext.update("errorEnvioSolicitud");
+                    requestContext.execute("PF('errorEnvioMensaje').show()");
+                    this.clienteSeleccionado = false;
+                }
+            }
+            wr.close();
+            rd.close();
+            this.clienteSeleccionado = false;
+
+        } catch (Exception e) {
+            this.mensajeError = "Error inesperado, intente nuevamente";
+            requestContext.update("errorEnvioSolicitud");
+            requestContext.execute("PF('errorEnvioMensaje').show()");
+            this.clienteSeleccionado = false;
         }
     }
 

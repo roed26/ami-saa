@@ -169,3 +169,9 @@ body {
   border:none;
 }
 
+.ui-breadcrumb ul li span {
+    display: block;
+    overflow: hidden;
+    color: black;
+}
+
