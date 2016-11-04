@@ -14,7 +14,10 @@
                 <h:outputLabel style="font-size: 14px; font-weight: bold;" value="Buscar PLC_MC" />
                 <p:inputText style="width: 500px;" value="#{plcMcController.dato}"  
                              placeholder="Digite el identificador o la MAC del PLC_MC">
-                    <p:ajax event="keyup" update="datalist" listener="#{plcMcController.buscarDato()}" />                                
+                    <p:ajax event="keyup" update="datalist" 
+                            listener="#{plcMcController.buscarDato()}" 
+                            oncomplete="#{plcMcController.reiniciarCampo()}"
+                            />                                
                 </p:inputText>    
             </h:panelGrid>
             <p:dataTable style="text-align: center;" id="datalist" value="#{plcMcController.items}" var="item"

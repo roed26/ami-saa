@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </h:head>
+    <h:body>
+        <h:form id="datosIngreso">
+            <p:commandButton style="left: 820px" value="Seleccionar un nuevo trafo" 
+                             onclick="PF('seleccionarProducto').show()" />
+        </h:form>
+        <h:form id="informacionProducto" >
+            <p:outputLabel rendered="#{productoController.trafoSeleccionado}"  value="Busque y seleccione el producto que desea vincular al trafo: " style="font-weight: bold; font-size: 16px;" />
+            <p:outputLabel rendered="#{productoController.trafoSeleccionado}"  value="#{productoController.trafo.idTrafo} " style="font-weight: bold; font-size: 16px; color: blue;" />
+        </h:form>
+
+        <h:form id="productoListForm" >
+          
+            <h:panelGrid columns="2" rendered="#{productoController.trafoSeleccionado}" >
+                <p:outputLabel value="Buscar por:" />
+                <p:inputText  placeholder="Identificador de producto" style="width: 240px;"  value="#{productoController.idProducto}" >
+                    <p:ajax event="keyup" update="tablaProductos" listener="#{productoController.buscarPorId()}" />                                
+                </p:inputText>                          
+            </h:panelGrid>
+            <br/>
+            <p:panel id="tablaProductos" rendered="#{productoController.trafoSeleccionado}" >
+                <p:dataTable id="datalist" value="#{productoController.listaProductosSinTrafo}" var="item"
+                             paginator="true"
+                             rowKey="#{item.idProducto}"
+                             rowIndexVar="i"
+                             rows="10"
+                             rowsPerPageTemplate="5,10"
+                             >
+                    <f:facet name="header">
+                        <h:outputLabel value="Listado de productos sin vinculo a un trafo" style="font-size: 17px; font-weight: bold;"/>
+                    </f:facet>
+                    <p:column>
+
+                        <f:facet name="header">
+                            <h:outputText value="Identificador de producto"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idProducto}"/>
+                    </p:column>
+
+                    <p:column style="width:140px;text-align:center; background: #EBEDEB;" >
+                        <f:facet name="header">
+                            <h:outputText value="Accion"/>
+                        </f:facet>
+                        <p:commandButton value="Vincular" action="#{productoController.vincularProductoATrafo(item)}" />  
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+        <p:dialog header="Seleccionar Trafo" closable="false" visible="#{!productoController.trafoSeleccionado}" resizable="false" width="450" position="center" modal="true"  widgetVar="seleccionarTrafo">
+            <p:outputLabel value="Busque y seleccione el trafo al cual desea vincular el producto" style="background: #c2dfef; color: black;font-weight: bold; font-size: 16px;" />                    
+            <h:form id="trafoListForm">
+                <br/>
+                <h:panelGrid columns="2" id="panel">
+                    <p:outputLabel value="Buscar trafo " />
+                    <p:inputText  placeholder="Digite el identificador del trafo" style="width: 240px;"  value="#{trafoController.idTrafo}" >
+                        <p:ajax event="keyup" update="tablaTrafos" listener="#{trafoController.buscarPorId()}" />                                
+                    </p:inputText>                          
+
+                    <br/>
+                    <p:panel id="tablaTrafos">
+                        <p:dataTable id="datalist" value="#{trafoController.listaTrafos}" var="item"
+                                     paginator="true"
+                                     rowKey="#{item.idTrafo}"
+                                     rows="7"
+                                     
+                                     >
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Identificador de producto"/>
+                                </f:facet>
+                                <h:outputText value="#{item.idTrafo}"/>
+                            </p:column>
+                            <p:column style="width:120px;text-align:center; background: #EBEDEB;">
+                                <f:facet name="header">
+                                    <h:outputText value="Accion"/>
+                                </f:facet>
+                                <p:commandButton id="viewButton"  
+                                                 action="#{productoController.seleccionarTrafo(item)}" 
+                                                 icon="ui-icon-plus" 
+                                                 value="Seleccionar"  
+                                                 ajax="true"
+                                                 oncomplete="#{productoController.reiniciarVariable()}"
+                                                 />
+                            </p:column>
+
+                        </p:dataTable>
+                    </p:panel>
+                </h:panelGrid>
+                <h:panelGrid columns="2" >
+                    <p:commandButton id="viewButton"  
+                                     action="#{productoController.cancelarSeleccion()}" 
+                                     value="Cancelar"  
+                                     ajax="true"
+                                     />
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+        <p:dialog modal="true" header="Información" resizable="false" widgetVar="mensajeVinculo" closable="false">
+            <h:form>
+                <p:panelGrid style="text-align:left;" styleClass="panelgrid">
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="color: blue;" value="El PLC_MMS fue vinculado al trafo con exito."/>
+                        </p:column>                                
+                    </p:row>
+                    <p:row>
+                        <p:column width="250px;">
+                            <p:commandButton style="font-style: italic;margin-left: 60px;font-weight: normal;" 
+                                             value="Aceptar" onclick="PF('mensajeVinculo').hide()"
+                                             />                                    
+                        </p:column>
+
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+        <p:dialog modal="true" id="msjVinculo" header="Información" resizable="false" widgetVar="mensajeVinculo" closable="false">
+            <h:form>
+                <p:panelGrid style="text-align:left;" styleClass="panelgrid">
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="color: blue;" value="El producto fue vinculado al trafo con exito."/>
+                        </p:column>                                
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:commandButton style="font-style: italic; font-weight: normal;" 
+                                             value="Aceptar" onclick="PF('mensajeVinculo').hide()"
+                                             ajax="false"
+                                             update="@all"
+                                             />                                    
+                        </p:column>
+
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+    </h:body>
+
+</html>

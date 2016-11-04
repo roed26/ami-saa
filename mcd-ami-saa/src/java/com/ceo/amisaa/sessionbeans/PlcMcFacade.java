@@ -31,19 +31,34 @@ public class PlcMcFacade extends AbstractFacade<PlcMc> {
     public PlcMcFacade() {
         super(PlcMc.class);
     }
+
     public List<PlcMc> buscarPorDato(String dato) {
         Query query = getEntityManager().createNamedQuery("PlcMc.findByDato");
         query.setParameter("dato", "%" + dato + "%");
         List<PlcMc> resultList = query.getResultList();
         return resultList;
     }
-    public boolean buscarPorId(String idPlcMc) {
+
+    public boolean buscarPorIdBool(String idPlcMc) {
         Query query = getEntityManager().createNamedQuery("PlcMc.findByIdPlcMc");
         query.setParameter("idPlcMc", idPlcMc);
         List<PlcMc> resultList = query.getResultList();
         return !resultList.isEmpty();
 
     }
+
+    public PlcMc buscarPorId(String idPlcMc) {
+        Query query = getEntityManager().createNamedQuery("PlcMc.findByIdPlcMc");
+        query.setParameter("idPlcMc", idPlcMc);
+        List<PlcMc> resultList = query.getResultList();
+        if (resultList.size() > 0) {
+            return resultList.get(0);
+        } else {
+            return null;
+        }
+
+    }
+
     public boolean buscarPorMac(String macPlcMc) {
         Query query = getEntityManager().createNamedQuery("PlcMc.findByMacPlcMc");
         query.setParameter("macPlcMc", macPlcMc);
@@ -51,4 +66,5 @@ public class PlcMcFacade extends AbstractFacade<PlcMc> {
         return !resultList.isEmpty();
 
     }
+
 }

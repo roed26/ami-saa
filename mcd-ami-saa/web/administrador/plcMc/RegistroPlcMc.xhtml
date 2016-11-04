@@ -35,7 +35,7 @@
                                      requiredMessage="Campo requerido"
                                      placeholder="Solo números y letras"
                                      >
-                            <f:ajax event="blur" render="@this"/>
+                         
                             <f:validator validatorId="ValidarCampoSoloNumerosYLetras"/>
                             <f:validator validatorId="ValidarCampoIdPlcMc"/>
 
@@ -61,7 +61,7 @@
                                      converter="toUpperCaseConverter"    
                                      placeholder="16 caracteres"
                                      >
-                            <f:ajax event="blur" render="@this"/>
+                            
                             <f:validator validatorId="ValidarCampoSoloNumerosYLetras"/>
                             <f:validator validatorId="ValidarCampo16Caracteres"/>
                             <f:validator validatorId="ValidarCampoMacPlcMc"/>
@@ -86,7 +86,7 @@
                                      requiredMessage="Campo requerido"
                                      placeholder="Ejemplo 1.4 ó 1.2.0"
                                      >
-                            <f:ajax event="blur" render="@this"/>
+                           
                             <f:validator validatorId="ValidarCampoVersionNumeroInicio"/>
                             <f:validator validatorId="ValidarCampoSoloNumerosYPuntos"/>
                         </p:inputText>

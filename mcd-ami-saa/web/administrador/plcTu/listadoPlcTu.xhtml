@@ -15,7 +15,7 @@
                 <h:outputLabel style="font-size: 14px; font-weight: bold;" value="Buscar PLC_TU " />
                 <p:inputText style="width: 500px;" value="#{plcTuController.dato}"  
                              placeholder="Digite el identificador o la MAC del PLC_TU">
-                    <p:ajax event="keyup" update="datalist" listener="#{plcTuController.buscarDato()}" />                                
+                    <p:ajax event="keyup" update="datalist" listener="#{plcTuController.buscarDato()}" oncomplete="#{plcTuController.reiniciarCampo()}" />                                
                 </p:inputText>                 
             </h:panelGrid>            
             <p:dataTable  style="text-align: center;" id="datalist" value="#{plcTuController.items}" var="item"

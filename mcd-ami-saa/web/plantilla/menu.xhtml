@@ -26,11 +26,15 @@
                             <p:menuitem value="Registrar PLC_MMS" action="#{routingController.irRegistroPlcMms()}" actionListener="#{addNavegacionController.addRegistrarPlcMms()}" ajax="false"/>
                             <p:menuitem value="Gestionar PLC_MMS"  action="#{routingController.irGestionPlcMms()}" actionListener="#{addNavegacionController.addGestionarPlcMms()}" ajax="false"/>
                         </p:submenu>
-                        <p:submenu label="Vincular">
-                            <p:menuitem value="Vincular producto a un PLC_TU" action="#{routingController.irVincularPlcTu()}" actionListener="#{addNavegacionController.addVincularProductoPlcTu()}" ajax="false"/>
-                            <p:menuitem value="Vincular PLC_MMS a un trafo"  action="#{routingController.irVincularPlcMms()}" actionListener="#{addNavegacionController.addVincularPlcMmsTrafo()}" ajax="false"/>
-                            <p:menuitem value="Vincular PLC_MC a varios productos"  action="#{routingController.irVincularPlcMc()}" actionListener="#{addNavegacionController.addVincularPlcMcProductos()}" ajax="false"/>
-                        </p:submenu>
+
+                    </p:submenu>
+                    <p:submenu label="Gestión Vinculos">
+                        <p:menuitem value="Vincular producto a un trafo" action="#{routingController.irVincularProductoTrafo()}" actionListener="#{addNavegacionController.addVincularPlcMcProductos()}" ajax="false"/>
+                        <p:menuitem value="Vincular producto a un cliente"  action="#{routingController.irVincularProductoCliente()}" actionListener="#{addNavegacionController.addVincularPlcMcProductos()}" ajax="false"/>
+                        <p:menuitem value="Vincular producto a un medidor"  action="#{routingController.irVincularProductoMedidor()}" actionListener="#{addNavegacionController.addVincularPlcMcProductos()}" ajax="false"/>
+                        <p:menuitem value="Vincular producto a un PLC_TU " action="#{routingController.irVincularPlcTu()}" actionListener="#{addNavegacionController.addVincularProductoPlcTu()}" ajax="false"/>
+                        <p:menuitem value="Vincular PLC_MMS a un trafo"  action="#{routingController.irVincularPlcMms()}" actionListener="#{addNavegacionController.addVincularPlcMmsTrafo()}" ajax="false"/>
+                        <p:menuitem value="Vincular PLC_MC a varios productos"  action="#{routingController.irVincularPlcMc()}" actionListener="#{addNavegacionController.addVincularPlcMcProductos()}" ajax="false"/>
                     </p:submenu>
                     <p:submenu label="Gestión de amarres">
                         <p:menuitem value="Por cliente" action="#{routingController.irEstadoAmarre()}" actionListener="#{addNavegacionController.addGestionAmarreCliente()}" ajax="false"/>
@@ -53,11 +57,11 @@
 
                     </p:submenu>
                     <p:submenu label="Gestión de clientes">
-                       <p:menuitem value="Registrar cliente"  ajax="false"/>
-                       <p:menuitem value="Gestionar cliente"   ajax="false"/>
+                        <p:menuitem value="Registrar cliente"  ajax="false"/>
+                        <p:menuitem value="Gestionar cliente"   ajax="false"/>
 
                     </p:submenu>
-                    
+
                 </p:tieredMenu>
             </h:form>
         </div>

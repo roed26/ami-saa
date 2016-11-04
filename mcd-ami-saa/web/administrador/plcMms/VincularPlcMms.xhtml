@@ -12,20 +12,22 @@
     <h:body>
         <h:form id="datosIngreso">
             <h:panelGrid columns="2"> 
-                <p:commandButton style="left: 830px" value="Seleccionar un nuevo trafo"
+                <p:commandButton style="left: 830px" 
+                                 value="Seleccionar un nuevo trafo"
+                                 action="#{plcMmsController.reiniciarVariable()}"
                                  onclick="PF('seleccionarTrafo').show()" />
             </h:panelGrid>
         </h:form>
-        <h:form id="informacionProducto" rendered="#{plcMmsController.trafoSeleccionado}">
-            <h:panelGrid columns="2"> 
+        <h:form id="informacionTrafo" >
+            <h:panelGrid columns="2" rendered="#{plcMmsController.trafoSeleccionado}"> 
                 <p:outputLabel style="font-weight: bold; color: black; font-size: 18px;" 
                                value="Seleccione el dispositivo PLC_MMS que desea vincular al trafo: "/> 
                 <p:outputLabel style="font-weight: bold; color: blue; font-size: 18px;" 
                                value="#{plcMmsController.trafo.idTrafo}"/> 
             </h:panelGrid>
         </h:form>
-        <h:form id="PlcMmsListForm" rendered="#{plcMmsController.trafoSeleccionado}">
-            <h:panelGrid style="margin-bottom: 5px;" columns="3">                      
+        <h:form id="PlcMmsListForm" >
+            <h:panelGrid style="margin-bottom: 5px;" columns="3" rendered="#{plcMmsController.trafoSeleccionado}">                      
 
                 <h:outputLabel style="font-size: 12px; font-weight: bold;" value="Buscar PLC_MMS" />
                 <p:inputText style="width: 500px;" value="#{plcMmsController.dato}"  
@@ -39,6 +41,7 @@
                          rows="10"
                          rowsPerPageTemplate="10,20,30,40,50"
                          emptyMessage="No se encontraron dispositivos PLC_MMS"
+                         rendered="#{plcMmsController.trafoSeleccionado}"
                          >
                 <f:facet name="header">
                     <h:outputLabel value="Listado de dispositivos PLC_MMS sin vinculo a un trafo" style="font-size: 17px; font-weight: bold;"/>
@@ -71,57 +74,53 @@
             </p:dataTable>
 
         </h:form>
-        <p:dialog header="Seleccionar Trafo" visible="#{!plcMmsController.trafoSeleccionado}" resizable="false" width="850" position="center" modal="true"  widgetVar="seleccionarTrafo">
+        <p:dialog header="Seleccionar Trafo" visible="#{!plcMmsController.trafoSeleccionado}" closable="false" resizable="false" width="500" position="center" modal="true"  widgetVar="seleccionarTrafo">
             <p:outputLabel value="Busque y seleccione el trafo al cual desea vincular el PLC_MMS" style="background: #c2dfef; color: black;font-weight: bold; font-size: 16px;" />                    
             <h:form id="trafoListForm">
                 <br/>
-                <h:panelGrid columns="2">
+                <h:panelGrid columns="2" id="panel">
                     <p:outputLabel value="Buscar trafo " />
                     <p:inputText  placeholder="Digite el identificador del trafo" style="width: 240px;"  value="#{trafoController.idTrafo}" >
                         <p:ajax event="keyup" update="tablaTrafos" listener="#{trafoController.buscarPorId()}" />                                
                     </p:inputText>                          
-                </h:panelGrid>
-                <br/>
-                <p:panel id="tablaTrafos">
-                    <p:dataTable id="datalist" value="#{trafoController.listaTrafos}" var="item"
-                                 paginator="true"
-                                 rowKey="#{item.idTrafo}"
-                                 rows="10"
-                                 rowsPerPageTemplate="5,10"
-                                 >
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="Identificador de producto"/>
-                            </f:facet>
-                            <h:outputText value="#{item.idTrafo}"/>
-                        </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="Latitud"/>
-                            </f:facet>
-                            <h:outputText value="#{item.latitud}"/>
-                        </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="Longitud"/>
-                            </f:facet>
-                            <h:outputText value="#{item.longitud}"/>
-                        </p:column>
-                        <p:column style="width:120px;text-align:center; background: #EBEDEB;">
-                            <f:facet name="header">
-                                <h:outputText value="Accion"/>
-                            </f:facet>
-                            <p:commandButton id="viewButton"  
-                                             actionListener="#{plcMmsController.seleccionarTrafo(item)}" 
-                                             icon="ui-icon-plus" 
-                                             value="Seleccionar"  
-                                             ajax="false"
-                                             update="@all"
-                                             />
-                        </p:column>
 
-                    </p:dataTable>
-                </p:panel>
+                    <br/>
+                    <p:panel id="tablaTrafos">
+                        <p:dataTable id="datalist" value="#{trafoController.listaTrafos}" var="item"
+                                     paginator="true"
+                                     rowKey="#{item.idTrafo}"
+                                     rows="7"
+
+                                     >
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Identificador de producto"/>
+                                </f:facet>
+                                <h:outputText value="#{item.idTrafo}"/>
+                            </p:column>
+                            <p:column style="width:120px;text-align:center; background: #EBEDEB;">
+                                <f:facet name="header">
+                                    <h:outputText value="Accion"/>
+                                </f:facet>
+                                <p:commandButton id="viewButton"  
+                                                 action="#{plcMmsController.seleccionarTrafo(item)}" 
+                                                 icon="ui-icon-plus" 
+                                                 value="Seleccionar"  
+                                                 ajax="true"
+                                                 oncomplete="#{plcMmsController.reiniciarVariable()}"
+                                                 />
+                            </p:column>
+
+                        </p:dataTable>
+                    </p:panel>
+                </h:panelGrid>
+                <h:panelGrid columns="2" >
+                    <p:commandButton id="viewButton"  
+                                     action="#{plcMmsController.cancelarSeleccion()}" 
+                                     value="Cancelar"  
+                                     ajax="true"
+                                     />
+                </h:panelGrid>
             </h:form>
         </p:dialog>
         <p:dialog modal="true" header="Información" resizable="false" widgetVar="mensajeVinculo" closable="false">

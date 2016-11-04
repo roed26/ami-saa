@@ -5,7 +5,6 @@
  */
 package com.ceo.amisaa.sessionbeans;
 
-import com.ceo.amisaa.entidades.PlcMms;
 import com.ceo.amisaa.entidades.PlcTu;
 import com.ceo.amisaa.entidades.Producto;
 import java.util.List;
@@ -84,12 +83,5 @@ public class PlcTuFacade extends AbstractFacade<PlcTu> {
             plcTu=resultList.get(0);
         }
         return plcTu;
- 
-    }
-    
-    
- 
-      
-    
-    
-}
+     }
+ }

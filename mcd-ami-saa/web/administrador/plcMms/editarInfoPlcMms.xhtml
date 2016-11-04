@@ -11,6 +11,22 @@
             <p:panelGrid styleClass="panelgrid" id="panel">
                 <p:row>
                     <p:column>
+                        <p:outputLabel value="Identificador PLC_MMS" />
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="idPlcMms" 
+                                     value="#{plcMmsController.selected.idPlcMms}" 
+                                     disabled="true"
+                                     title="Identificador" 
+                                     >
+
+                        </p:inputText>
+
+                    </p:column>                   
+                </p:row>
+                <p:row>
+
+                    <p:column>
                         <p:outputLabel value="Dirección MAC PLC_MMS"/>                
                         <h:outputLabel style="font-style: italic;font-size: 16px;text-align: left; color:red;" 
                                        value="*" />
@@ -26,7 +42,7 @@
                                      placeholder="16 caracteres"
                                      >
                             <f:ajax event="blur" render="@this" />
-                            
+
                         </p:inputText>        
                     </p:column>
                     <p:column>
@@ -179,9 +195,6 @@
                                      >
                             <f:validator validatorId="ValidarCampoNumericoCelular"/>
                             <f:validator validatorId="ValidarCampo10Numeros"/>
-                            <f:validator validatorId="ValidarCampoNumeroCelular"/>
-
-
                         </p:inputText>
 
                     </p:column>

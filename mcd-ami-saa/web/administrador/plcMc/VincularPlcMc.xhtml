@@ -16,10 +16,17 @@
                                  onclick="PF('seleccionarPlcMc').show()" />
             </h:panelGrid>
         </h:form>
-        
+        <h:form id="informacionPlcMc" >
+            <p:outputLabel rendered="#{plcMcController.plcMcSeleccionado}" 
+                           style="font-weight: bold; color: black; font-size: 18px;" 
+                           value="Seleccione el (los) producto(s) que desea vincular al dispositivo PLC_MC: "/> 
+            <p:outputLabel rendered="#{plcMcController.plcMcSeleccionado}" 
+                           style="font-weight: bold; color: blue; font-size: 18px;" 
+                           value="#{plcMcController.idPlcMc}"/> 
+        </h:form>
 
-        <h:form  rendered="#{plcMcController.plcMcSeleccionado}" id="ProductosListForm">
-            <h:panelGrid columns="2">
+        <h:form  id="ProductosListForm">
+            <h:panelGrid columns="2" rendered="#{plcMcController.plcMcSeleccionado}">
                 <p:outputLabel value="Buscar: " />
                 <p:inputText  placeholder="Digite el identificador del producto" style="width: 340px;"  value="#{productoController.idProducto}" >
                     <p:ajax event="keyup" update="tablaProdcutos" listener="#{productoController.buscarPorId()}" />                                
@@ -33,10 +40,11 @@
                          rowIndexVar="i"
                          rowsPerPageTemplate="10,20,30,40,50"
                          emptyMessage="No se encontraron productos"
+                         rendered="#{plcMcController.plcMcSeleccionado}"
                          >
 
                 <f:facet name="header">
-                    <h:outputLabel value="Listado de productos" style="font-size: 17px; font-weight: bold;"/>
+                    <h:outputLabel value="Listado de productos sin vinculo" style="font-size: 17px; font-weight: bold;"/>
                 </f:facet>
 
                 <p:column>
@@ -63,21 +71,17 @@
                     <f:facet name="header">
                         <h:outputText value="Seleccionar"/>
                     </f:facet>
-
-
                 </p:column>
-
             </p:dataTable>
-            <h:panelGrid style="margin-bottom: 5px;" columns="3">          
-
-                <p:commandButton disabled="#{!plcMcController.plcMcSeleccionado}" value="Vincular" action="#{plcMcController.vincularProductos()}"/>
-
+            <h:panelGrid style="margin-bottom: 5px;" columns="3" rendered="#{plcMcController.plcMcSeleccionado}">          
+                <p:commandButton disabled="#{!plcMcController.plcMcSeleccionado}" 
+                                 value="Vincular" 
+                                 action="#{plcMcController.vincularProductos()}"/>
             </h:panelGrid>
-
         </h:form>
-        
-        <p:dialog header="Seleccionar PLC_MC" visible="#{!plcMcController.plcMcSeleccionado}" resizable="false" width="850" position="center" modal="true"  widgetVar="seleccionarPlcMc">
-            <p:outputLabel value="Busque y seleccione el PLC_MC al cual desea vinculas el (los) producto(s) " style="font-weight: bold; font-size: 16px;" />
+
+        <p:dialog header="Seleccionar PLC_MC" closable="false" visible="#{!plcMcController.plcMcSeleccionado}" resizable="false" width="850" position="center" modal="true"  widgetVar="seleccionarPlcMc">
+            <p:outputLabel value="Busque y seleccione el PLC_MC al cual desea vincular el (los) producto(s) " style="font-weight: bold; font-size: 16px;" />
             <br/>
             <h:form id="PlcMcListForm">
                 <h:panelGrid style="margin-bottom: 10px;" columns="3">                      
@@ -122,11 +126,18 @@
                         <p:commandButton id="viewButton"  
                                          actionListener="#{plcMcController.seleccionarPlcMc(item)}" 
                                          icon="ui-icon-plus" value="Seleccionar"  
-                                         ajax="false"
-                                         update="@all"
+                                         ajax="true"
+                                        oncomplete="#{plcMcController.reiniciarVariables()}"
                                          />
                     </p:column>
                 </p:dataTable>
+                <h:panelGrid columns="2" >
+                    <p:commandButton id="viewButton"  
+                                     action="#{plcMcController.cancelarSeleccion()}" 
+                                     value="Cancelar"  
+                                     ajax="true"
+                                     />
+                </h:panelGrid>
             </h:form>
 
         </p:dialog>
@@ -135,15 +146,13 @@
                 <p:panelGrid style="text-align:left;" styleClass="panelgrid">
                     <p:row>
                         <p:column>
-                            <h:outputLabel style="color: blue;" value="Se vincularon los productos al PLC_MC con exito."/>
+                            <h:outputLabel style="color: blue;" value="Se vincularon el (los) producto(s) al PLC_MC con exito."/>
                         </p:column>                                
                     </p:row>
                     <p:row>
                         <p:column width="200px;">
                             <p:commandButton style="font-style: italic;margin-left: 60px;font-weight: normal;" 
                                              value="Aceptar" onclick="PF('mensajeVinculo').hide()"
-                                             ajax="false"
-                                             update="@all"
                                              />                                    
                         </p:column>
 

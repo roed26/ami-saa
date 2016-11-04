@@ -6,10 +6,12 @@ import com.ceo.amisaa.managedbean.util.JsfUtil.PersistAction;
 import com.ceo.amisaa.sessionbeans.MedidorFacade;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.inject.Named;
@@ -27,8 +29,14 @@ public class MedidorController implements Serializable {
     private com.ceo.amisaa.sessionbeans.MedidorFacade ejbFacade;
     private List<Medidor> items = null;
     private Medidor selected;
+    private String idMedidor;
 
     public MedidorController() {
+    }
+
+    @PostConstruct
+    private void init() {
+        this.cargarMedidores();
     }
 
     public Medidor getSelected() {
@@ -47,6 +55,14 @@ public class MedidorController implements Serializable {
 
     private MedidorFacade getFacade() {
         return ejbFacade;
+    }
+
+    public String getIdMedidor() {
+        return idMedidor;
+    }
+
+    public void setIdMedidor(String idMedidor) {
+        this.idMedidor = idMedidor;
     }
 
     public Medidor prepareCreate() {
@@ -79,6 +95,21 @@ public class MedidorController implements Serializable {
             items = getFacade().findAll();
         }
         return items;
+    }
+
+    public void buscarPorId() {
+        this.items = getFacade().buscarPorId(idMedidor);
+
+    }
+
+    public List<Medidor> getListaMedidoresActivos() {
+        List<Medidor> lista = new ArrayList<>();
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).getIdProducto() == null && items.get(i).getEstado().equalsIgnoreCase("FA")) {
+                lista.add(items.get(i));
+            }
+        }
+        return lista;
     }
 
     private void persist(PersistAction persistAction, String successMessage) {
@@ -119,6 +150,10 @@ public class MedidorController implements Serializable {
 
     public List<Medidor> getItemsAvailableSelectOne() {
         return getFacade().findAll();
+    }
+
+    private void cargarMedidores() {
+        this.items = ejbFacade.findAll();
     }
 
     @FacesConverter(forClass = Medidor.class)

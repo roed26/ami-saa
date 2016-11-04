@@ -1,9 +1,11 @@
 package com.ceo.amisaa.managedbean;
 
+import com.ceo.amisaa.entidades.Medidor;
 import com.ceo.amisaa.entidades.PlcTu;
 import com.ceo.amisaa.entidades.Producto;
 import com.ceo.amisaa.managedbean.util.JsfUtil;
 import com.ceo.amisaa.managedbean.util.JsfUtil.PersistAction;
+import com.ceo.amisaa.sessionbeans.MedidorFacade;
 import com.ceo.amisaa.sessionbeans.PlcTuFacade;
 
 import java.io.Serializable;
@@ -34,13 +36,17 @@ public class PlcTuController implements Serializable {
 
     @EJB
     private com.ceo.amisaa.sessionbeans.PlcTuFacade ejbPlcTu;
+    @EJB
+    private MedidorFacade ejbMedidor;
 
     private List<PlcTu> items = null;
     private List<PlcTu> listaPlcTuSinVinculo;
     private PlcTu objPlcTu;
+    private Medidor medidor;
     private String dato;
     private Producto producto;
     private boolean productoSeleccionado;
+    private int numero = 0;
 
     public PlcTuController() {
         this.objPlcTu = new PlcTu();
@@ -86,6 +92,14 @@ public class PlcTuController implements Serializable {
         this.productoSeleccionado = productoSeleccionado;
     }
 
+    public int getNumero() {
+        return numero;
+    }
+
+    public void setNumero(int numero) {
+        this.numero = numero;
+    }
+
     public List<PlcTu> getListaPlcTuSinVinculo() {
         this.getItems();
         listaPlcTuSinVinculo = new ArrayList<>();
@@ -128,12 +142,12 @@ public class PlcTuController implements Serializable {
     public void newObj() {
         this.objPlcTu = new PlcTu();
     }
-    
-    public void cancelarEditar(){
+
+    public void cancelarEditar() {
         RequestContext requestContext = RequestContext.getCurrentInstance();
         requestContext.execute("PF('PlcTuEditDialog').hide()");
         this.objPlcTu = new PlcTu();
-    
+
     }
 
     public String getDato() {
@@ -142,6 +156,11 @@ public class PlcTuController implements Serializable {
 
     public void setDato(String dato) {
         this.dato = dato;
+    }
+
+    public void contar() {
+        numero++;
+        System.out.println("numero: " + numero);
     }
 
     public void editarInfoPlcTu() {
@@ -183,6 +202,7 @@ public class PlcTuController implements Serializable {
         this.objPlcTu = plcTu;
         this.objPlcTu.setIdProducto(producto);
         this.ejbPlcTu.edit(this.objPlcTu);
+
         RequestContext requestContext = RequestContext.getCurrentInstance();
         productoSeleccionado = false;
         requestContext.execute("PF('mensajeVinculo').show()");
@@ -231,10 +251,11 @@ public class PlcTuController implements Serializable {
 
     public void buscarDato() {
         this.items = ejbPlcTu.buscarPorDato(this.dato.toLowerCase());
+        this.dato = "";
     }
 
     public void seleccionarProducto(Producto producto) {
-       
+        productoSeleccionado= true;
         RequestContext requestContext = RequestContext.getCurrentInstance();
         FacesContext context = FacesContext.getCurrentInstance();
         Application application = context.getApplication();
@@ -242,16 +263,27 @@ public class PlcTuController implements Serializable {
         UIViewRoot viewRoot = viewHandler.createView(context, context.getViewRoot().getViewId());
         context.setViewRoot(viewRoot);
         context.renderResponse();
-        
-        requestContext.execute("PF('seleccionarProducto').hide()"); 
-        
+        requestContext.execute("PF('seleccionarProducto').hide()");
+        requestContext.update("plcTuListForm");
+        requestContext.update("informacionProducto");
         this.producto = producto;
-        this.productoSeleccionado = true;
+
+    }
+
+    public void cancelarSeleccionProducto() {
+        productoSeleccionado = false;
+        this.producto = new Producto();
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        FacesContext context = FacesContext.getCurrentInstance();
+        Application application = context.getApplication();
+        ViewHandler viewHandler = application.getViewHandler();
+        UIViewRoot viewRoot = viewHandler.createView(context, context.getViewRoot().getViewId());
+        context.setViewRoot(viewRoot);
+        context.renderResponse();
+        requestContext.execute("PF('seleccionarProducto').hide()");
         requestContext.update("plcTuListForm");
         requestContext.update("informacionProducto");
         requestContext.update("panel");
-        
-
     }
 
     public void reiniciarVariables() {
@@ -259,7 +291,11 @@ public class PlcTuController implements Serializable {
 
     }
 
-    
+    public void reiniciarCampo() {
+        this.dato = "";
+        this.items = ejbPlcTu.findAll();
+
+    }
 
     @FacesConverter(forClass = PlcTu.class)
     public static class PlcTuControllerConverter implements Converter {

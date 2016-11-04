@@ -14,7 +14,7 @@
                 <h:outputLabel style="font-size: 14px; font-weight: bold;" value="Buscar PLC_MMS" />
                 <p:inputText style="width: 500px;" value="#{plcMmsController.dato}"  
                              placeholder="Digite el identificador o la MAC del PLC_MMS">
-                    <p:ajax event="keyup" update="datalist" listener="#{plcMmsController.buscarDato()}" />                                
+                    <p:ajax event="keyup" update="datalist" listener="#{plcMmsController.buscarDato()}" oncomplete="#{plcMmsController.reiniciarCampo()}"/>                                
                 </p:inputText>  
             </h:panelGrid>
             <p:dataTable id="datalist" value="#{plcMmsController.items}" var="item"

@@ -54,6 +54,7 @@ public class PlcMmsController implements Serializable {
     @PostConstruct
     private void init() {
         trafoSeleccionado = false;
+        dato = "";
     }
 
     public PlcMms getSelected() {
@@ -112,7 +113,6 @@ public class PlcMmsController implements Serializable {
         this.maestroSeleccionado = maestroSeleccionado;
     }
 
-    
     public List<PlcMms> getListaPlcMmsSinVinculo() {
         this.getItems();
         listaPlcMmsSinVinculo = new ArrayList<>();
@@ -219,15 +219,44 @@ public class PlcMmsController implements Serializable {
 
     public void buscarDato() {
         this.items = ejbPlcMms.buscarPorDato(this.dato.toLowerCase());
+        this.dato = "";
+        
     }
-
+    public void reiniciarCampo() {
+        this.dato = "";
+        this.items = ejbPlcMms.findAll();
+        
+        
+    }
     public void seleccionarTrafo(Trafo trafo) {
         this.trafo = trafo;
         trafoSeleccionado = true;
-        /*RequestContext requestContext = RequestContext.getCurrentInstance();
-        requestContext.update("PlcMmsListForm");
-        requestContext.execute("PF('seleccionarTrafo').hide()");*/
 
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        FacesContext context = FacesContext.getCurrentInstance();
+        Application application = context.getApplication();
+        ViewHandler viewHandler = application.getViewHandler();
+        UIViewRoot viewRoot = viewHandler.createView(context, context.getViewRoot().getViewId());
+        context.setViewRoot(viewRoot);
+        context.renderResponse();
+        requestContext.execute("PF('seleccionarTrafo').hide()");
+        requestContext.update("PlcMmsListForm");
+        requestContext.update("informacionTrafo");
+    }
+
+    public void cancelarSeleccion() {
+        trafoSeleccionado = false;
+
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        FacesContext context = FacesContext.getCurrentInstance();
+        Application application = context.getApplication();
+        ViewHandler viewHandler = application.getViewHandler();
+        UIViewRoot viewRoot = viewHandler.createView(context, context.getViewRoot().getViewId());
+        context.setViewRoot(viewRoot);
+        context.renderResponse();
+        requestContext.execute("PF('seleccionarTrafo').hide()");
+        requestContext.update("PlcMmsListForm");
+        requestContext.update("informacionTrafo");
     }
 
     public void newObj() {
@@ -241,6 +270,7 @@ public class PlcMmsController implements Serializable {
         RequestContext requestContext = RequestContext.getCurrentInstance();
         trafoSeleccionado = false;
         requestContext.update("PlcMmsListForm");
+        requestContext.update("informacionTrafo");
         requestContext.execute("PF('mensajeVinculo').show()");
     }
 
@@ -274,11 +304,12 @@ public class PlcMmsController implements Serializable {
             this.objPlcMms = new PlcMms();
         }
     }
-    public void enviarSolicitudConfiguracion(){
+
+    public void enviarSolicitudConfiguracion() {
         RequestContext requestContext = RequestContext.getCurrentInstance();
         if (this.objPlcMms != null) {
-           String trama="";
-           String numeroCelular = "&msisdn=57" + this.objPlcMms.getNumeroCelular();
+            String trama = "";
+            String numeroCelular = "&msisdn=57" + this.objPlcMms.getNumeroCelular();
             enviarMensajeTexto(numeroCelular, trama);
 
             //registro en base de datos nuevos parametros
@@ -289,6 +320,7 @@ public class PlcMmsController implements Serializable {
             this.objPlcMms = new PlcMms();
         }
     }
+
     private void enviarMensajeTexto(String numeroCelular, String trama) {
         RequestContext requestContext = RequestContext.getCurrentInstance();
         FacesContext context = FacesContext.getCurrentInstance();
@@ -340,13 +372,14 @@ public class PlcMmsController implements Serializable {
             requestContext.execute("PF('errorEnvioMensaje').show()");
             //this.clienteSeleccionado = false;
         }
-    }        
+    }
+
     public void seleccionarClienteSolicitud(PlcMms plcMms) {
         this.objPlcMms = plcMms;
         RequestContext requestContext = RequestContext.getCurrentInstance();
         requestContext.update("PlcMmsEditForm");
         requestContext.execute("PF('seleccionarPlcMms').hide()");
-        
+
     }
 
     public void ventanaEliminarPlcMms(PlcMms selected) {
@@ -371,5 +404,9 @@ public class PlcMmsController implements Serializable {
                 requestContext.execute("PF('noSePuedeEliminar').show()");
             }
         }
+    }
+
+    public void reiniciarVariable() {
+        trafoSeleccionado = false;
     }
 }

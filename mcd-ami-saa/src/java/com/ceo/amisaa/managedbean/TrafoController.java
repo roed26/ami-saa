@@ -18,13 +18,9 @@ import com.ceo.amisaa.sessionbeans.PlcMmsFacade;
 import com.ceo.amisaa.sessionbeans.PlcTuFacade;
 import com.ceo.amisaa.sessionbeans.ProductoFacade;
 import com.ceo.amisaa.sessionbeans.TrafoFacade;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.IOException;
 import java.io.Serializable;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -464,69 +460,6 @@ public class TrafoController implements Serializable {
 
     }
 
-    public void enviarSolicitudPrueba() {
-
-        this.trama = "$@A0x5101";//+ macro.getIdMacro();
-
-        RequestContext requestContext = RequestContext.getCurrentInstance();
-        FacesContext context = FacesContext.getCurrentInstance();
-        Application application = context.getApplication();
-        ViewHandler viewHandler = application.getViewHandler();
-        UIViewRoot viewRoot = viewHandler.createView(context, context.getViewRoot().getViewId());
-        context.setViewRoot(viewRoot);
-        context.renderResponse();
-
-        String numeroCelular = "&msisdn=573146359398";
-        //String numeroCelular = "&msisdn=57" + "3114760156";
-
-        try {
-
-            String data = "";
-
-            data += "username=" + URLEncoder.encode("unicauca", "ISO-8859-1");
-            data += "&password=" + URLEncoder.encode("unicauca", "ISO-8859-1");
-            data += "&message=" + URLEncoder.encode(trama, "ISO-8859-1");
-            data += "&want_report=1";
-            data += numeroCelular;
-
-            URL url = new URL("https://bulksms.vsms.net/eapi/submission/send_sms/2/2.0");
-
-            URLConnection conn = url.openConnection();
-            conn.setDoOutput(true);
-            OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-            wr.write(data);
-            wr.flush();
-
-            // Get the response
-            BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String line;
-            String dat = null;
-            while ((line = rd.readLine()) != null) {
-                String respuesta[] = line.split("\\|");
-
-                if (!respuesta[0].equalsIgnoreCase("25")) {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
-                    requestContext.execute("PF('exitoEnvioMensaje').show()");
-                } else {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "No hay creditos"));
-                    requestContext.execute("PF('errorCreditos').show()");
-                }
-
-            }
-
-            wr.close();
-            rd.close();
-
-            this.trafoSeleccionado = false;
-
-        } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La solicitud se envio con exito"));
-            requestContext.execute("PF('errorEnvioMensaje').show()");
-            this.trafoSeleccionado = false;
-        }
-
-    }
-
     public void enviarSolicitud() {
         RequestContext requestContext = RequestContext.getCurrentInstance();
         FacesContext context = FacesContext.getCurrentInstance();
@@ -542,53 +475,9 @@ public class TrafoController implements Serializable {
             this.plcMms = ejbPlcMms.buscarPorIdTrafoObj(selected);
             if (this.plcMms != null) {
                 if (this.plcMms.getNumeroCelular() != null) {
-                    String numeroCelular = "&msisdn=57" + this.plcMms.getNumeroCelular();
 
-                    try {
-                        String data = "";
-                        data += "username=" + URLEncoder.encode("roed26", "ISO-8859-1");
-                        data += "&password=" + URLEncoder.encode("rosario26@", "ISO-8859-1");
-                        data += "&message=" + URLEncoder.encode(trama, "ISO-8859-1");
-                        data += "&want_report=1";
-                        data += numeroCelular;
-
-                        URL url = new URL("https://bulksms.vsms.net/eapi/submission/send_sms/2/2.0");
-
-                        URLConnection conn = url.openConnection();
-                        conn.setDoOutput(true);
-                        OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-                        wr.write(data);
-                        wr.flush();
-
-                        // Get the response
-                        BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                        String line;
-                        String dat = null;
-                        while ((line = rd.readLine()) != null) {
-                            String respuesta[] = line.split("\\|");
-
-                            if (!respuesta[0].equalsIgnoreCase("25")) {
-                                requestContext.execute("PF('exitoEnvioMensaje').show()");
-                            } else {
-                                this.mensajeError = "No cuenta con suficiente saldo para enviar la solicitud";
-                                requestContext.update("formMensajeError");
-                                requestContext.execute("PF('errorEnvioMensaje').show()");
-                            }
-
-                        }
-
-                        wr.close();
-                        rd.close();
-
-                        this.trafoSeleccionado = false;
-
-                    } catch (Exception e) {
-                        this.mensajeError = "Error inesperado, intente nuevamente";
-                        requestContext.update("formMensajeError");
-                        requestContext.execute("PF('errorEnvioMensaje').show()");
-                        this.trafoSeleccionado = false;
-                    }
-
+                    String numeroCelular = this.plcMms.getNumeroCelular();
+                    enviarMensaje(numeroCelular, trama);
                 } else {
                     this.mensajeError = "El maestro asociado al trafo no tiene un número de celular";
                     requestContext.update("formMensajeError");
@@ -631,6 +520,10 @@ public class TrafoController implements Serializable {
         } else {
             this.clientes = false;
         }
+    }
+
+    public void enviarMensaje(String numeroCelular, String trama) {
+       
     }
 
     public void cargarTrafos() {
@@ -690,7 +583,5 @@ public class TrafoController implements Serializable {
                 return null;
             }
         }
-
     }
-
 }

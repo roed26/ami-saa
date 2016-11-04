@@ -45,6 +45,16 @@ public class RoutingController implements Serializable {
    public void irVincularPlcMc(){
            this.ruta = "/administrador/plcMc/VincularPlcMc.xhtml";
    }
+   
+   public void irVincularProductoTrafo(){
+           this.ruta = "/administrador/vinculos/VincularProductoTrafo.xhtml";
+   }
+   public void irVincularProductoCliente(){
+           this.ruta = "/administrador/vinculos/VincularProductoCliente.xhtml";
+   }
+   public void irVincularProductoMedidor(){
+           this.ruta = "/administrador/vinculos/VincularProductoMedidor.xhtml";
+   }
    public void irGestionPlcMms(){
        this.ruta = "/administrador/plcMms/listadoPlcMms.xhtml";
    }

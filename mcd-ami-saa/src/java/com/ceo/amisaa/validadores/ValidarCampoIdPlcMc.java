@@ -21,7 +21,7 @@ public class ValidarCampoIdPlcMc implements Validator {
     public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
         String texto = String.valueOf(value);
 
-        if(ejbPlcMc.buscarPorId(texto))
+        if(ejbPlcMc.buscarPorIdBool(texto))
         {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Este id ya pertenece a un PLC_MC.", "Este id ya pertenece a un PLC_MC.");
             throw new ValidatorException(msg);

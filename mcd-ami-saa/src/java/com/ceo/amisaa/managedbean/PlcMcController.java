@@ -34,13 +34,17 @@ public class PlcMcController implements Serializable {
 
     @EJB
     private com.ceo.amisaa.sessionbeans.PlcMcFacade ejbPlcMc;
+    @EJB
     private com.ceo.amisaa.sessionbeans.ProductoFacade ejbProducto;
+
     private List<PlcMc> items = null;
     private PlcMc objPlcMc;
     private String dato;
     private boolean estadoActivo;
     private boolean plcMcSeleccionado;
     private List<Producto> productos;
+    private String idPlcMc;
+    private int numero=0;
 
     public PlcMcController() {
         this.objPlcMc = new PlcMc();
@@ -49,7 +53,6 @@ public class PlcMcController implements Serializable {
 
     @PostConstruct
     private void init() {
-        this.ejbProducto = new ProductoFacade();
 
     }
 
@@ -75,10 +78,18 @@ public class PlcMcController implements Serializable {
         this.dato = dato;
     }
 
+    public String getIdPlcMc() {
+        return idPlcMc;
+    }
+
+    public void setIdPlcMc(String idPlcMc) {
+        this.idPlcMc = idPlcMc;
+    }
+
     public boolean isPlcMcSeleccionado() {
         return plcMcSeleccionado;
     }
-
+    
     public void setPlcMcSeleccionado(boolean plcMcSeleccionado) {
         this.plcMcSeleccionado = plcMcSeleccionado;
     }
@@ -89,6 +100,14 @@ public class PlcMcController implements Serializable {
 
     public void setProductos(List<Producto> productos) {
         this.productos = productos;
+    }
+
+    public int getNumero() {
+        return numero;
+    }
+
+    public void setNumero(int numero) {
+        this.numero = numero;
     }
 
     private PlcMcFacade getFacade() {
@@ -226,6 +245,12 @@ public class PlcMcController implements Serializable {
 
     public void buscarDato() {
         this.items = ejbPlcMc.buscarPorDato(this.dato.toLowerCase());
+        this.dato = "";
+    }
+
+    public void reiniciarCampo() {
+        this.dato = "";
+        this.items = ejbPlcMc.findAll();
 
     }
 
@@ -252,28 +277,50 @@ public class PlcMcController implements Serializable {
         }
     }
 
+    public void cancelarSeleccion() {
+        plcMcSeleccionado = false;
+        this.objPlcMc = new PlcMc();
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        FacesContext context = FacesContext.getCurrentInstance();
+        Application application = context.getApplication();
+        ViewHandler viewHandler = application.getViewHandler();
+        UIViewRoot viewRoot = viewHandler.createView(context, context.getViewRoot().getViewId());
+        context.setViewRoot(viewRoot);
+        context.renderResponse();
+        requestContext.execute("PF('seleccionarPlcMc').hide()");
+        requestContext.update("ProductosListForm");
+        requestContext.update("informacionPlcMc");
+    }
+
     public void newObj() {
         this.objPlcMc = new PlcMc();
     }
 
     public void seleccionarPlcMc(PlcMc plcMc) {
-        this.objPlcMc = plcMc;
+        idPlcMc = plcMc.getIdPlcMc();
         plcMcSeleccionado = true;
+        dato = "";
         RequestContext requestContext = RequestContext.getCurrentInstance();
         requestContext.update("ProductosListForm");
+        requestContext.update("informacionPlcMc");
         requestContext.execute("PF('seleccionarPlcMc').hide()");
 
     }
 
     public void vincularProductos() {
+        this.objPlcMc = ejbPlcMc.buscarPorId(idPlcMc);
         if (this.productos.size() > 0) {
             for (int i = 0; i < this.productos.size(); i++) {
-                this.productos.get(i).setMacPlcMc(objPlcMc);
-                this.ejbProducto.edit(this.productos.get(i));
+                Producto producto = this.productos.get(i);
+                producto.setMacPlcMc(objPlcMc);
+                this.ejbProducto.edit(producto);
             }
-
+            this.plcMcSeleccionado = false;
             RequestContext requestContext = RequestContext.getCurrentInstance();
-            requestContext.execute("PF('mensajeVinculo').hide()");
+            requestContext.update("informacionPlcMc");
+            requestContext.update("ProductosListForm");
+            requestContext.execute("PF('mensajeVinculo').show()");
+            this.objPlcMc = new PlcMc();
         }
     }
 
@@ -289,6 +336,11 @@ public class PlcMcController implements Serializable {
         this.objPlcMc = new PlcMc();
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El PLC_MC se registro con exito."));
         requestContext.execute("PF('mensajeRegistroExitoso').show()");
+    }
+
+    public void reiniciarVariables() {
+        this.plcMcSeleccionado = false;
+
     }
 
 }

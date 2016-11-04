@@ -15,7 +15,7 @@ import javax.faces.validator.ValidatorException;
 public class ValidarCampoMacPlcTu implements Validator {
 
     @EJB
-    private PlcMmsFacade ejbPlcTu;
+    private PlcTuFacade ejbPlcTu;
 
     @Override
     public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {

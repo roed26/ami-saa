@@ -14,10 +14,12 @@
             <p:commandButton style="left: 820px" value="Seleccionar un nuevo producto" 
                              onclick="PF('seleccionarProducto').show()" />
         </h:form>
-        <h:form id="informacionProducto" rendered="#{plcTuController.productoSeleccionado}">
-            <p:outputLabel style="font-weight: bold; color: black; font-size: 18px;" 
+        <h:form id="informacionProducto" >
+            <p:outputLabel rendered="#{plcTuController.productoSeleccionado}" 
+                           style="font-weight: bold; color: black; font-size: 18px;" 
                            value="Seleccione el dispositivo PLC_TU que desea vincular al producto: "/> 
-            <p:outputLabel style="font-weight: bold; color: blue; font-size: 18px;" 
+            <p:outputLabel rendered="#{plcTuController.productoSeleccionado}" 
+                           style="font-weight: bold; color: blue; font-size: 18px;" 
                            value="#{plcTuController.producto.idProducto}"/> 
         </h:form>
         <h:form id="plcTuListForm" >
@@ -71,18 +73,18 @@
             </p:dataTable>
         </h:form>
         
-        <p:dialog id="seleccionProducto" header="Seleccionar producto" visible="#{!plcTuController.productoSeleccionado}" resizable="false" width="850" position="center" modal="true" widgetVar="seleccionarProducto">
+        <p:dialog id="seleccionProducto" closable="false" header="Seleccionar producto" visible="#{!plcTuController.productoSeleccionado}" resizable="false" width="850" position="center" modal="true" widgetVar="seleccionarProducto">
             <p:outputLabel value="Busque y seleccione el producto que desea vincular al PLC_TU" style="font-weight: bold; font-size: 16px;" />
             <h:form id="productoListForm" >
                 <br/>
                 <h:panelGrid columns="2" >
                     <p:outputLabel value="Buscar por:" />
                     <p:inputText  placeholder="Identificador de producto" style="width: 240px;"  value="#{productoController.idProducto}" >
-                        <p:ajax event="keyup" update="tablaTrafos" listener="#{productoController.buscarPorId()}" />                                
+                        <p:ajax event="keyup" update="tablaProductos" listener="#{productoController.buscarPorId()}" />                                
                     </p:inputText>                          
                 </h:panelGrid>
                 <br/>
-                <p:panel id="tablaTrafos">
+                <p:panel id="tablaProductos">
                     <p:dataTable id="datalist" value="#{productoController.listaProductosActivos}" var="item"
                                  paginator="true"
                                  rowKey="#{item.idProducto}"
@@ -122,10 +124,18 @@
                                              />
                         </p:column>
                     </p:dataTable>
+                    <h:panelGrid columns="2" >
+                    <p:commandButton id="clearButton"  
+                                     action="#{plcTuController.cancelarSeleccionProducto()}" 
+                                     value="Cancelar"  
+                                     ajax="true"
+                                     />
+                </h:panelGrid>
                 </p:panel>
             </h:form>
         </p:dialog>
-
+        
+        
         <p:dialog modal="true" id="msjVinculo" header="Información" resizable="false" widgetVar="mensajeVinculo" closable="false">
             <h:form>
                 <p:panelGrid style="text-align:left;" styleClass="panelgrid">

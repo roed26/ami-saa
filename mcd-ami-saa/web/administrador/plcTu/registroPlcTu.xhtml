@@ -17,7 +17,7 @@
         <h:outputLabel style="font-style: italic; font-size: 13px; color:black; " 
                        value="Campos obligatorios "/>
         <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
-                                       value="*"/>
+                       value="*"/>
         <br/>
         <br/>
         <h:form id="PlcTuCreateForm" style="font-weight: bold; color:black;">
@@ -35,7 +35,7 @@
                                      requiredMessage="Campo requerido"
                                      placeholder="Solo números y letras"
                                      >
-                            <f:ajax event="blur" render="@this"/>
+
                             <f:validator validatorId="ValidarCampoSoloNumerosYLetras"/>
                             <f:validator validatorId="ValidarCampoIdPlcTu"/>
 
@@ -61,13 +61,15 @@
                                      converter="toUpperCaseConverter"  
                                      placeholder="16 caracteres"
                                      >
-                            <f:ajax event="blur" render="@this"/>
+
                             <f:validator validatorId="ValidarCampoSoloNumerosYLetras"/>
                             <f:validator validatorId="ValidarCampo16Caracteres"/>
                             <f:validator validatorId="ValidarCampoMacPlcTu"/>
+                                    
                         </p:inputText>
 
                     </p:column>
+
                     <p:column>                        
                         <p:message for="macPlcTu"/>
                     </p:column>

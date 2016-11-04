@@ -11,6 +11,21 @@
             <p:panelGrid styleClass="panelgrid" id="panel" >
                 <p:row>
                     <p:column>
+                        <p:outputLabel value="Identificador PLC_MC" />
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="idPlcMc" 
+                                     value="#{plcMcController.selected.idPlcMc}" 
+                                     disabled="true"
+                                     title="Identificador" 
+                                     >
+                            
+                        </p:inputText>
+
+                    </p:column>                   
+                </p:row>  
+                <p:row>
+                    <p:column>
                         <p:outputLabel value="Dirección MAC PLC_MC"/>                
                     </p:column>
                     <p:column>

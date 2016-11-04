@@ -62,14 +62,16 @@
         <div >
             <h:form>
                 <p:breadCrumb  model="#{addNavegacionController.ruta}">
-                    
+
                 </p:breadCrumb>
             </h:form> 
         </div>
+
+        <div id="menu">
+            <ui:insert name="left">Left</ui:insert>
+        </div>
+
         <div>
-            <div id="menu">
-                <ui:insert name="left">Left</ui:insert>
-            </div>
             <div id="content" >
                 <ui:insert name="content">Content</ui:insert>
             </div>
