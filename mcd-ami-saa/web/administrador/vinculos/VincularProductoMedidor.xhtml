@@ -13,7 +13,7 @@
         <h:form id="datosIngreso">
             <h:panelGrid columns="2"> 
                 <p:commandButton style="left: 830px" 
-                                 value="Seleccionar un nuevo cliente"
+                                 value="Seleccionar un nuevo medidor"
                                  onclick="PF('seleccionarCliente').show()" />
             </h:panelGrid>
         </h:form>
@@ -63,7 +63,7 @@
             </p:panel>
         </h:form>
          
-        <p:dialog id="seleccionMedidor" visible="#{!productoController.clienteSeleccionado}" header="Seleccionar medidor" closable="false" resizable="false" width="450" position="center" modal="true" widgetVar="seleccionarMedidor">
+        <p:dialog id="seleccionMedidor" visible="#{!productoController.medidorSeleccionado}" header="Seleccionar medidor" closable="false" resizable="false" width="450" position="center" modal="true" widgetVar="seleccionarMedidor">
             
             <h:form id="medidorListForm" >
                 <p:outputLabel value="Busque y seleccione el medidor al cual desea vincular el producto" style="font-weight: bold; font-size: 16px;" />
