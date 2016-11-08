@@ -379,4 +379,18 @@ public class AddNavegacionController implements Serializable {
         this.menuNavegacion.addElement(gestionUbicacion);
         this.menuNavegacion.addElement(gestion);
     }
+    
+    public void addGestionGeomarre() {
+        this.menuNavegacion = new DefaultMenuModel();
+        DefaultMenuItem index = new DefaultMenuItem();
+        index.setValue("Index");
+        DefaultMenuItem gestionUbicacion = new DefaultMenuItem();
+        gestionUbicacion.setValue("Ubicación trafos y clientes");
+        DefaultMenuItem gestion = new DefaultMenuItem();
+        gestion.setValue("Geoamarre");
+
+        this.menuNavegacion.addElement(index);
+        this.menuNavegacion.addElement(gestionUbicacion);
+        this.menuNavegacion.addElement(gestion);
+    }
 }

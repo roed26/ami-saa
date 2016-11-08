@@ -53,7 +53,7 @@
                     </p:submenu>
                     <p:submenu label="Ubicación trafos y clientes">
                         <p:menuitem value="Trafos y clientes" action="#{routingController.irTrafoClientes()}" actionListener="#{addNavegacionController.addGestionUbicacion()}"  ajax="false"/>
-                        <p:menuitem value="Geoamarre"  ajax="false"/>
+                        <p:menuitem value="Geoamarre" action="#{routingController.irGeomarre()}" actionListener="#{addNavegacionController.addGestionGeomarre()}"  ajax="false"/>
 
                     </p:submenu>
                     <p:submenu label="Gestión de clientes">
