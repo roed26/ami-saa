@@ -49,6 +49,13 @@
                         </p:column>
                     </p:dataTable>
                 </p:panel>
+                <h:panelGrid columns="2" >
+                    <p:commandButton id="viewButton"  
+                                     value="Cancelar"  
+                                     ajax="true"
+                                     action="#{trafoController.reiniciarVariables()}"
+                                     />
+                </h:panelGrid>
             </h:form>
         </p:dialog>
 

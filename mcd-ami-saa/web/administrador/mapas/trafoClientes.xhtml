@@ -43,7 +43,7 @@ and open the template in the editor.
             </h:form>
         </p:dialog>
         
-        <p:dialog header="Seleccionar Trafo" visible="#{!marcadoresController.trafoSeleccionado}" resizable="false" width="450" position="center" modal="true"  widgetVar="seleccionarTrafo">
+        <p:dialog closable="false" header="Seleccionar Trafo" visible="#{!marcadoresController.trafoSeleccionado}" resizable="false" width="450" position="center" modal="true"  widgetVar="seleccionarTrafo">
             <p:outputLabel value="Busque y seleccione el trafo " style="background: #c2dfef; color: black;font-weight: bold; font-size: 16px;" />                    
             <h:form id="trafoListForm">
                 <br/>
@@ -82,6 +82,13 @@ and open the template in the editor.
 
                     </p:dataTable>
                 </p:panel>
+                <h:panelGrid columns="2" >
+                    <p:commandButton id="viewButton"  
+                                     value="Cancelar"  
+                                     ajax="true"
+                                     action="#{trafoController.reiniciarVariables()}"
+                                     />
+                </h:panelGrid>
             </h:form>
         </p:dialog>
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXroWbv5-OtudGXwL0NgbV9TrlfLwafPA"

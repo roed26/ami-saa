@@ -70,7 +70,7 @@
 
 
         </h:form>
-        <p:dialog visible="#{!trafoController.trafoSeleccionado}" header="Seleccionar trafo" resizable="false" width="450" position="center" modal="true"  widgetVar="seleccionarTrafo">
+        <p:dialog closable="false" visible="#{!trafoController.trafoSeleccionado}" header="Seleccionar trafo" resizable="false" width="450" position="center" modal="true"  widgetVar="seleccionarTrafo">
             <p:outputLabel value="Seleccione un trafo para visualizar la lista de cliente vinculados " style="color: black;font-weight: bold; font-size: 14px;" />                    
             <h:form id="ClienteListForm">
                 <br/>
@@ -101,6 +101,13 @@
                                          />
                     </p:column>
                 </p:dataTable>
+                <h:panelGrid columns="2" >
+                    <p:commandButton id="viewButton"  
+                                     value="Cancelar"  
+                                     ajax="true"
+                                     action="#{trafoController.reiniciarVariables()}"
+                                     />
+                </h:panelGrid>
 
             </h:form>
         </p:dialog>

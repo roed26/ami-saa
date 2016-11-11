@@ -29,6 +29,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -525,6 +526,21 @@ public class ClienteController implements Serializable {
         this.rangoFechaCambiado3 = false;
         this.rangoFecha = "";
         this.clienteSeleccionado = false;
+    }
+
+    public void reiniciarVaariables() {
+        nombreOApellidos = "";
+        cargarClientes();
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        FacesContext context = FacesContext.getCurrentInstance();
+        Application application = context.getApplication();
+        ViewHandler viewHandler = application.getViewHandler();
+        UIViewRoot viewRoot = viewHandler.createView(context, context.getViewRoot().getViewId());
+        context.setViewRoot(viewRoot);
+        context.renderResponse();
+        requestContext.execute("PF('seleccionarCliente').hide()");
+        requestContext.update("productoListForm");
+        requestContext.update("informacionCliente");
     }
 
     public void enviarSolicitud() {

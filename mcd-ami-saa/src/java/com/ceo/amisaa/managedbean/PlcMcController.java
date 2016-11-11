@@ -280,6 +280,8 @@ public class PlcMcController implements Serializable {
     public void cancelarSeleccion() {
         plcMcSeleccionado = false;
         this.objPlcMc = new PlcMc();
+        dato="";
+        items=ejbPlcMc.findAll();
         RequestContext requestContext = RequestContext.getCurrentInstance();
         FacesContext context = FacesContext.getCurrentInstance();
         Application application = context.getApplication();

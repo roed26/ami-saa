@@ -538,7 +538,36 @@ public class TrafoController implements Serializable {
         estadosDeAmarre = new ArrayList<>();
 
     }
-
+    public void reiniciarVariables(){
+    
+        idTrafo="";
+        cargarTrafos();
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        FacesContext context = FacesContext.getCurrentInstance();
+        Application application = context.getApplication();
+        ViewHandler viewHandler = application.getViewHandler();
+        UIViewRoot viewRoot = viewHandler.createView(context, context.getViewRoot().getViewId());
+        context.setViewRoot(viewRoot);
+        context.renderResponse();
+        requestContext.execute("PF('seleccionarTrafo').hide()");
+        requestContext.update("productoListForm");
+        requestContext.update("informacionProducto");
+    }
+    public void reiniciarVariablesPlcMms(){
+    
+        idTrafo="";
+        cargarTrafos();
+            RequestContext requestContext = RequestContext.getCurrentInstance();
+        FacesContext context = FacesContext.getCurrentInstance();
+        Application application = context.getApplication();
+        ViewHandler viewHandler = application.getViewHandler();
+        UIViewRoot viewRoot = viewHandler.createView(context, context.getViewRoot().getViewId());
+        context.setViewRoot(viewRoot);
+        context.renderResponse();
+        requestContext.execute("PF('seleccionarTrafo').hide()");
+        requestContext.update("PlcMmsListForm");
+        requestContext.update("informacionTrafo");
+    }
     /*private void cargarResultados() {
         for (int i = 0; i < listaClientes.size(); i++) {
             

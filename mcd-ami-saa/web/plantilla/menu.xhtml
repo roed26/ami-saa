@@ -49,16 +49,16 @@
                         <p:menuitem value="Solicitud de estado de amarre y consumo de un cliente" action="#{routingController.irSolicitudTiempoRealCliente()}" actionListener="#{addNavegacionController.addGestionSolicitudEstadoCliente}" ajax="false"/>
                         <p:menuitem value="Solicitud de suspención de servicio"  action="#{routingController.irSolicitudSuspensionCliente()}" actionListener="#{addNavegacionController.addGestionSolicitudSupension()}" ajax="false"/>
                         <p:menuitem value="Solicitud de reconexión de servicio"  action="#{routingController.irSolicitudReconexionCliente()}" actionListener="#{addNavegacionController.addGestionSolicitudReconexion()}" ajax="false"/>
-                        <p:menuitem value="Solicitud de configuración paramatros PLC_MMS"  action="#{routingController.irSolicitudConfiguracion()}" actionListener="#{addNavegacionController.addGestionSolicitudConfiguracion()}" ajax="false"/>
+                        <p:menuitem disabled="true" value="Solicitud de configuración paramatros PLC_MMS"  action="#{routingController.irSolicitudConfiguracion()}" actionListener="#{addNavegacionController.addGestionSolicitudConfiguracion()}" ajax="false"/>
                     </p:submenu>
                     <p:submenu label="Ubicación trafos y clientes">
                         <p:menuitem value="Trafos y clientes" action="#{routingController.irTrafoClientes()}" actionListener="#{addNavegacionController.addGestionUbicacion()}"  ajax="false"/>
                         <p:menuitem value="Geoamarre" action="#{routingController.irGeomarre()}" actionListener="#{addNavegacionController.addGestionGeomarre()}"  ajax="false"/>
 
                     </p:submenu>
-                    <p:submenu label="Gestión de clientes">
-                        <p:menuitem value="Registrar cliente"  ajax="false"/>
-                        <p:menuitem value="Gestionar cliente"   ajax="false"/>
+                    <p:submenu  label="Gestión de clientes">
+                        <p:menuitem disabled="true" value="Registrar cliente"  ajax="false"/>
+                        <p:menuitem disabled="true" value="Gestionar cliente"   ajax="false"/>
 
                     </p:submenu>
 

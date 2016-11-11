@@ -114,7 +114,7 @@
                 </p:row>
             </p:panelGrid>
         </h:form>
-        <p:dialog header="Seleccionar cliente" visible="#{!clienteController.clienteSeleccionado}" resizable="false" width="850" position="center" modal="true"  widgetVar="seleccionarCliente">
+        <p:dialog header="Seleccionar cliente" closable="false" visible="#{!clienteController.clienteSeleccionado}" resizable="false" width="850" position="center" modal="true"  widgetVar="seleccionarCliente">
             <h:form id="ClienteListForm">
                 <br/>
                 <h:panelGrid columns="2">
@@ -158,6 +158,13 @@
                         <p:commandButton id="viewButton"  actionListener="#{clienteController.seleccionarCliente(item)}" icon="ui-icon-plus" value="Seleccionar"  />
                     </p:column>
                 </p:dataTable>
+                <h:panelGrid columns="2" >
+                    <p:commandButton id="viewButton"  
+                                     action="#{clienteController.reiniciarVaariables()}" 
+                                     value="Cancelar"  
+                                     ajax="true"
+                                     />
+                </h:panelGrid>
 
             </h:form>
         </p:dialog>

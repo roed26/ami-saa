@@ -127,8 +127,8 @@
                 </p:row>
             </p:panelGrid>
         </h:form>
-        
-<p:dialog visible="#{!trafoController.trafoSeleccionado}" header="Seleccionar trafo" resizable="false" width="400" position="center"  widgetVar="seleccionarTrafo">
+
+        <p:dialog closable="false" visible="#{!trafoController.trafoSeleccionado}" header="Seleccionar trafo" resizable="false" width="400" position="center"  widgetVar="seleccionarTrafo">
             <p:outputLabel style="font-weight: bold; font-size: 16px" value="Busque y selecciones el trafo al cual desea enviar la solicitud" />
             <h:form id="listaTrafos">
                 <br/>
@@ -144,7 +144,7 @@
                                  paginator="true"
                                  rowKey="#{item.idTrafo}"
                                  rows="5"
-                                 
+
                                  >
                         <p:column style="text-align: center; width: 180px">
                             <f:facet name="header">
@@ -165,6 +165,13 @@
                         </p:column>
                     </p:dataTable>
                 </p:panel>
+                <h:panelGrid columns="2" >
+                    <p:commandButton id="viewButton"  
+                                     value="Cancelar"  
+                                     ajax="true"
+                                     action="#{trafoController.reiniciarVariables()}"
+                                     />
+                </h:panelGrid>
             </h:form>
         </p:dialog>
         <p:dialog header="Seleccionar rango de fecha" resizable="false"  position="center" modal="true"  widgetVar="seleccionarFecha">

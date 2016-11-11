@@ -195,6 +195,22 @@ public class ProductoController implements Serializable {
         return lista;
     }
 
+    public void cancelarSeleccionProducto() {
+        idProducto = "";
+        items = ejbFacade.findAll();
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        FacesContext context = FacesContext.getCurrentInstance();
+        Application application = context.getApplication();
+        ViewHandler viewHandler = application.getViewHandler();
+        UIViewRoot viewRoot = viewHandler.createView(context, context.getViewRoot().getViewId());
+        context.setViewRoot(viewRoot);
+        context.renderResponse();
+        requestContext.execute("PF('seleccionarProducto').hide()");
+        requestContext.update("plcTuListForm");
+        requestContext.update("informacionProducto");
+        requestContext.update("panel");
+    }
+
     public List<Producto> getListaProductosSinCliente() {
         List<Producto> lista = new ArrayList<>();
         for (int i = 0; i < items.size(); i++) {
@@ -380,7 +396,7 @@ public class ProductoController implements Serializable {
         requestContext.update("productoListForm");
         requestContext.update("informacionCliente");
     }
-    
+
     public void cancelarSeleccionMedidor() {
         medidorSeleccionado = false;
         medidor = new Medidor();
@@ -394,7 +410,7 @@ public class ProductoController implements Serializable {
         requestContext.execute("PF('seleccionarMedidor').hide()");
         requestContext.update("productoListForm");
         requestContext.update("informacionMedidor");
-        
+
     }
 
     public void vincularProductoATrafo(Producto producto) {

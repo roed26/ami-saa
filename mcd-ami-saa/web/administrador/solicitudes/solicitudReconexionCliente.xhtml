@@ -56,6 +56,13 @@
                         <p:commandButton id="viewButton"  actionListener="#{clienteController.seleccionarClienteSolicitud(item)}" icon="ui-icon-plus" value="Seleccionar"  />
                     </p:column>
                 </p:dataTable>
+                <h:panelGrid columns="2" >
+                    <p:commandButton id="viewButton"  
+                                     action="#{clienteController.reiniciarVaariables()}" 
+                                     value="Cancelar"  
+                                     ajax="true"
+                                     />
+                </h:panelGrid>
 
             </h:form>
         </p:dialog>

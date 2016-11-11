@@ -156,6 +156,11 @@ public class MedidorController implements Serializable {
         this.items = ejbFacade.findAll();
     }
 
+    public void cancelarSeleccionMedidor() {
+        idMedidor="";
+        items=ejbFacade.findAll();
+    }
+
     @FacesConverter(forClass = Medidor.class)
     public static class MedidorControllerConverter implements Converter {
 
