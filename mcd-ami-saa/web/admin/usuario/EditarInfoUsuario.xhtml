@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="UsuarioEditDlg" closable="false" widgetVar="UsuarioEditDialog" modal="true" resizable="false" appendTo="@(body)" header="Editar información">
+            <h:form id="UsuarioEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Cédula" />
+
+                            </p:column>
+                            <p:column>
+                                <p:outputLabel  value="#{usuarioController.usuario.cedula}" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="#{bundleRolUsuario.EditUsuarioLabel_nombres}" />
+                            </p:column>
+                            <p:column rendered="#{usuarioController.mostrarNombres}">
+                                <p:outputLabel value="#{usuarioController.usuario.nombres}" />
+                            </p:column>
+                            <p:column  rendered="#{usuarioController.mostrarNombres}">
+                                <p:commandLink style="color: blue;" value="Modificar" action="#{usuarioController.mostrarModificarNombres()}"/>
+                            </p:column>
+                            <p:column  rendered="#{!usuarioController.mostrarNombres}">
+                                <p:inputText value="#{usuarioController.nombres}"/>  
+                            </p:column>
+                            <p:column  rendered="#{!usuarioController.mostrarNombres}">
+                                <p:commandLink style="color: blue;" value="Aceptar" update="display,:UsuarioListForm:datalist" action="#{usuarioController.actualizarNombres()}"
+                                               />
+                                <p:commandLink style="margin-left: 10px;color: blue;" value="Cancelar" 
+                                               action="#{usuarioController.cancelarActualizarNombres()}"
+                                               />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="#{bundleRolUsuario.EditUsuarioLabel_apellidos}" />
+                            </p:column>
+                            <p:column rendered="#{usuarioController.mostrarApellidos}">
+                                <p:outputLabel value="#{usuarioController.usuario.apellidos}" />
+                            </p:column>
+                            <p:column  rendered="#{usuarioController.mostrarApellidos}">
+                                <p:commandLink style="color: blue;" value="Modificar" action="#{usuarioController.mostrarModificarApellidos()}"/>
+                            </p:column>
+                            <p:column  rendered="#{!usuarioController.mostrarApellidos}">
+                                <p:inputText value="#{usuarioController.apellidos}"/>  
+                            </p:column>
+                            <p:column  rendered="#{!usuarioController.mostrarApellidos}">
+                                <p:commandLink style="color: blue;" value="Aceptar" update="display,:UsuarioListForm:datalist" action="#{usuarioController.actualizarApellidos()}"
+                                               />
+                                <p:commandLink style="margin-left: 10px;color: blue;" value="Cancelar" 
+                                               action="#{usuarioController.cancelarActualizarApellidos()}"
+                                               />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Celular" />
+                            </p:column>
+                            <p:column rendered="#{usuarioController.mostrarCelular}">
+                                <p:outputLabel value="#{usuarioController.usuario.celular}" />
+                            </p:column>
+                            <p:column  rendered="#{usuarioController.mostrarCelular}">
+                                <p:commandLink style="color: blue;" value="Modificar" action="#{usuarioController.mostrarModificarCelular()}"/>
+                            </p:column>
+                            <p:column  rendered="#{!usuarioController.mostrarCelular}">
+                                <p:inputText value="#{usuarioController.celular}"/>  
+                            </p:column>
+                            <p:column  rendered="#{!usuarioController.mostrarCelular}">
+                                <p:commandLink style="color: blue;" value="Aceptar" update="display,:UsuarioListForm:datalist" action="#{usuarioController.actualizarCelular()}"
+                                               />
+                                <p:commandLink style="margin-left: 10px;color: blue;" value="Cancelar" 
+                                               action="#{usuarioController.cancelarActualizarCelular()}"
+                                               />
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Nombre de usuario" />
+                            </p:column>
+                            <p:column rendered="#{usuarioController.mostrarNombreDeUsuario}">
+                                <p:outputLabel value="#{usuarioController.usuario.nombreUsuario}" />
+                            </p:column>
+                            <p:column  rendered="#{usuarioController.mostrarNombreDeUsuario}">
+                                <p:commandLink style="color: blue;" value="Modificar" action="#{usuarioController.mostrarModificarNombreDeUsuario()}"/>
+                            </p:column>
+                            <p:column  rendered="#{!usuarioController.mostrarNombreDeUsuario}">
+                                <p:inputText value="#{usuarioController.nombreDeUsuario}"/>  
+                            </p:column>
+                            <p:column  rendered="#{!usuarioController.mostrarNombreDeUsuario}">
+                                <p:commandLink style="color: blue;" value="Aceptar" update="display,:UsuarioListForm:datalist" action="#{usuarioController.actualizarNombreDeUsuario()}"
+                                               />
+                                <p:commandLink style="margin-left: 10px;color: blue;" value="Cancelar" 
+                                               action="#{usuarioController.cancelarActualizarNombreDeUsuario()}"
+                                               />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Contraseña" />
+                            </p:column>
+                            <p:column rendered="#{usuarioController.mostrarContrasena}">
+                                <p:outputLabel value="**********" />
+                            </p:column>
+                            <p:column  rendered="#{usuarioController.mostrarContrasena}">
+                                <p:commandLink style="color: blue;" value="Modificar" action="#{usuarioController.mostrarModificarContrasena()}"/>
+                            </p:column>
+                            <p:column  rendered="#{!usuarioController.mostrarContrasena}">
+                                <p:password value="#{usuarioController.contrasena}"/>  
+                            </p:column>
+                            <p:column  rendered="#{!usuarioController.mostrarContrasena}">
+                                <p:commandLink style="color: blue;" value="Aceptar" 
+                                               update="display,:UsuarioListForm:datalist" 
+                                               action="#{usuarioController.actualizarContrasena()}"
+                                               />
+                                <p:commandLink style="margin-left: 10px;color: blue;" value="Cancelar" 
+                                               action="#{usuarioController.cancelarActualizarContrasena()}"
+                                               />
+                            </p:column>
+                        </p:row>
+                        
+                        <p:outputLabel value="#{bundleRolUsuario.EditUsuarioLabel_contrasena}" for="contrasena" />
+                        <p:inputText id="contrasena" value="#{usuarioController.usuario.contrasena}" title="#{bundleRolUsuario.EditUsuarioTitle_contrasena}" required="true" requiredMessage="#{bundleRolUsuario.EditUsuarioRequiredMessage_contrasena}"/>
+                    </p:panelGrid>
+                    
+                    <p:commandButton value="Cerrar" onclick="UsuarioEditDialog.hide()" action="#{usuarioController.reiniciarObj()}"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

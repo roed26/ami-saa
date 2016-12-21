@@ -22,31 +22,7 @@
                     oncomplete="handleComplete(xhr, status, args)" interval="10" />
         </h:form>
         <div id="header">
-            <div class="notificaciones">
-                <h:form id="formNotificacion">
-                    <h:link rendered="#{!notificacionController.mostrarnotificacion}" id="opcionesnotificacion1" style="text-decoration: none;color:#0080FF ;font-size: 13pt; ">
-                        <p:graphicImage style="width: 35px;float: left;" value="/faces/resources/img/notificaciones/notificacion.png"/>  
-                    </h:link>
-                    <p:menu  overlay="true" trigger="opcionesnotificacion1"  my="left top" at="left bottom">        
-                        <p:menuitem  value="Ver notificaciones" 
-                                     action="#{routingController.irNotificaciones()}" ajax="false"  />
-                    </p:menu>
-                    <h:link rendered="#{notificacionController.mostrarnotificacion}"  id="opcionesnotificacion2" style="text-decoration: none;color:#0080FF ;font-size: 13pt; ">
 
-                        <p:graphicImage style="width: 35px;float: left;" value="/faces/resources/img/notificaciones/notificacion.png"/>  
-
-                        <div id="ciruculonotificacionconteo">
-                            #{notificacionController.conteoNotificacionesNuevas}
-                        </div>
-                    </h:link>
-                    <p:menu  overlay="true" trigger="opcionesnotificacion2"  my="left top" at="left bottom">        
-                        <p:menuitem  value="Ver notificaciones" 
-                                     action="#{routingController.irNotificaciones()}" 
-                                     actionListener="#{addNavegacionController.addNotificacion()}"
-                                     ajax="false"  />
-                    </p:menu>
-                </h:form>
-            </div>
             <div class="con_escudo_titulo">
                 <div class="bkg">
                     <div class="logo">
@@ -55,9 +31,61 @@
                     <div class="borde-redondo"></div>
                 </div>
             </div>
+            <div class="CuadroDeBotonesSesion">
+                <ui:insert name="CuadroDeBotonesSesion"> 
+                    <h:form id="infoUsuario" style="width: auto">
+                        <p:outputLabel value="Bienvenido: "/>
+                        <h:link id="opcionesusuario" style="text-decoration: none;font-size: 14px;color:#000000; ">
+                            <p:graphicImage value="#{usuarioSessionController.imagenPorDefecto}" style="border-radius:18px;" width="35"  height="35" >
+                                <f:param name="id" value="#{usuarioSessionController.identificacion}" />
+                            </p:graphicImage> 
+                            #{usuarioSessionController.nombreUsuario()}
+                        </h:link>
+                        <p:menu  overlay="true"  trigger="opcionesusuario" my="right top" at="right bottom" >
+                            <p:menuitem value="Mi Perfil" 
+                                        ajax="false"
+                                        />
+                            <p:separator/>
+                            <p:menuitem value="Cerrar Sesión" action="#{usuarioSessionController.logout()}"/>
+                        </p:menu>
+
+                        <div class="notificaciones">
+                            <h:link rendered="#{!notificacionController.mostrarnotificacion}" id="opcionesnotificacion1" style="text-decoration: none;color:#0080FF ;font-size: 13pt; ">
+                                <p:graphicImage style="width: 35px;float: left;" value="/faces/resources/img/notificaciones/notificacion.png"/>  
+                            </h:link>
+                            <p:menu  overlay="true" trigger="opcionesnotificacion1"  my="right top" at="right bottom" >        
+                                <p:menuitem  value="Ver notificaciones" 
+                                             action="#{routingController.irNotificaciones()}" ajax="false"  />
+                            </p:menu>
+                            <h:link rendered="#{notificacionController.mostrarnotificacion}"  id="opcionesnotificacion2" style="text-decoration: none;color:#0080FF ;font-size: 13pt; ">
+
+                                <p:graphicImage style="width: 35px;float: left;" value="/faces/resources/img/notificaciones/notificacion.png"/>  
+
+                                <div id="ciruculonotificacionconteo">
+                                    #{notificacionController.conteoNotificacionesNuevas}
+                                </div>
+                            </h:link>
+                            <p:menu  overlay="true" trigger="opcionesnotificacion2"  my="right top" at="right bottom" >        
+                                <p:menuitem  value="Ver notificaciones" 
+                                             action="#{routingController.irNotificaciones()}" 
+                                             actionListener="#{addNavegacionController.addNotificacion()}"
+                                             ajax="false"  />
+                            </p:menu>
+
+                        </div>
+
+
+
+                    </h:form>
+                </ui:insert>
+            </div>
+            
             <div class="bottom">
 
             </div>
+
+
+
         </div>
         <div >
             <h:form>

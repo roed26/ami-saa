@@ -38,9 +38,13 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Macro.findByModelo", query = "SELECT m FROM Macro m WHERE m.modelo = :modelo"),
     @NamedQuery(name = "Macro.findByMarca", query = "SELECT m FROM Macro m WHERE m.marca = :marca"),
     @NamedQuery(name = "Macro.findByClase", query = "SELECT m FROM Macro m WHERE m.clase = :clase"),
-    @NamedQuery(name = "Macro.findByTrafo", query = "SELECT m FROM Macro m WHERE m.idTrafo = :trafo")
+    @NamedQuery(name = "Macro.findByTrafo", query = "SELECT m FROM Macro m WHERE m.idTrafo = :trafo"),
+    @NamedQuery(name = "Macro.findByMacros", query = "SELECT m FROM Macro m WHERE LOWER(m.idMacro) LIKE :idMacro ")
 })
 public class Macro implements Serializable {
+
+    @OneToMany(mappedBy = "idMacro")
+    private Collection<EventosConsumoMacro> eventosConsumoMacroCollection;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -195,6 +199,15 @@ public class Macro implements Serializable {
     @Override
     public String toString() {
         return "com.ceo.amisaa.managedbean.Macro[ idMacro=" + idMacro + " ]";
+    }
+
+    @XmlTransient
+    public Collection<EventosConsumoMacro> getEventosConsumoMacroCollection() {
+        return eventosConsumoMacroCollection;
+    }
+
+    public void setEventosConsumoMacroCollection(Collection<EventosConsumoMacro> eventosConsumoMacroCollection) {
+        this.eventosConsumoMacroCollection = eventosConsumoMacroCollection;
     }
     
 }

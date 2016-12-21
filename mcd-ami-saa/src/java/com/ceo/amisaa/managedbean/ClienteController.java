@@ -407,6 +407,8 @@ public class ClienteController implements Serializable {
 
     public void seleccionarCliente(Cliente cliente) {
         this.selected = cliente;
+        this.nombreOApellidos="";
+        this.items= ejbCliente.findAll();
         this.rangoFechaCambiado1 = false;
         this.rangoFechaCambiado2 = false;
         this.rangoFechaCambiado3 = false;
@@ -476,6 +478,7 @@ public class ClienteController implements Serializable {
                                 energia = eventoConsumo.get(i).getEnergia() - eventoConsumo.get(i - 1).getEnergia();
                             }
                             consumoCliente.set(formatoFecha.format(eventoConsumo.get(i).getFechaHora()), energia);
+                            
 
                         }
                     }

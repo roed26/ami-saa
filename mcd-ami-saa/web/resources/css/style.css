@@ -1,4 +1,139 @@
+#loginContainer {
+    position:relative;
+    float:right;
+    font-size:13px;
+}
 
+/* Login Box */
+#loginBox {
+    position:absolute;
+    top:11px;
+    right:3px;
+    display:none;
+    z-index:40;
+}
+#loginForm {
+    width:390px; 
+    height: 180px;
+    border:3px solid #12b0e4;
+    border-radius:3px 0 3px 3px;
+    -moz-border-radius:3px 0 3px 3px;
+    margin-top:-1px;
+    background:gainsboro;
+
+}
+
+#loginForm fieldset {
+    margin:0 0 12px 0;
+    display:block;
+    border:0;
+    padding:0;
+}
+#loginForm #checkbox {
+    width:auto;
+    margin:1px 9px 0 0;
+    float:left;
+    padding:0;
+    border:0;
+    *margin:-3px 9px 0 0; /* IE7 Fix */
+}
+#loginForm #body fieldset label {
+    display:block;
+    float:none;
+    margin:0 0 6px 0;
+}
+
+/* Default Input */
+#loginForm input {
+    width:92%;
+    border:1px solid #899caa;
+    border-radius:3px;
+    -moz-border-radius:3px;
+    color:#3a454d;
+    font-weight:bold;
+    padding:8px 8px;
+    box-shadow:inset 0px 1px 3px #bbb;
+    -webkit-box-shadow:inset 0px 1px 3px #bbb;
+    -moz-box-shadow:inset 0px 1px 3px #bbb;
+    font-size:14px;
+}
+
+/* Sign In Button */
+#loginForm #login {
+    width:auto;
+    float:left;
+    background:#339cdf url(../img/loginbuttonbg.png) repeat-x;
+    color:#fff;
+    padding:7px 10px 8px 10px;
+    text-shadow:0px -1px #278db8;
+    border:1px solid #339cdf;
+    box-shadow:none;
+    -moz-box-shadow:none;
+    -webkit-box-shadow:none;
+    margin:0 12px 0 0;
+    cursor:pointer;
+    *padding:7px 2px 8px 2px; /* IE7 Fix */
+}
+
+/* Forgot your password */
+#loginForm span {
+    text-align:center;
+    display:block;
+    padding:7px 0 4px 0;
+}
+
+#loginForm span a {
+    color:#3a454d;
+    text-shadow:1px 1px #fff;
+    font-size:12px;
+}
+
+/* Login Button */
+#loginButton { 
+    display:inline-block;
+    float:right;
+    top:-25px;
+    background: gainsboro; 
+    border:2px solid #339cdf; 
+    border-radius:3px;
+    -moz-border-radius:4px;
+    position:relative;
+    z-index:40;
+    cursor:pointer;
+}
+
+#loginButton:hover {
+    border:2px solid white; 
+    -moz-border-radius:3px;
+
+}
+
+#loginButton span {
+    color: #000000; 
+    font-size:15px; 
+    font-weight:bold; 
+    padding:7px 29px 9px 10px;
+    background:url(../img/loginArrow.png) no-repeat 130px 7px;
+    display:block
+}
+
+/* If the Login Button has been clicked */    
+#loginButton.active {
+    border-radius:4px 4px 0 0;
+}
+
+#loginButton.active span {
+    background-position:53px -76px;
+}
+
+/* A Line added to overlap the border */
+#loginButton.active em {
+    position:absolute;
+    width:100%;
+    height:1px;
+    background:#d2e0ea;
+    bottom:-1px;
+}
 
 fieldset#body {
     background:#fff;
@@ -22,7 +157,19 @@ body {
     font-size:75%;
     font-family:"Arial CE",Arial, sans-serif, Helvetica;
     color:#000;
-    
+
+}
+.CuadroDeBotonesSesion
+{
+    position: absolute;
+    color: #252525;
+    text-align: center;
+    /*/border: 3px solid #000000;
+    border-style: none none solid;*/
+    right: 23px;
+    top: 17px;
+    border-radius: 10px;
+   
 }
 
 h2 {font-size:130%;color:#55482b;font-weight:bold}
@@ -42,7 +189,7 @@ h3 {color:#3d3832;font-size:100%;margin:15px;border-bottom:1px solid #3d3832;pad
 #footer a {color:white}
 #footer a:hover {color:#a90341}
 
- 
+
 #logo {margin:25px 0 0 20px;float:left}
 /* menu */
 #navcontainer {
@@ -85,8 +232,8 @@ h3 {color:#3d3832;font-size:100%;margin:15px;border-bottom:1px solid #3d3832;pad
 /* topoffers */
 #topoffers {
     height:auto;
-            width:1000px;
-padding: 30px 0;}
+    width:1000px;
+    padding: 30px 0;}
 #topoffers-left-arrow {
     float:left;
     width:86px}
@@ -116,5 +263,5 @@ padding: 30px 0;}
 
 
 table, table tr, table td {
-   border: none !important;
+    border: none !important;
 }

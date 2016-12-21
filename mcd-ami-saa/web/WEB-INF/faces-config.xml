@@ -8,5 +8,13 @@
             <base-name>/Bundle</base-name>
             <var>bundle</var>
         </resource-bundle>
+        <resource-bundle>
+            <base-name>/BundleEventoConsumoMacro</base-name>
+            <var>bundleEventoConsumoMacro</var>
+        </resource-bundle>
+        <resource-bundle>
+            <base-name>/BundleRolUsuario</base-name>
+            <var>bundleRolUsuario</var>
+        </resource-bundle>
     </application>
 </faces-config>

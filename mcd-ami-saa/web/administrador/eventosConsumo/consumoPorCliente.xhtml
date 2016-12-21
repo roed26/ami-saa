@@ -29,9 +29,9 @@
                 <p:row>
                     <p:column rowspan="9" rendered="#{!clienteController.sinConsumo}">
                         <p:barChart value="#{clienteController.consumo}" legendPosition="ne" 
-                                    title="Consumo" style="height:400px; width: 500px; color: red;"
+                                    title="Consumo" style="height:400px; width: 500px; color: red; text-align: center;"
                                     xaxisLabel="dias" yaxisLabel="Kw/h" 
-
+                                    xaxisAngle="270"
                                     />
                     </p:column>
                     <p:column rowspan="9" rendered="#{clienteController.sinConsumo}">
@@ -170,6 +170,7 @@
                         </f:facet>
                         <p:commandButton id="viewButton" 
                                          actionListener="#{clienteController.seleccionarCliente(item)}" 
+                                         oncomplete=""
                                          icon="ui-icon-plus" 
                                          value="Seleccionar"  />
                     </p:column>
@@ -187,7 +188,7 @@
 
         <p:dialog header="Seleccionar rango de fecha" resizable="false"  position="center" modal="true"  widgetVar="seleccionarFecha">
             <h:form id="formFecha" style="text-align: center; font-weight: bold; color: black;">
-                <p:outputLabel style="font-weight: bold; font-size: 14px; " value="Seleccione el rango de fecha para conocer el estado de amarre del cliente" />
+                <p:outputLabel style="font-weight: bold; font-size: 14px; " value="Seleccione el rango de fecha para conocer el consumo del cliente" />
                 <br/>
                 <br/>
                 <p:panelGrid id="panel">

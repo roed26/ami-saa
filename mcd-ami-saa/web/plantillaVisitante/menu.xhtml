@@ -5,23 +5,78 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <!--h:outputStylesheet name="./css/estilos.css"/-->
+        <h:outputScript library="js" name="login.js"/>
     </h:head>
     <h:body>        
-            <h:form id="formMenu" >
-                <div id="navcontainer">
-                    <ul>
-                        <li><a class="active" href="#">Inicio</a></li>
-                        <li><a href="#">Contacto</a></li>
-                        <li><a href="#">Acerca de</a></li>
-                    </ul>
+        <h:form id="formMenu" >
+            <div id="navcontainer">
+                <ul>
+                    <li><a class="active" href="#">Inicio</a></li>
+                    <li><a href="#">Contacto</a></li>
+                    <li><a href="#">Acerca de</a></li>
+                </ul>
+            </div>
+        </h:form>
+            <div id="loginContainer">
+                <a href="#" id="loginButton"><span>Iniciar sesión</span><em></em></a>
+                <div style="clear:both"></div>
+                <div id="loginBox">                
+                    <h:form id="loginForm">
+                        <p:panelGrid style="text-align:left; width: 390px; height: 180px" styleClass="panelgrid">
+                            <p:row>
+                                <p:column style="text-align:right; width: 140px ">
+                                    <p:outputLabel  value="Nombre de Usuario:" />
+                                    <p:outputLabel style="color:red; text-align: left"  value=" * " />
+                                </p:column>
+
+                                <p:column>
+                                    <p:inputText id="nombreUsuario" value="#{usuarioSessionController.nombreDeUsuario}"  
+                                                 required="true" label="nombreUsuario" requiredMessage="Ingrese nombre de usuario"/>
+                                </p:column>
+                                <p:column style="text-align:left; width: 2px " >
+                                    <p:message for="nombreUsuario" id="msgUsuario" display="icon" />
+                                </p:column>
+                            </p:row>
+
+
+                            <p:row>
+                                <p:column style="text-align:right;">
+                                    <p:outputLabel  value="Contraseña:" />
+                                    <p:outputLabel style="color:red; text-align: left"  value=" * " />
+                                </p:column>
+
+                                <p:column>
+                                    <p:password id="contrasena" value="#{usuarioSessionController.contrasena}"
+                                                label="contrasena" required="true" requiredMessage="Ingrese una contraseña">
+                                        <f:validateLength minimum="6" />
+                                        <p:ajax update="msgContrasena" event="keyup" />
+                                    </p:password>                          
+                                </p:column>
+                                <p:column style="width: 35px">
+                                    <p:message for="contrasena" id="msgContrasena" display="icon" />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column colspan="3" style="text-align: center;">
+                                    <p:link  value="¿Has olvidado tu contraseña?">                                
+                                    </p:link> 
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column colspan="3" style="text-align: right; ">
+                                    <p:commandButton style="background: gainsboro; width: 150px; color:#000000;font-style: normal;font-weight: bold; "
+                                                     value="Iniciar sesión"  action="#{usuarioSessionController.login()}"
+                                                     ajax="false"/>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>   
+                    </h:form>
                 </div>
-                <div class="login">
-                    <div id="loginwrapper">
-                        <p:button outcome="/plantilla/usuarioMain" value="Iniciar sesión"/>
-                    </div>
-                </div>
-            </h:form>      
+                <h:form id="mensajeerror">
+                </h:form>
+            </div>
+
+        
 
     </h:body>
 </html>

@@ -50,6 +50,13 @@ public class MedidorFacade extends AbstractFacade<Medidor> {
         List<Medidor> resultList = query.getResultList();
         return resultList;
     }
+    public boolean buscarPorIdBool(String idMedidor) {
+        Query query = getEntityManager().createNamedQuery("Medidor.findByIdMedidor");
+        query.setParameter("idMedidor", idMedidor);
+        List<Medidor> resultList = query.getResultList();
+        return !resultList.isEmpty();
+
+    }
     public Medidor buscarMedidorPorId(String idMedidor) {
         Query query = getEntityManager().createNamedQuery("Medidor.findByMedidores");
         query.setParameter("idMedidor", "%" + idMedidor + "%");

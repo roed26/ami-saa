@@ -25,4 +25,52 @@
     <welcome-file-list>
         <welcome-file>faces/plantillaVisitante/index.xhtml</welcome-file>
     </welcome-file-list>
+    <security-constraint>
+        <display-name>Administrador pages</display-name>
+        <web-resource-collection>
+            <web-resource-name>admin</web-resource-name>
+            <description>acceso a administrador</description>
+            <url-pattern>/faces/administrador/*</url-pattern>
+            <url-pattern>/faces/admin/*</url-pattern>
+            <url-pattern>/faces/plantilla/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <description/>
+            <role-name>Administrador</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <security-constraint>
+        <display-name>Operario pages</display-name>
+        <web-resource-collection>
+            <web-resource-name>operario</web-resource-name>
+            <description>acceso a operario</description>
+            <url-pattern>/faces/administrador/*</url-pattern>
+            <url-pattern>/faces/plantilla/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <description/>
+            <role-name>Operario</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <realm-name>mcd-ami-saaJDBCRealm</realm-name>
+        <form-login-config>
+            <form-login-page>/templates/_usuariotmp.xhtml</form-login-page>
+            <form-error-page>/templates/_usuariotmp.xhtml</form-error-page>
+        </form-login-config>
+    </login-config>
+    <security-role>
+        <description>administrador
+</description>
+        <role-name>Administrador</role-name>
+    </security-role>
+    <security-role>
+        <description>rol operario</description>
+        <role-name>Operario</role-name>
+    </security-role>
+    <security-role>
+        <description>rol desarrollador</description>
+        <role-name>Desarrollador</role-name>
+    </security-role>
 </web-app>

@@ -165,6 +165,8 @@ public class ProductoController implements Serializable {
     public List<Producto> getListaProductosActivos() {
         List<Producto> lista = new ArrayList<>();
         listaClientes = new ArrayList<>();
+        
+              
         for (int i = 0; i < items.size(); i++) {
             if (items.get(i).getEstado().equalsIgnoreCase("A") && items.get(i).getCedula() != null && items.get(i).getIdTrafo() != null) {
                 if (ejbPlcTu.buscarIdProducto(items.get(i)) == null && items.get(i).getMacPlcMc() == null) {

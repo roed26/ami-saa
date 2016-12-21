@@ -62,7 +62,7 @@ public class NotificacionController implements Serializable {
             conteoNotificacionesNuevas = size +"";
              RequestContext requestContext = RequestContext.getCurrentInstance();
              requestContext.addCallbackParam("respuesta", true);
-             requestContext.update("formNotificacion");
+             requestContext.update("infoUsuario");
         }
         else
         {
@@ -72,7 +72,7 @@ public class NotificacionController implements Serializable {
                  conteoNotificacionesNuevas = size +"";
                 RequestContext requestContext = RequestContext.getCurrentInstance();
                 requestContext.addCallbackParam("respuesta", false);
-                requestContext.update("formNotificacion");
+                requestContext.update("infoUsuario");
             }
             else
             {
@@ -83,7 +83,7 @@ public class NotificacionController implements Serializable {
                     conteoNotificacionesNuevas= "";
                     RequestContext requestContext = RequestContext.getCurrentInstance();
                     requestContext.addCallbackParam("respuesta", false);
-                    requestContext.update("formNotificacion");
+                    requestContext.update("infoUsuario");
                 }
             }
         }

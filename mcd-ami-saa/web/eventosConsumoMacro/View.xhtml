@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="EventosConsumoMacroViewDlg" widgetVar="EventosConsumoMacroViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundleEventoConsumoMacro.ViewEventosConsumoMacroTitle}">
+            <h:form id="EventosConsumoMacroViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{eventosConsumoMacroController.selected != null}">
+                        <h:outputText value="#{bundleEventoConsumoMacro.ViewEventosConsumoMacroLabel_idConsumo}"/>
+                        <h:outputText value="#{eventosConsumoMacroController.selected.idConsumo}" title="#{bundleEventoConsumoMacro.ViewEventosConsumoMacroTitle_idConsumo}"/>
+                        <h:outputText value="#{bundleEventoConsumoMacro.ViewEventosConsumoMacroLabel_energia}"/>
+                        <h:outputText value="#{eventosConsumoMacroController.selected.energia}" title="#{bundleEventoConsumoMacro.ViewEventosConsumoMacroTitle_energia}"/>
+                        <h:outputText value="#{bundleEventoConsumoMacro.ViewEventosConsumoMacroLabel_potencia}"/>
+                        <h:outputText value="#{eventosConsumoMacroController.selected.potencia}" title="#{bundleEventoConsumoMacro.ViewEventosConsumoMacroTitle_potencia}"/>
+                        <h:outputText value="#{bundleEventoConsumoMacro.ViewEventosConsumoMacroLabel_voltaje}"/>
+                        <h:outputText value="#{eventosConsumoMacroController.selected.voltaje}" title="#{bundleEventoConsumoMacro.ViewEventosConsumoMacroTitle_voltaje}"/>
+                        <h:outputText value="#{bundleEventoConsumoMacro.ViewEventosConsumoMacroLabel_corriente}"/>
+                        <h:outputText value="#{eventosConsumoMacroController.selected.corriente}" title="#{bundleEventoConsumoMacro.ViewEventosConsumoMacroTitle_corriente}"/>
+                        <h:outputText value="#{bundleEventoConsumoMacro.ViewEventosConsumoMacroLabel_fechaHora}"/>
+                        <h:outputText value="#{eventosConsumoMacroController.selected.fechaHora}" title="#{bundleEventoConsumoMacro.ViewEventosConsumoMacroTitle_fechaHora}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundleEventoConsumoMacro.ViewEventosConsumoMacroLabel_idMacro}"/>
+                        <h:outputText value="#{eventosConsumoMacroController.selected.idMacro}" title="#{bundleEventoConsumoMacro.ViewEventosConsumoMacroTitle_idMacro}"/>
+                        <h:outputText value="#{bundleEventoConsumoMacro.ViewEventosConsumoMacroLabel_macPlcMms}"/>
+                        <h:outputText value="#{eventosConsumoMacroController.selected.macPlcMms}" title="#{bundleEventoConsumoMacro.ViewEventosConsumoMacroTitle_macPlcMms}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundleEventoConsumoMacro.Close}" onclick="EventosConsumoMacroViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

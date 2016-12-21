@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="UsuarioViewDlg" closable="false" widgetVar="UsuarioViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundleRolUsuario.ViewUsuarioTitle}">
+            <h:form id="UsuarioViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid  >
+                        <p:row>
+                            <p:column style="background: #f2f5f9;">
+                                <h:outputText value="#{bundleRolUsuario.ViewUsuarioLabel_cedula}"/>        
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{usuarioController.usuario.cedula}" title="#{bundleRolUsuario.ViewUsuarioTitle_cedula}"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column style="background: #f2f5f9;">
+                                <h:outputText value="#{bundleRolUsuario.ViewUsuarioLabel_nombres}"/>
+
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{usuarioController.usuario.nombres}" title="#{bundleRolUsuario.ViewUsuarioTitle_nombres}"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column style="background: #f2f5f9;">
+                                <h:outputText value="#{bundleRolUsuario.ViewUsuarioLabel_apellidos}"/>
+
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{usuarioController.usuario.apellidos}" title="#{bundleRolUsuario.ViewUsuarioTitle_apellidos}"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column style="background: #f2f5f9;">
+                                <h:outputText value="#{bundleRolUsuario.ViewUsuarioLabel_celular}"/>
+
+
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{usuarioController.usuario.celular}" title="#{bundleRolUsuario.ViewUsuarioTitle_celular}"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column style="background: #f2f5f9;">
+                                <h:outputText value="#{bundleRolUsuario.ViewUsuarioLabel_nombreUsuario}"/>
+
+
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{usuarioController.usuario.nombreUsuario}" title="#{bundleRolUsuario.ViewUsuarioTitle_nombreUsuario}"/>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                    <p:commandButton value="Cerrar" onclick="UsuarioViewDialog.hide()" action="#{usuarioController.reiniciarObj()}"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

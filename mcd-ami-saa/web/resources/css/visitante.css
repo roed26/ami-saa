@@ -28,11 +28,13 @@ body {
     float: left;
     margin-top: 8px;
     margin-left: 13px;
+    
 }
 
 
 #header .bottom{
     height: 85px;
+    
     background: linear-gradient(to right,rgb(17,177,230)0%,rgb(34, 126, 156)51%,rgb(17,177,230) 100%);
 }
 

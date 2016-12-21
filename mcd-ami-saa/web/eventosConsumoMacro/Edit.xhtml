@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="EventosConsumoMacroEditDlg" widgetVar="EventosConsumoMacroEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundleEventoConsumoMacro.EditEventosConsumoMacroTitle}">
+            <h:form id="EventosConsumoMacroEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{eventosConsumoMacroController.selected != null}">
+                        <p:outputLabel value="#{bundleEventoConsumoMacro.EditEventosConsumoMacroLabel_idConsumo}" for="idConsumo" />
+                        <p:inputText id="idConsumo" value="#{eventosConsumoMacroController.selected.idConsumo}" title="#{bundleEventoConsumoMacro.EditEventosConsumoMacroTitle_idConsumo}" required="true" requiredMessage="#{bundleEventoConsumoMacro.EditEventosConsumoMacroRequiredMessage_idConsumo}"/>
+                        <p:outputLabel value="#{bundleEventoConsumoMacro.EditEventosConsumoMacroLabel_energia}" for="energia" />
+                        <p:inputText id="energia" value="#{eventosConsumoMacroController.selected.energia}" title="#{bundleEventoConsumoMacro.EditEventosConsumoMacroTitle_energia}" required="true" requiredMessage="#{bundleEventoConsumoMacro.EditEventosConsumoMacroRequiredMessage_energia}"/>
+                        <p:outputLabel value="#{bundleEventoConsumoMacro.EditEventosConsumoMacroLabel_potencia}" for="potencia" />
+                        <p:inputText id="potencia" value="#{eventosConsumoMacroController.selected.potencia}" title="#{bundleEventoConsumoMacro.EditEventosConsumoMacroTitle_potencia}" required="true" requiredMessage="#{bundleEventoConsumoMacro.EditEventosConsumoMacroRequiredMessage_potencia}"/>
+                        <p:outputLabel value="#{bundleEventoConsumoMacro.EditEventosConsumoMacroLabel_voltaje}" for="voltaje" />
+                        <p:inputText id="voltaje" value="#{eventosConsumoMacroController.selected.voltaje}" title="#{bundleEventoConsumoMacro.EditEventosConsumoMacroTitle_voltaje}" required="true" requiredMessage="#{bundleEventoConsumoMacro.EditEventosConsumoMacroRequiredMessage_voltaje}"/>
+                        <p:outputLabel value="#{bundleEventoConsumoMacro.EditEventosConsumoMacroLabel_corriente}" for="corriente" />
+                        <p:inputText id="corriente" value="#{eventosConsumoMacroController.selected.corriente}" title="#{bundleEventoConsumoMacro.EditEventosConsumoMacroTitle_corriente}" required="true" requiredMessage="#{bundleEventoConsumoMacro.EditEventosConsumoMacroRequiredMessage_corriente}"/>
+                        <p:outputLabel value="#{bundleEventoConsumoMacro.EditEventosConsumoMacroLabel_fechaHora}" for="fechaHora" />
+                        <p:calendar id="fechaHora" pattern="MM/dd/yyyy" value="#{eventosConsumoMacroController.selected.fechaHora}" title="#{bundleEventoConsumoMacro.EditEventosConsumoMacroTitle_fechaHora}" required="true" requiredMessage="#{bundleEventoConsumoMacro.EditEventosConsumoMacroRequiredMessage_fechaHora}" showOn="button"/>
+                        <p:outputLabel value="#{bundleEventoConsumoMacro.EditEventosConsumoMacroLabel_idMacro}" for="idMacro" />
+                        <p:selectOneMenu id="idMacro" value="#{eventosConsumoMacroController.selected.idMacro}" >
+                            <f:selectItem itemLabel="#{bundleEventoConsumoMacro.SelectOneMessage}"/>
+                            <f:selectItems value="#{macroController.itemsAvailableSelectOne}"
+                                           var="idMacroItem"
+                                           itemValue="#{idMacroItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundleEventoConsumoMacro.EditEventosConsumoMacroLabel_macPlcMms}" for="macPlcMms" />
+                        <p:selectOneMenu id="macPlcMms" value="#{eventosConsumoMacroController.selected.macPlcMms}" required="true" requiredMessage="#{bundleEventoConsumoMacro.EditEventosConsumoMacroRequiredMessage_macPlcMms}">
+                            <f:selectItem itemLabel="#{bundleEventoConsumoMacro.SelectOneMessage}"/>
+                            <f:selectItems value="#{plcMmsController.itemsAvailableSelectOne}"
+                                           var="macPlcMmsItem"
+                                           itemValue="#{macPlcMmsItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{eventosConsumoMacroController.update}" value="#{bundleEventoConsumoMacro.Save}" update="display,:EventosConsumoMacroListForm:datalist,:growl" oncomplete="handleSubmit(args, 'EventosConsumoMacroEditDialog');"/>
+                    <p:commandButton value="#{bundleEventoConsumoMacro.Cancel}" onclick="EventosConsumoMacroEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

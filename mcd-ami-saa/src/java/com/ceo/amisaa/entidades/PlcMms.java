@@ -48,6 +48,9 @@ import javax.xml.bind.annotation.XmlTransient;
 public class PlcMms implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "macPlcMms")
+    private Collection<EventosConsumoMacro> eventosConsumoMacroCollection;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "macPlcMms")
     private Collection<EventosConsumoMc> eventosConsumoMcCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "macPlcMms")
     private Collection<EventosAmarreMc> eventosAmarreMcCollection;
@@ -261,6 +264,15 @@ public class PlcMms implements Serializable {
 
     public void setEventosAmarreMcCollection(Collection<EventosAmarreMc> eventosAmarreMcCollection) {
         this.eventosAmarreMcCollection = eventosAmarreMcCollection;
+    }
+
+    @XmlTransient
+    public Collection<EventosConsumoMacro> getEventosConsumoMacroCollection() {
+        return eventosConsumoMacroCollection;
+    }
+
+    public void setEventosConsumoMacroCollection(Collection<EventosConsumoMacro> eventosConsumoMacroCollection) {
+        this.eventosConsumoMacroCollection = eventosConsumoMacroCollection;
     }
     
 }

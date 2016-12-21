@@ -97,6 +97,24 @@ public class RoutingController implements Serializable {
    public void irGeomarre(){
        this.ruta = "/administrador/mapas/geoamarre.xhtml";
    }
+   public void irRegistrarUsuario(){
+       this.ruta = "/admin/usuario/RegistrarUsuario.xhtml";
+   }
+   public void irGestionarUsuario(){
+       this.ruta = "/admin/usuario/ListadoUsuarios.xhtml";
+   }
+   public void irRegistrarMedidor(){
+       this.ruta = "/admin/medidor/RegistrarMedidor.xhtml";
+   }
+   public void irGestionarMedidores(){
+       this.ruta = "/admin/medidor/ListadoMedidores.xhtml";
+   }
+   public void irRegistrarMacromedidor(){
+       this.ruta = "/admin/macro/RegistrarMacro.xhtml";
+   }
+   public void irGestionarMacromedidores(){
+       this.ruta = "/admin/macro/ListadoMacros.xhtml";
+   }
    public void irNotificaciones()
    {
        this.ruta = "/administrador/notificaciones/notificaciones.xhtml";

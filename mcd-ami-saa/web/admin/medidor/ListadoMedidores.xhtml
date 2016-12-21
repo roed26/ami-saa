@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:body>
+        <h:form id="MedidorListForm">
+            <h:panelGrid style="margin-bottom: 5px;" columns="3">                      
+                <h:outputLabel style="font-size: 14px; font-weight: bold;" value="Buscar Medidor " />
+                <p:inputText style="width: 500px;" value="#{medidorController.datoBusqueda}"  
+                             placeholder="Digite el identificador">
+                    <p:ajax event="keyup" update="datalist" listener="#{medidorController.buscarMedidor()}" oncomplete="#{medidorController.reiniciarCampo()}" />                                
+                </p:inputText>                 
+            </h:panelGrid>     
+            <p:dataTable id="datalist" value="#{medidorController.items}" var="item"
+                         paginator="true"
+                         rowKey="#{item.idMedidor}"
+                         rows="10"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         >
+                <f:facet name="header" >
+                    <h:outputLabel value="Listado de medidores registrados en el sistema" style="font-size: 17px; font-weight: bold;"/>
+                </f:facet>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Identificador"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idMedidor}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Tipo"/>
+                    </f:facet>
+                    <h:outputText value="#{item.tipo}"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Estado"/>
+                    </f:facet>
+                    <h:outputText rendered="#{item.estado.equalsIgnoreCase('fa')}" value="Físicamente activo"/>
+                    <h:outputText rendered="#{item.estado.equalsIgnoreCase('sa')}" value="Servicio activado"/>
+                    <h:outputText rendered="#{item.estado.equalsIgnoreCase('sd')}" value="Servicio desactivado"/>
+                </p:column>
+                <p:column style="width: 120px; background: #EBEDEB;">
+                    <f:facet name="header">
+                        <h:outputText value="Acciones"/>
+                    </f:facet>
+                    <p:commandButton id="viewButton"   icon="ver-icon" action="#{medidorController.setSelected(item)}" update=":MedidorViewForm" oncomplete="PF('MedidorViewDialog').show()" />
+                    <p:commandButton id="editButton"   icon="ui-icon-pencil" action="#{medidorController.setSelected(item)}"  update=":MedidorEditForm" oncomplete="PF('MedidorEditDialog').show()" />
+                    <p:commandButton id="deleteButton" icon="ui-icon-trash"  action="#{medidorController.ventanaEliminar(item)}" update="datalist" />
+                </p:column>
+            </p:dataTable>
+
+        </h:form>
+        <ui:include src="EditarInfoMedidor.xhtml"/>
+        <ui:include src="VerInfoMedidor.xhtml"/>
+        <p:dialog modal="true" resizable="false" header="Confirmar" widgetVar="eliminarMedidor" closable="false" position="center">
+            <h:form>
+                <p:panelGrid style="text-align:left;" styleClass="panelgrid">
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="color: red;" value="¿Está seguro que desea eliminar este medidor?"/><br/>
+                        </p:column>                                
+                    </p:row>
+                    <p:row>
+                        <p:column width="200px;">
+                            <p:commandButton style="font-style: italic;margin-left: 170px;font-weight: normal; color: black;" 
+                                             value="Si" action="#{medidorController.eliminarMedidor()}"/>
+                            <p:commandButton style="font-style: italic; margin-left: 10px;font-weight: normal; color: black;" value="No" onclick="PF('eliminarPlcTu').hide()" action="#{medidorController.reiniciarObj()}"/>
+                        </p:column>
+
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+        <p:dialog modal="true" resizable="false" header="Error" widgetVar="noSePuedeEliminar" closable="false">
+            <h:form>
+                <p:panelGrid style="text-align:left;" styleClass="panelgrid">
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="color: red;" value="No es posible eliminar el medidor, esta vinculado a un producto."/>
+                        </p:column>                                
+                    </p:row>
+                    <p:row>
+                        <p:column width="200px;">
+                            <p:commandButton style="font-style: italic;margin-left: 100px;font-weight: normal;" 
+                                             value="Aceptar" onclick="PF('noSePuedeEliminar').hide()"/>                                    
+                        </p:column>
+
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+        <p:dialog modal="true" header="Información" resizable="false" widgetVar="eliminacionCorrecta" closable="false">
+            <h:form>
+                <p:panelGrid style="text-align:left;" styleClass="panelgrid">
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="color: blue;" value="El medidor se elimino con exito."/>
+                        </p:column>                                
+                    </p:row>
+                    <p:row>
+                        <p:column width="200px;">
+                            <p:commandButton style="font-style: italic;margin-left: 60px;font-weight: normal;" 
+                                             value="Aceptar" onclick="PF('eliminacionCorrecta').hide()"/>                                    
+                        </p:column>
+
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+    </h:body>
+
+</html>

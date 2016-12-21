@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </h:head>
+    <h:body>
+        <h:outputLabel style="font-weight:bold ; font-size: 17px; color:black; " 
+                       value="Registro de un nuevo Usuario"/>
+        <br/>
+        <br/>
+        <h:outputLabel style="font-style: italic; font-size: 13px; color:black; " 
+                       value="Campos obligatorios "/>
+        <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
+                       value="*"/>
+        <br/>
+        <br/>
+        <h:form id="UsuarioCreateForm">
+            <p:panelGrid id="panel" >
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Cédula" />
+                        <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
+                                       value="*"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="cedula" placeholder="Solo números"
+                                     value="#{usuarioController.usuario.cedula}" 
+                                     title="#{bundleRolUsuario.CreateUsuarioTitle_cedula}" 
+                                     required="true" requiredMessage="Campo obligatorio">
+                            <f:validator validatorId="ValidarCampoNumerico"/>
+                            <f:validator validatorId="ValidarCampoCedula"/>
+                            <p:ajax update="msgCedula" event ="keyup" />
+                        </p:inputText>
+                    </p:column>
+                    <p:column>
+                        <p:message for="cedula" id="msgCedula"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Nombres"/>
+                        <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
+                                       value="*"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="nombres" placeholder="Solo letras y espacios" 
+                                     value="#{usuarioController.usuario.nombres}" 
+                                     title="#{bundleRolUsuario.CreateUsuarioTitle_nombres}" 
+                                     required="true" 
+                                     requiredMessage="Campo obligatorio">
+                            <f:validator validatorId="ValidarCampoSoloLetrasYespacio"/>
+                            <p:ajax update="msgNombres" event ="keyup" />
+                        </p:inputText>        
+                    </p:column>
+                    <p:column>
+                        <p:message for="nombres" id="msgNombres"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Apellidos"  />
+                        <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
+                                       value="*"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="apellidos" placeholder="Solo letras y espacios" 
+                                     value="#{usuarioController.usuario.apellidos}" 
+                                     title="#{bundleRolUsuario.CreateUsuarioTitle_apellidos}" 
+                                     required="true" 
+                                     requiredMessage="Campo obligatorio">
+                            <f:validator validatorId="ValidarCampoSoloLetrasYespacio"/>
+                            <p:ajax update="msgApellidos" event ="keyup" />
+                        </p:inputText>
+                    </p:column>
+                    <p:column>
+                        <p:message for="apellidos" id="msgApellidos"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Celular" />
+                        <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
+                                       value="*"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="celular" placeholder="Solo números" 
+                                     value="#{usuarioController.usuario.celular}" 
+                                     title="#{bundleRolUsuario.CreateUsuarioTitle_celular}" 
+                                     required="true"
+                                     requiredMessage="Campo obligatorio"
+                                     >
+                            <f:validator validatorId="ValidarCampoNumerico"/>
+                            <p:ajax update="msgCelular" event ="keyup" />
+                        </p:inputText>        
+                    </p:column>
+                    <p:column>
+                        <p:message for="celular" id="msgCelular"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Nombre de usuario" />
+                        <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
+                                       value="*"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="nombreUsuario" 
+                                     value="#{usuarioController.usuario.nombreUsuario}" 
+                                     title="#{bundleRolUsuario.CreateUsuarioTitle_nombreUsuario}" 
+                                     required="true" 
+                                     requiredMessage="Campo obligatorio">
+                            <f:validator validatorId="ValidarCampoNombreUsuario"/>
+                            <p:ajax update="msgNombreUsuario" event ="keyup" />
+                        </p:inputText>        
+                    </p:column>
+                    <p:column>
+                        <p:message for="nombreUsuario" id="msgNombreUsuario"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Contraseña"/>
+                        <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
+                                       value="*"/>
+                    </p:column>
+                    <p:column>
+                        <p:password id="contrasena1" placeholder="Minimo 6 caracteres" 
+                                    value="#{usuarioController.usuario.contrasena}" 
+                                    title="#{bundleRolUsuario.CreateUsuarioTitle_contrasena}" 
+                                    required="true" requiredMessage="Campo obligatorio"
+                                    >
+                            <f:validateLength minimum="6" />
+                        </p:password>
+                    </p:column>
+                    <p:column>
+                        <p:message for="contrasena1" />
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Repetir contraseña"/>
+                        <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
+                                       value="*"/>
+                    </p:column>
+                    <p:column>
+                        <p:password id="contrasena2" placeholder="Minimo 6 caracteres" 
+                                    value="#{usuarioController.repetirContrasena}" 
+                                    title="#{bundleRolUsuario.CreateUsuarioTitle_contrasena}" 
+                                    required="true" requiredMessage="Campo obligatorio">
+                            <f:validateLength minimum="6" />
+                        </p:password>
+                    </p:column>
+                    <p:column>
+                        <p:message for="contrasena2" />
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Tipo de usuario" />
+                    </p:column>
+                    <p:column>
+                        <p:selectOneMenu id="rol" value="#{usuarioController.rol.idRol}">
+                            <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
+                            <f:selectItems value="#{rolController.itemsAvailableSelectOne}"
+                                           var="rol"
+                                           itemLabel="#{rol.descripcion}"
+                                           itemValue="#{rol.idRol}"/>
+                            <f:validator validatorId="ValidarCamposSeleccionar"/>
+                        </p:selectOneMenu>
+                    </p:column>
+                    <p:column>
+                        <p:message for="rol"/>
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+            <p:panelGrid>
+                <p:row>
+                    <p:column colspan="3" style="width: 450px; text-align: center;">
+                        <p:commandButton action="#{usuarioController.registrarUsuario()}" 
+                                         value="Registrar" ajax="true" 
+                                         update="panel"/>            
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+        </h:form>
+        <p:dialog header="Información" modal="true" position="center" widgetVar="mensajeRegistroExitoso" closable="false">
+            <p:messages  style="font-size: 15px;"  showDetail="true" autoUpdate="true"/>
+            <h:form>
+                <p:commandButton  value="Aceptar" style="font-weight: normal;"
+                                  onclick="PF('mensajeRegistroExitoso').hide()"/>
+            </h:form>
+        </p:dialog>
+    </h:body>  
+</html>

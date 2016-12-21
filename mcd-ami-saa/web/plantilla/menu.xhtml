@@ -61,7 +61,21 @@
                         <p:menuitem disabled="true" value="Gestionar cliente"   ajax="false"/>
 
                     </p:submenu>
+                    <p:submenu  label="Gestión de usuarios">
+                        <p:menuitem  value="Registrar usuario" action="#{routingController.irRegistrarUsuario()}" ajax="false"/>
+                        <p:menuitem  value="Gestionar usuarios" action="#{routingController.irGestionarUsuario()}"   ajax="false"/>
 
+                    </p:submenu>
+                    
+                    <p:submenu  label="Gestión de medidores">
+                        <p:menuitem  value="Registrar medidor" action="#{routingController.irRegistrarMedidor()}" ajax="false"/>
+                        <p:menuitem  value="Gestionar medidores" action="#{routingController.irGestionarMedidores()}"   ajax="false"/>
+                    </p:submenu>
+
+                    <p:submenu  label="Gestión de macromedidor">
+                        <p:menuitem  value="Registrar macromedidor" action="#{routingController.irRegistrarMacromedidor()}" ajax="false"/>
+                        <p:menuitem  value="Gestionar macromedidores" action="#{routingController.irGestionarMacromedidores()}"   ajax="false"/>
+                    </p:submenu>
                 </p:tieredMenu>
             </h:form>
         </div>

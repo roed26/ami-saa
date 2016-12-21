@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+
+    <h:body>
+        <h:outputLabel style="font-weight:bold ; font-size: 17px; color:black; " 
+                       value="Registro de un nuevo macromedidor"/>
+        <br/>
+        <br/>
+        <h:outputLabel style="font-style: italic; font-size: 13px; color:black; " 
+                       value="Campos obligatorios "/>
+        <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
+                       value="*"/>
+        <br/>
+        <br/>
+
+
+        <h:form id="MacroCreateForm">
+            <h:panelGroup id="display">
+                <p:panelGrid >
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Id macro" />
+                            <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
+                                           value="*"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="idMacro" placeholder="Identificador del macromedidor"
+                                         value="#{macroController.macro.idMacro}" 
+                                         title="Identificador macro" 
+                                         required="true" 
+                                         requiredMessage="Campo obligatorio">
+                                <f:validator validatorId="ValidarCampoIdMacro"/>
+                                <p:ajax update="msgIdMacro" event ="keyup" />
+                            </p:inputText>
+
+                        </p:column>
+                        <p:column>
+                            <p:message for="idMacro" id="msgIdMacro"/>
+                        </p:column>
+                    </p:row>
+
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Modelo" />
+                            <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
+                                           value="*"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="modelo" placeholder="Modelo del macromedidor"
+                                         value="#{macroController.macro.modelo}" 
+                                         title="Modelo" 
+                                         required="true" 
+                                         requiredMessage="Campo obligatorio">
+                                <p:ajax update="msgModelo" event ="keyup" />
+                            </p:inputText>
+
+                        </p:column>
+                        <p:column>
+                            <p:message for="modelo" id="msgModelo"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Marca" />
+                            <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
+                                           value="*"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="marca" placeholder="Marca del macromedidor"
+                                         value="#{macroController.macro.marca}" 
+                                         title="Marca" 
+                                         required="true" 
+                                         requiredMessage="Campo obligatorio">
+                                <p:ajax update="msgMarca" event ="keyup" />
+                            </p:inputText>
+
+                        </p:column>
+                        <p:column>
+                            <p:message for="marca" id="msgMarca"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Clase" />
+                            <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
+                                           value="*"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="clase" placeholder="Clase del macromedidor"
+                                         value="#{macroController.macro.clase}" 
+                                         title="Clase" 
+                                         required="true" 
+                                         requiredMessage="Campo obligatorio">
+                                
+                                <p:ajax update="msgClase" event ="keyup" />
+                            </p:inputText>
+
+                        </p:column>
+                        <p:column>
+                            <p:message for="clase" id="msgClase"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Tipo" />
+                            <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
+                                           value="*"/>
+                        </p:column>
+                        <p:column>
+                            <p:selectOneMenu id="tipo" value="#{macroController.macro.tipo}">
+                                <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
+                                <f:selectItem itemLabel="Monofasico" itemValue="m"/>
+                                <f:selectItem itemLabel="Bifasico" itemValue="b"/>
+                                <f:selectItem itemLabel="Trifasico" itemValue="t"/>
+                                <f:validator validatorId="ValidarCamposSeleccionar"/>
+                            </p:selectOneMenu>
+
+                        </p:column>
+                        <p:column>
+                            <p:message for="tipo" id="msgTipo"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Estado" />
+                            <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
+                                           value="*"/>
+                        </p:column>
+                        <p:column>
+                            <p:selectOneRadio value="#{macroController.macro.estado}" >
+                                <f:selectItem itemLabel="Activo" itemValue="A"/>                 
+                                <f:selectItem itemLabel="Inactivo" itemValue="D"/>                 
+                            </p:selectOneRadio>
+                        </p:column>
+
+                    </p:row>
+                </p:panelGrid>
+                <p:commandButton actionListener="#{macroController.registrarMacro()}" value="Registrar" update="display" />
+
+            </h:panelGroup>
+        </h:form>
+        <p:dialog header="Información" modal="true" position="center" widgetVar="mensajeRegistroExitoso" closable="false">
+            <p:messages  style="font-size: 15px;"  showDetail="true" autoUpdate="true"/>
+            <h:form>
+                <p:commandButton  value="Aceptar" style="font-weight: normal;"
+                                  onclick="PF('mensajeRegistroExitoso').hide()"/>
+            </h:form>
+        </p:dialog>
+
+    </h:body>
+</html>

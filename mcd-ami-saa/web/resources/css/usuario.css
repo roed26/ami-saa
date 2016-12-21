@@ -36,21 +36,23 @@ body {
     float: left;
     margin-top: 8px;
     margin-left: 13px;
+    background: url(../img/logoapp.png) no-repeat;
 }
 
 .notificaciones
 {    
     float: right;
-    width: 68px;
+    padding-left: 17px;
+    /*width: 68px;
     height: 100px;
-    padding-top: 33px; 
+    padding-top: 33px; */
 }
 
 #ciruculonotificacionconteo
 {
     float: left;
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     text-align: center;
     border-radius: 10px;
     background-color: #D20005;

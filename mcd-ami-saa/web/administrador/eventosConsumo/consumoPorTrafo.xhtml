@@ -8,13 +8,12 @@
 
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Estado amarre clientes
-        </title>
+        
     </h:head>
     <h:body>
         <h:form id="datosIngreso" >
             <h:panelGrid columns="2" > 
-                <p:commandButton style="left: 850px" action="#{clienteController.cambiarEstadoSeleccion}" value="Realizar nueva consulta" 
+                <p:commandButton style="left: 850px" action="#{consumoController.cambiarEstadoSeleccion}" value="Realizar nueva consulta" 
                                  onclick="PF('seleccionarTrafo').show()" />
             </h:panelGrid>
             <br/>
@@ -22,114 +21,83 @@
 
         <h:form id="trafoSeleccionado">
 
-            <p:outputLabel style="font-weight: bold; font-size: 16px; color: black;" value="Información de consumo" rendered="#{clienteController.clienteSeleccionado}"/>
+            <p:outputLabel style="font-weight: bold; font-size: 16px; color: black;" value="Información de consumo" rendered="#{consumoController.trafoSeleccionado}"/>
             <p:separator/>
             <br/>
-            <p:panelGrid  rendered="#{clienteController.clienteSeleccionado}">
+            <p:panelGrid  rendered="#{consumoController.trafoSeleccionado}">
                 <p:row>
-                    <p:column rowspan="9" rendered="#{!clienteController.sinConsumo}">
-                        <p:barChart value="#{clienteController.consumo}" legendPosition="ne" 
-                                    title="Consumo" style="height:400px; width: 500px; color: red;"
+                    <p:column rowspan="6" rendered="#{!consumoController.sinConsumo}">
+                        <p:barChart value="#{consumoController.consumo}" legendPosition="ne" 
+                                    title="Consumo" style="height:auto; width: auto; color: red;"
                                     xaxisLabel="dias" yaxisLabel="Kw/h" 
 
                                     />
                     </p:column>
-                    <p:column rowspan="9" rendered="#{clienteController.sinConsumo}">
-                        <p:barChart value="#{clienteController.consumo}" legendPosition="ne" 
-                                    title="El cliente no registra consumo en esta fecha" style="height:400px; width: 500px; color: red;"
+                    <p:column rowspan="6" rendered="#{consumoController.sinConsumo}">
+                        <p:barChart value="#{consumoController.consumo}" legendPosition="ne" 
+                                    title="El macromedidor no registra consumo en esta fecha" style="height:300px; width: 400px; color: red;"
                                     xaxisLabel="dias" yaxisLabel="Kw/h" 
+                                    xaxisAngle="270"
 
                                     />
                     </p:column>
-                    <p:column>
-                        <p:outputLabel value="Nombre del cliente: " style="font-weight: bold; color: black;"/>
+                    <p:column colspan="2" style="height: 20px; background: #EBEDEB; text-align: center;">
+                        <p:outputLabel value="Informacion del macromedidor " style="font-weight: bold; color: black;"/>
                     </p:column>
-                    <p:column colspan="2">
-                        <p:outputLabel value="#{clienteController.selected.nombres} "/>
-                        <p:outputLabel value="#{clienteController.selected.apellidos}"/>
+                    
+                    
+                </p:row>
+                <p:row>
+                    <p:column style="background: #c2dfef; height: 20px;" >
+                        <p:outputLabel value="Identificador:" style="font-weight: bold; color: black;"/>                        
+                    </p:column>
+                    <p:column style="background: #c2dfef; height: 20px;">
+                        <p:outputLabel value="#{consumoController.macro.idMacro} " style="font-weight: bold; color: black;"/>
                     </p:column>
                 </p:row>
                 <p:row>
-                    <p:column>
-                        <p:outputLabel value="Dirección: " style="font-weight: bold; color: black;"/>
+                    <p:column style="height: 20px;">
+                        <p:outputLabel value="Marca:" style="font-weight: bold; color: black;"/>                        
                     </p:column>
-                    <p:column colspan="2">
-                        <p:outputLabel value="#{clienteController.selected.direccion}"/>
-                    </p:column>
-                </p:row>
-
-                <p:row rendered="#{!clienteController.existeTrafo}">
-                    <p:column colspan="3">
-                        <p:outputLabel value="Este cliente no tiene un producto asociado " style="font-weight: bold; color: Red;"/>
+                    <p:column style="height: 20px;">
+                        <p:outputLabel value="#{consumoController.macro.marca} " style="font-weight: bold; color: black;"/>
                     </p:column>
                 </p:row>
-                <p:row rendered="#{clienteController.existeTrafo}">
-                    <p:column colspan="3" style="background: #c2dfef; text-align: center; font-weight: bold; color: black;">
-                        <p:outputLabel value="Producto"/>
+                <p:row>
+                    <p:column style="background: #c2dfef; height: 20px; " >
+                        <p:outputLabel value="Modelo:" style="font-weight: bold; color: black;"/>                        
+                    </p:column>
+                    <p:column style="background: #c2dfef; height: 20px; ">
+                        <p:outputLabel value="#{consumoController.macro.modelo} " style="font-weight: bold; color: black;"/>
                     </p:column>
                 </p:row>
-                <p:row rendered="#{clienteController.existeTrafo}">
-                    <p:column >
-                        <p:outputLabel style="font-weight: bold;" value="Identificador"/>
+                <p:row>
+                    <p:column style="height: 20px;">
+                        <p:outputLabel value="Tipo:" style="font-weight: bold; color: black;"/>                        
                     </p:column>
-                    <p:column colspan="2">
-                        <p:outputLabel style="font-weight: bold;" value="#{clienteController.producto.idProducto}"/>
-                    </p:column>
-
-                </p:row>
-                <p:row rendered="#{clienteController.existeTrafo}">
-                    <p:column colspan="3" style="background: #c2dfef; text-align: center; font-weight: bold; color: black;">
-                        <p:outputLabel value="Trafo al cual esta vinculado"/>
+                    <p:column style="height: 20px;">
+                        <p:outputLabel value="#{consumoController.macro.tipo} " style="font-weight: bold; color: black;"/>
                     </p:column>
                 </p:row>
-                <p:row rendered="#{clienteController.existeTrafo}">
-                    <p:column style="background: #EBEDEB; text-align: center;">
-                        <p:outputLabel value="Identificador de trafo"/>
+                <p:row>
+                    <p:column style="background: #c2dfef; height: 20px; " >
+                        <p:outputLabel value="Estado:" style="font-weight: bold; color: black;"/>                        
                     </p:column>
-                    <p:column style="background: #EBEDEB; text-align: center;">
-                        <p:outputLabel value="Latitud"/>
-                    </p:column>
-                    <p:column style="background: #EBEDEB; text-align: center;">
-                        <p:outputLabel value="Longitud"/>
-                    </p:column>
-                </p:row>
-                <p:row rendered="#{clienteController.existeTrafo}">
-                    <p:column >
-                        <p:outputLabel value="#{clienteController.trafo.idTrafo}"/>
-                    </p:column>
-                    <p:column >
-                        <p:outputLabel value="#{clienteController.trafo.latitud}"/>
-                    </p:column>
-                    <p:column >
-                        <p:outputLabel value="#{clienteController.trafo.longitud}"/>
-                    </p:column>
-                </p:row>
-
-                <p:row rendered="#{clienteController.existeTrafo}">
-                    <p:column colspan="3" style="background: #c2dfef; text-align: center; font-weight: bold; color: black;">
-                        <p:outputLabel value="Estado de amarre"/>
-                    </p:column>
-                </p:row>
-                <p:row rendered="#{clienteController.existeTrafo}">
-                    <p:column rendered="#{clienteController.activo}">
-                        <p:outputLabel style="font-size: 17px; font-weight: bold;" value="Hay amarre"/>
-                    </p:column>
-                    <p:column colspan="2" rendered="#{clienteController.activo}">
+                    <p:column rendered="#{consumoController.macro.estado.equalsIgnoreCase('A')}" style="height: 20px; background: #c2dfef; ">
                         <p:graphicImage width="20" height="20" value="./../resources/img/estado/activo.png"/>
+                        <p:outputLabel value="Activo" style="font-weight: bold; color: black;"/>
                     </p:column>
-                    <p:column style="vertical-align: middle;" rendered="#{!clienteController.activo}">
-                        <p:outputLabel style="font-size: 17px; font-weight: bold;" value="Sin amarre"/>
-                    </p:column>
-                    <p:column colspan="2" style="vertical-align: middle;" rendered="#{!clienteController.activo}">
+                    <p:column rendered="#{!consumoController.macro.estado.equalsIgnoreCase('A')}" style="height: 20px; background: #c2dfef; ">
                         <p:graphicImage width="20" height="20" value="./../resources/img/estado/inactivo.png"/>
+                        <p:outputLabel value=" Inactivo" style="font-weight: bold; color: black;"/>
                     </p:column>
-
                 </p:row>
+                
             </p:panelGrid>
         </h:form>
 
-        <p:dialog closable="false" visible="#{!trafoController.trafoSeleccionado}" header="Seleccionar trafo" resizable="false" width="400" position="center"  widgetVar="seleccionarTrafo">
-            <p:outputLabel style="font-weight: bold; font-size: 16px" value="Busque y selecciones el trafo al cual desea enviar la solicitud" />
+        <p:dialog closable="false" visible="#{!consumoController.trafoSeleccionado}" header="Seleccionar trafo" resizable="false" width="400" position="center"  widgetVar="seleccionarTrafo">
+            <p:outputLabel style="font-weight: bold; font-size: 16px" value="Busque y selecciones el trafo " />
             <h:form id="listaTrafos">
                 <br/>
                 <h:panelGrid columns="2">
@@ -158,9 +126,8 @@
                                 <h:outputText value="Accion"/>
                             </f:facet>
                             <p:commandButton id="viewButton"  
-                                             actionListener="#{trafoController.seleccionarTrafoSolicitud(item)}" 
+                                             action="#{consumoController.seleccionarTrafo(item)}" 
                                              icon="ui-icon-plus" value="Seleccionar"  
-
                                              />
                         </p:column>
                     </p:dataTable>
@@ -174,17 +141,20 @@
                 </h:panelGrid>
             </h:form>
         </p:dialog>
-        <p:dialog header="Seleccionar rango de fecha" resizable="false"  position="center" modal="true"  widgetVar="seleccionarFecha">
+        
+        
+        <p:dialog header="Seleccionar rango de fecha" resizable="false" width="500px" position="center" modal="true"  widgetVar="seleccionarFecha">
             <h:form id="formFecha" style="text-align: center; font-weight: bold; color: black;">
-                <p:outputLabel style="font-weight: bold; font-size: 14px; " value="Seleccione el rango de fecha para conocer el estado de amarre del cliente" />
+                <p:outputLabel style="font-weight: bold; font-size: 14px; " value="Seleccione el rango de fecha para conocer el consumo del macromedidor vinculado al trafo: " />
+                <p:outputLabel style="font-weight: bold; font-size: 15px; color: blue; " value="#{consumoController.trafo.idTrafo}" />
                 <br/>
                 <br/>
                 <p:panelGrid id="panel">
                     <p:row>
                         <p:column colspan="2">
                             <p:selectOneRadio id="rangoFecha" 
-                                              value="#{clienteController.rangoFecha}" 
-                                              valueChangeListener="#{clienteController.cambiarRangoFecha}"
+                                              value="#{consumoController.rangoFecha}" 
+                                              valueChangeListener="#{consumoController.cambiarRangoFecha}"
                                               required="true"
                                               requiredMessage="Seleccione un rango de fecha"
                                               >
@@ -199,48 +169,48 @@
                         </p:column>
 
                     </p:row>
-                    <p:row rendered="#{clienteController.rangoFechaCambiado1}">
+                    <p:row rendered="#{consumoController.rangoFechaCambiado1}">
                         <p:column >
                             <h:outputText value="Fecha de inicio"/>
                         </p:column>
                         <p:column>
-                            <h:outputText value="#{clienteController.formatoFecha.format(clienteController.fechaInicio)}"/>
+                            <h:outputText value="#{consumoController.formatoFecha.format(consumoController.fechaInicio)}"/>
                         </p:column>
 
                     </p:row>
-                    <p:row rendered="#{clienteController.rangoFechaCambiado1}">
+                    <p:row rendered="#{consumoController.rangoFechaCambiado1}">
                         <p:column >
                             <h:outputText value="Fecha de fin"/>
                         </p:column>
                         <p:column>
-                            <h:outputText value="#{clienteController.formatoFecha.format(clienteController.fechaFin)}"/>
+                            <h:outputText value="#{consumoController.formatoFecha.format(consumoController.fechaFin)}"/>
                         </p:column>
 
                     </p:row>
-                    <p:row rendered="#{clienteController.rangoFechaCambiado2}">
+                    <p:row rendered="#{consumoController.rangoFechaCambiado2}">
                         <p:column >
                             <h:outputText value="Fecha de inicio"/>
                         </p:column>
                         <p:column>
-                            <h:outputText value="#{clienteController.formatoFecha.format(clienteController.fechaInicio)}"/>
+                            <h:outputText value="#{consumoController.formatoFecha.format(consumoController.fechaInicio)}"/>
                         </p:column>
 
                     </p:row>
-                    <p:row rendered="#{clienteController.rangoFechaCambiado2}">
+                    <p:row rendered="#{consumoController.rangoFechaCambiado2}">
                         <p:column >
                             <h:outputText value="Fecha de fin"/>
                         </p:column>
                         <p:column>
-                            <h:outputText value="#{clienteController.formatoFecha.format(clienteController.fechaFin)}"/>
+                            <h:outputText value="#{consumoController.formatoFecha.format(consumoController.fechaFin)}"/>
                         </p:column>
 
                     </p:row>
-                    <p:row rendered="#{clienteController.rangoFechaCambiado3}">
+                    <p:row rendered="#{consumoController.rangoFechaCambiado3}">
                         <p:column >
                             <h:outputText value="Fecha de inicio"/>
                         </p:column>
                         <p:column>
-                            <p:calendar value="#{clienteController.fechaInicio}" size="14" id="fechaInicio"  required="true" 
+                            <p:calendar value="#{consumoController.fechaInicio}" size="14" id="fechaInicio"  required="true" 
                                         requiredMessage="Seleccione una fecha de inicio."
                                         showOn="button"
                                         navigator="true" yearRange="c-100:c" pattern="yyyy-MM-dd" 
@@ -253,12 +223,12 @@
                             <p:message for="fechaInicio"/>
                         </p:column>
                     </p:row>
-                    <p:row rendered="#{clienteController.rangoFechaCambiado3}">
+                    <p:row rendered="#{consumoController.rangoFechaCambiado3}">
                         <p:column >
                             <h:outputText value="Fecha de fin"/>
                         </p:column>
                         <p:column >
-                            <p:calendar value="#{clienteController.fechaFin}" size="14" id="fechaFin"  required="true" 
+                            <p:calendar value="#{consumoController.fechaFin}" size="14" id="fechaFin"  required="true" 
                                         requiredMessage="Seleccione una fecha de fin." 
                                         showOn="button" navigator="true" yearRange="c-100:c" pattern="yyyy-MM-dd" 
                                         placeholder="aaaa-mm-dd"
@@ -274,10 +244,9 @@
                         <p:column colspan="2" style="text-align: right;">
                             <p:commandButton 
                                 value="Aceptar"  
-                                ajax="true" 
                                 update="panel"
-                                action="#{clienteController.procesarConsulta()}"
-                                oncomplete="#{clienteController.cambiarEstadoSeleccion()}"
+                                action="#{consumoController.procesarConsulta()}"
+                                oncomplete="#{consumoController.cambiarEstadoSeleccion()}"
                                 />
                         </p:column>
                     </p:row>                   

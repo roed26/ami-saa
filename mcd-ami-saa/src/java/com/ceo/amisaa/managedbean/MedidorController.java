@@ -16,10 +16,15 @@ import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.Application;
+import javax.faces.application.FacesMessage;
+import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import org.primefaces.context.RequestContext;
 
 @Named("medidorController")
 @SessionScoped
@@ -28,23 +33,28 @@ public class MedidorController implements Serializable {
     @EJB
     private com.ceo.amisaa.sessionbeans.MedidorFacade ejbFacade;
     private List<Medidor> items = null;
-    private Medidor selected;
+    private Medidor medidor;
+    //String
     private String idMedidor;
+    private String datoBusqueda;
 
     public MedidorController() {
+        this.medidor = new Medidor();
     }
 
     @PostConstruct
     private void init() {
         this.cargarMedidores();
+        
+
     }
 
     public Medidor getSelected() {
-        return selected;
+        return medidor;
     }
 
     public void setSelected(Medidor selected) {
-        this.selected = selected;
+        this.medidor = selected;
     }
 
     protected void setEmbeddableKeys() {
@@ -65,30 +75,20 @@ public class MedidorController implements Serializable {
         this.idMedidor = idMedidor;
     }
 
+    public String getDatoBusqueda() {
+        return datoBusqueda;
+    }
+
+    public void setDatoBusqueda(String datoBusqueda) {
+        this.datoBusqueda = datoBusqueda;
+    }
+
     public Medidor prepareCreate() {
-        selected = new Medidor();
+        medidor = new Medidor();
         initializeEmbeddableKey();
-        return selected;
+        return medidor;
     }
 
-    public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("MedidorCreated"));
-        if (!JsfUtil.isValidationFailed()) {
-            items = null;    // Invalidate list of items to trigger re-query.
-        }
-    }
-
-    public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("MedidorUpdated"));
-    }
-
-    public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("MedidorDeleted"));
-        if (!JsfUtil.isValidationFailed()) {
-            selected = null; // Remove selection
-            items = null;    // Invalidate list of items to trigger re-query.
-        }
-    }
 
     public List<Medidor> getItems() {
         if (items == null) {
@@ -113,13 +113,13 @@ public class MedidorController implements Serializable {
     }
 
     private void persist(PersistAction persistAction, String successMessage) {
-        if (selected != null) {
+        if (medidor != null) {
             setEmbeddableKeys();
             try {
                 if (persistAction != PersistAction.DELETE) {
-                    getFacade().edit(selected);
+                    getFacade().edit(medidor);
                 } else {
-                    getFacade().remove(selected);
+                    getFacade().remove(medidor);
                 }
                 JsfUtil.addSuccessMessage(successMessage);
             } catch (EJBException ex) {
@@ -157,8 +157,71 @@ public class MedidorController implements Serializable {
     }
 
     public void cancelarSeleccionMedidor() {
-        idMedidor="";
-        items=ejbFacade.findAll();
+        idMedidor = "";
+        items = ejbFacade.findAll();
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        requestContext.execute("PF('seleccionarMedidor').hide()");
+    }
+
+    public void registrarMedidor() {
+        ejbFacade.create(medidor);
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La información del medidor se registro con exito."));
+        requestContext.execute("PF('mensajeRegistroExitoso').show()");
+        this.medidor = new Medidor();
+        this.items = ejbFacade.findAll();
+    }
+
+    public void editarMedidor() {
+        ejbFacade.edit(medidor);
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        this.medidor = new Medidor();
+        this.items = ejbFacade.findAll();
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La información del medidor se edito con exito."));
+        requestContext.execute("PF('MedidorEditDialog').hide()");
+        requestContext.execute("PF('mensajeRegistroExitoso').show()");
+
+    }
+
+    public void eliminarMedidor() {
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        if (this.medidor != null) {
+            if (this.medidor.getIdProducto()==null) {
+                this.ejbFacade.remove(this.medidor);
+                requestContext.update("MedidorListForm");
+                requestContext.execute("PF('eliminarMedidor').hide()");
+                requestContext.execute("PF('eliminacionCorrecta').show()");
+                this.medidor = new Medidor();
+                this.items = getFacade().findAll();
+            } else {
+                this.medidor = new Medidor();
+                requestContext.execute("PF('eliminarMedidor').hide()");
+                requestContext.execute("PF('noSePuedeEliminar').show()");
+            }
+        }
+    }
+
+    public void ventanaEliminar(Medidor medidor) {
+
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        this.medidor = medidor;
+        requestContext.execute("PF('eliminarMedidor').show()");
+    }
+
+    public void reiniciarObj() {
+        this.medidor = new Medidor();
+    }
+
+    public void buscarMedidor() {
+        this.items = ejbFacade.buscarPorId(this.datoBusqueda.toLowerCase());
+        this.datoBusqueda = "";
+    }
+
+    public void reiniciarCampo() {
+        this.datoBusqueda = "";
+        this.items = ejbFacade.findAll();
+
     }
 
     @FacesConverter(forClass = Medidor.class)

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="MedidorEditDlg" closable="false" widgetVar="MedidorEditDialog" modal="true" resizable="false" appendTo="@(body)" header="Editar información">
+            <h:form id="MedidorEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid >
+                        <p:row>
+                        <p:column>
+                            <p:outputLabel value="Id medidor" />
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel id="idMedidor" 
+                                         value="#{medidorController.selected.idMedidor}" 
+                                         title="#{bundle.CreateMedidorTitle_idMedidor}" />
+
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="estado" />
+                            <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
+                                           value="*"/>
+                        </p:column>
+                        <p:column>
+                            <p:selectOneMenu id="estado" value="#{medidorController.selected.estado}">
+                                <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
+                                <f:selectItem itemLabel="Físicamente activo" itemValue="fa"/>
+                                <f:selectItem itemLabel="Servicio activado" itemValue="sa"/>
+                                <f:selectItem itemLabel="Servicio desactivado" itemValue="sa"/>
+                                <f:validator validatorId="ValidarCamposSeleccionar"/>
+                            </p:selectOneMenu>
+                        </p:column>
+
+                        <p:column>
+                            <p:message for="estado" />
+                        </p:column>
+
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Tipo" />
+                            <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
+                                           value="*"/>
+                        </p:column>
+                        <p:column>
+                            <p:selectOneMenu id="tipo" value="#{medidorController.selected.tipo}">
+                                <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
+                                <f:selectItem itemLabel="Monofasico" itemValue="Monofasico"/>
+                                <f:selectItem itemLabel="Bifasico" itemValue="Bifasico"/>
+                                <f:selectItem itemLabel="Trifasico" itemValue="Trifasico"/>
+                                <f:validator validatorId="ValidarCamposSeleccionar"/>
+                            </p:selectOneMenu>
+
+                        </p:column>
+                        <p:column>
+                            <p:message for="tipo" id="msgTipo"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Marcar" />
+                            <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
+                                           value="*"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="marca" placeholder="Marca del medidor"
+                                         value="#{medidorController.selected.marca}" 
+                                         title="Marca" 
+                                         required="true" 
+                                         requiredMessage="Campo obligatorio">
+                                <p:ajax update="msgMarca" event ="keyup" />
+                            </p:inputText>
+
+                        </p:column>
+                        <p:column>
+                            <p:message for="marca" id="msgMarca"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Modelo" />
+                            <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
+                                           value="*"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="modelo" placeholder="Modelo del medidor"
+                                         value="#{medidorController.selected.modelo}" 
+                                         title="Modelo" 
+                                         required="true" 
+                                         requiredMessage="Campo obligatorio">
+                                <p:ajax update="msgModelo" event ="keyup" />
+                            </p:inputText>
+
+                        </p:column>
+                        <p:column>
+                            <p:message for="modelo" id="msgModelo"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Clase" />
+                            <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
+                                           value="*"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="clase" placeholder="Clase del medidor"
+                                         value="#{medidorController.selected.clase}" 
+                                         title="Clase" 
+                                         required="true" 
+                                         requiredMessage="Campo obligatorio">
+                                
+                                <p:ajax update="msgClase" event ="keyup" />
+                            </p:inputText>
+
+                        </p:column>
+                        <p:column>
+                            <p:message for="clase" id="msgClase"/>
+                        </p:column>
+                    </p:row>
+                        <p:row>
+                            <p:column>
+                                <h:outputText value="Vinculado al producto"/>
+                            </p:column>
+                            <p:column>
+                                <h:outputText rendered="#{medidorController.selected.idProducto==null}" value="Sin vinculo" title="Producto al cual esta vinculado"/>
+                                <h:outputText rendered="#{medidorController.selected.idProducto!=null}" value="#{medidorController.selected.idProducto}" title="Producto al cual esta vinculado"/>
+                            </p:column>
+                        </p:row>
+                        
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{medidorController.editarMedidor()}" value="Guardar cambios" update="display,:MedidorListForm:datalist" />
+                    <p:commandButton value="Cancelar" action="#{medidorController.reiniciarObj()}" onclick="MedidorEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+        <p:dialog header="Información" modal="true" position="center" widgetVar="mensajeRegistroExitoso" closable="false">
+            <p:messages  style="font-size: 15px;"  showDetail="true" autoUpdate="true"/>
+            <h:form>
+                <p:commandButton  value="Aceptar" style="font-weight: normal;"
+                                  onclick="PF('mensajeRegistroExitoso').hide()"/>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>
