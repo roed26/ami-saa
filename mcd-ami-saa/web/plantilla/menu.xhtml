@@ -37,8 +37,9 @@
                         <p:menuitem value="Vincular PLC_MC a varios productos"  action="#{routingController.irVincularPlcMc()}" actionListener="#{addNavegacionController.addVincularPlcMcProductos()}" ajax="false"/>
                     </p:submenu>
                     <p:submenu label="Gestión de amarres">
-                        <p:menuitem value="Por cliente" action="#{routingController.irEstadoAmarre()}" actionListener="#{addNavegacionController.addGestionAmarreCliente()}" ajax="false"/>
-                        <p:menuitem value="Por trafo" action="#{routingController.irListaClientes()}" actionListener="#{addNavegacionController.addGestionAmarreTrafo()}" ajax="false"/>
+                        <p:menuitem value="Amarre por cliente" action="#{routingController.irEstadoAmarre()}" actionListener="#{addNavegacionController.addGestionAmarreCliente()}" ajax="false"/>
+                        <p:menuitem value="Amarre por trafo" action="#{routingController.irListaClientes()}" actionListener="#{addNavegacionController.addGestionAmarreTrafo()}" ajax="false"/>
+                        <p:menuitem value="Estadísticas de amarre" action="#{routingController.irEstadisticasAmarre()}"  ajax="false"/>
                     </p:submenu>
                     <p:submenu label="Gestión consumo">
                         <p:menuitem value="Consumo por cliente" action="#{routingController.irConsumoCliente()}" actionListener="#{addNavegacionController.addGestionConsumoCliente()}" ajax="false"/>
@@ -57,8 +58,8 @@
 
                     </p:submenu>
                     <p:submenu  label="Gestión de clientes">
-                        <p:menuitem disabled="true" value="Registrar cliente"  ajax="false"/>
-                        <p:menuitem disabled="true" value="Gestionar cliente"   ajax="false"/>
+                        <p:menuitem  value="Registrar cliente" action="#{routingController.irRegistrarCliente()}" ajax="false"/>
+                        <p:menuitem  value="Gestionar cliente" action="#{routingController.irGestionarCliente()}"  ajax="false"/>
 
                     </p:submenu>
                     <p:submenu  label="Gestión de usuarios">

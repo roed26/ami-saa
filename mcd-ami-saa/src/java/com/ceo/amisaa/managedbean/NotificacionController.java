@@ -63,6 +63,7 @@ public class NotificacionController implements Serializable {
              RequestContext requestContext = RequestContext.getCurrentInstance();
              requestContext.addCallbackParam("respuesta", true);
              requestContext.update("infoUsuario");
+             requestContext.update("tituloPagina");
         }
         else
         {
@@ -73,6 +74,7 @@ public class NotificacionController implements Serializable {
                 RequestContext requestContext = RequestContext.getCurrentInstance();
                 requestContext.addCallbackParam("respuesta", false);
                 requestContext.update("infoUsuario");
+                requestContext.update("tituloPagina");
             }
             else
             {
@@ -84,6 +86,7 @@ public class NotificacionController implements Serializable {
                     RequestContext requestContext = RequestContext.getCurrentInstance();
                     requestContext.addCallbackParam("respuesta", false);
                     requestContext.update("infoUsuario");
+                    requestContext.update("tituloPagina");
                 }
             }
         }

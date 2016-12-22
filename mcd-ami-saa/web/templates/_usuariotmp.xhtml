@@ -14,7 +14,7 @@
         <h:outputStylesheet name="./css/style.css"/>
         <h:outputScript library="js" name="javascript.js" />
 
-        <title></title>
+        <title id="tituloPagina">Principal (#{notificacionController.conteoNotificacionesNuevas})</title>
     </h:head>
     <h:body>
         <h:form>
@@ -34,21 +34,23 @@
             <div class="CuadroDeBotonesSesion">
                 <ui:insert name="CuadroDeBotonesSesion"> 
                     <h:form id="infoUsuario" style="width: auto">
-                        <p:outputLabel value="Bienvenido: "/>
-                        <h:link id="opcionesusuario" style="text-decoration: none;font-size: 14px;color:#000000; ">
-                            <p:graphicImage value="#{usuarioSessionController.imagenPorDefecto}" style="border-radius:18px;" width="35"  height="35" >
-                                <f:param name="id" value="#{usuarioSessionController.identificacion}" />
-                            </p:graphicImage> 
-                            #{usuarioSessionController.nombreUsuario()}
-                        </h:link>
-                        <p:menu  overlay="true"  trigger="opcionesusuario" my="right top" at="right bottom" >
-                            <p:menuitem value="Mi Perfil" 
-                                        ajax="false"
-                                        />
-                            <p:separator/>
-                            <p:menuitem value="Cerrar Sesión" action="#{usuarioSessionController.logout()}"/>
-                        </p:menu>
-
+                        <div class="notificaciones">
+                            <br/>
+                            
+                            <p:outputLabel style="font-weight: bold;" value="Bienvenido: "/>
+                            <h:link id="opcionesusuario" style=" text-decoration: none; font-size: 13px; color:#000000; ">
+                                <!--<p:graphicImage value="#{usuarioSessionController.imagenPorDefecto}" style="border-radius:18px;" width="35"  height="35" >
+                                    <f:param name="id" value="#{usuarioSessionController.identificacion}" />
+                                </p:graphicImage> -->
+                                #{usuarioSessionController.nombreUsuario()}
+                            </h:link>
+                            <h:commandLink id="perfil" style=" font-size: 14px;" action="#{routingController.irPerfilDeUsuario()}">
+                                Mi perfil                           
+                            </h:commandLink>
+                            <h:commandLink id="salida" style=" font-size: 14px;" action="#{usuarioSessionController.logout()}" >
+                                Salir                           
+                            </h:commandLink>
+                        </div>
                         <div class="notificaciones">
                             <h:link rendered="#{!notificacionController.mostrarnotificacion}" id="opcionesnotificacion1" style="text-decoration: none;color:#0080FF ;font-size: 13pt; ">
                                 <p:graphicImage style="width: 35px;float: left;" value="/faces/resources/img/notificaciones/notificacion.png"/>  
@@ -79,7 +81,7 @@
                     </h:form>
                 </ui:insert>
             </div>
-            
+
             <div class="bottom">
 
             </div>

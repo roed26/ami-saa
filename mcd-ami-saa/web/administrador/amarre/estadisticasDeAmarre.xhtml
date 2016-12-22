@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Estado amarre clientes </title>
+    </h:head>
+    <h:body>
+        <h:form id="datosIngreso">
+            <h:panelGrid columns="2"> 
+
+                <p:commandButton style="left: 840px;" value="Realizar nueva consulta" 
+                                 onclick="PF('seleccionarCliente').show()" />
+            </h:panelGrid>
+            <br/>
+            <br/>
+        </h:form>
+
+        <p:separator/>
+        <h:form id="clienteSeleccionado">
+
+
+        </h:form>
+
+        <p:dialog visible="#{!amarreController.procesado}" header="Seleccionar rango de fecha" closable="false" resizable="false"  position="center" modal="true"  widgetVar="seleccionarFecha">
+            <h:form id="formFecha" style="text-align: center; font-weight: bold; color: black;">
+                <p:outputLabel style="font-weight: bold; font-size: 14px; " value="Seleccione el rango de fecha" />
+                <br/>
+                <br/>
+                <p:panelGrid id="panel">
+                    <p:row>
+                        <p:column colspan="2">
+                            <p:selectOneRadio id="rangoFecha" 
+                                              value="#{amarreController.rangoFecha}" 
+                                              valueChangeListener="#{amarreController.cambiarRangoFecha}"
+                                              required="true"
+                                              requiredMessage="Seleccione un rango de fecha"
+                                              >
+                                <f:selectItem itemValue="1" itemLabel=" Última semana " />
+                                <f:selectItem itemValue="2" itemLabel=" Último mes " />
+                                <f:selectItem itemValue="3" itemLabel="Seleccionar rango de fecha " />
+                                <f:ajax  execute="ocupacion"  render="panel"/>
+                            </p:selectOneRadio>
+                        </p:column>
+                        <p:column>
+                            <p:message for="rangoFecha"/>
+                        </p:column>
+
+                    </p:row>
+                    <p:row rendered="#{amarreController.rangoFechaCambiado1}">
+                        <p:column >
+                            <h:outputText value="Fecha de inicio"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{amarreController.formatoFecha.format(amarreController.fechaInicio)}"/>
+                        </p:column>
+
+                    </p:row>
+                    <p:row rendered="#{amarreController.rangoFechaCambiado1}">
+                        <p:column >
+                            <h:outputText value="Fecha de fin"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{amarreController.formatoFecha.format(amarreController.fechaFin)}"/>
+                        </p:column>
+
+                    </p:row>
+                    <p:row rendered="#{amarreController.rangoFechaCambiado2}">
+                        <p:column >
+                            <h:outputText value="Fecha de inicio"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{amarreController.formatoFecha.format(amarreController.fechaInicio)}"/>
+                        </p:column>
+
+                    </p:row>
+                    <p:row rendered="#{amarreController.rangoFechaCambiado2}">
+                        <p:column >
+                            <h:outputText value="Fecha de fin"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{amarreController.formatoFecha.format(amarreController.fechaFin)}"/>
+                        </p:column>
+
+                    </p:row>
+                    <p:row rendered="#{amarreController.rangoFechaCambiado3}">
+                        <p:column >
+                            <h:outputText value="Fecha de inicio"/>
+                        </p:column>
+                        <p:column>
+                            <p:calendar value="#{amarreController.fechaInicio}" size="14" id="fechaInicio"  required="true" 
+                                        requiredMessage="Seleccione una fecha de inicio."
+                                        showOn="button"
+                                        navigator="true" yearRange="c-100:c" pattern="yyyy-MM-dd" 
+                                        placeholder="aaaa-mm-dd"
+                                        >
+                                <f:validator validatorId="ValidarCampoFecha"/>
+                            </p:calendar>
+                        </p:column>
+                        <p:column>
+                            <p:message for="fechaInicio" />
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{amarreController.rangoFechaCambiado3}">
+                        <p:column >
+                            <h:outputText value="Fecha de fin"/>
+                        </p:column>
+                        <p:column >
+                            <p:calendar value="#{amarreController.fechaFin}" size="14" id="fechaFin"  required="true" 
+                                        requiredMessage="Seleccione una fecha de fin." 
+                                        showOn="button" navigator="true" yearRange="c-100:c" pattern="yyyy-MM-dd" 
+                                        placeholder="aaaa-mm-dd"
+                                        >
+                                <f:validator validatorId="ValidarCampoFecha"/>                               
+                            </p:calendar>
+                        </p:column>
+                        <p:column>
+                            <p:message for="fechaFin" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="2" style="text-align: right;">
+                            <p:commandButton 
+                                value="Aceptar"  
+                                ajax="true" 
+                                update="panel"
+                                actionListener="#{amarreController.seleccionarFecha()}"
+
+                                oncomplete="#{amarreController.cambiarEstadoSeleccion()}"
+                                />
+
+                            <p:commandButton 
+                                value="Cancelar"  
+                                onclick="PF('seleccionarFecha').hide()"
+
+
+
+                                />
+                        </p:column>
+                    </p:row>                   
+                </p:panelGrid>
+
+            </h:form>
+
+        </p:dialog>
+
+        <p:dialog closable="false"  header="Seleccionar trafo" resizable="false" width="450" position="center" modal="true"  widgetVar="seleccionarTrafo">
+            <p:outputLabel value="Busque y seleccione un trafo" style="color: black;font-weight: bold; font-size: 14px;" />                    
+            <h:form id="ClienteListForm">
+                <br/>
+                <h:panelGrid columns="2">
+                    <p:outputLabel value="Buscar por:" />
+                    <p:inputText  placeholder="Identificador de trafo" style="width: 240px;"  value="#{trafoController.idTrafo}" >
+                        <p:ajax event="keyup" update="datalist" listener="#{trafoController.buscarPorId()}" />                                
+                    </p:inputText>                          
+                </h:panelGrid>
+                <br/>
+                <p:dataTable id="datalist" value="#{trafoController.listaTrafos}" var="item"
+                             paginator="true"
+                             rowKey="#{item.idTrafo}"
+                             rows="10"
+                             rowsPerPageTemplate="5,10"
+                             >
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Identificador del trafo"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idTrafo}"/>
+                    </p:column>
+                    <p:column style="width: 120px; background: #EBEDEB;">
+                        <f:facet name="header">
+                            <h:outputText value="Accion"/>
+                        </f:facet>
+                        <p:commandButton id="viewButton"  actionListener="#{amarreController.seleccionarTrafo(item)}" icon="ui-icon-plus" value="Seleccionar"  
+                                         />
+                    </p:column>
+                </p:dataTable>
+                <h:panelGrid columns="2" >
+                    <p:commandButton id="viewButton"  
+                                     value="Cancelar"  
+                                     ajax="true"
+                                     action="#{amarreController.reiniciarVariables()}"
+                                     />
+                </h:panelGrid>
+
+            </h:form>
+        </p:dialog>
+        <p:dialog closable="false"  header="Seleccionar tipos de grafica" resizable="false" position="center" modal="true"  widgetVar="seleccionarTipoGrafica">
+            <p:outputLabel value="Seleccione el (los) tipo(s) de grafica que desea visualizar"/>
+            <h:form>
+                <p:panelGrid>
+                    <p:row>
+                        <p:column>
+                            <h:outputText value="Histograma: " />
+                        </p:column>
+                        <p:column>
+                            <p:selectBooleanCheckbox value="#{amarreController.histograma}" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="Curva " />
+                        </p:column>
+                        <p:column>
+                            <p:selectBooleanCheckbox value="#{amarreController.histograma}" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="Tortas " />
+                        </p:column>
+                        <p:column>
+                            <p:selectBooleanCheckbox value="#{amarreController.histograma}" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:commandButton value="Aceptar" action="#{amarreController.procesarConsulta()}"/>
+                        </p:column>
+                    </p:row>                  
+
+                </p:panelGrid>
+                
+            </h:form>
+        </p:dialog>
+
+    </h:body>    
+</html>

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </h:head>
+    <h:body>
+        <h:outputLabel style="font-weight:bold ; font-size: 17px; color:black; " 
+                       value="Registro de un nuevo cliente"/>
+        <br/>
+        <br/>
+        <h:outputLabel style="font-style: italic; font-size: 13px; color:black; " 
+                       value="Campos obligatorios "/>
+        <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
+                       value="*"/>
+        <br/>
+        <br/>
+        <h:form id="ClienteCreateForm">
+            <p:panelGrid id="panel">
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Cédula" />
+                        <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
+                                       value="*"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="cedula" placeholder="Solo números" value="#{clienteController.selected.cedula}" 
+                                     title="Cédula" 
+                                     required="true" requiredMessage="Campo obligatorio">
+                            <f:validator validatorId="ValidarCampoNumerico"/>
+                            <f:validator validatorId="ValidarCampoCedulaCliente"/>
+                            <p:ajax update="msgCedula" event ="keyup" />
+                        </p:inputText>
+                    </p:column>
+                    <p:column>
+                        <p:message for="cedula" id="msgCedula"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Nombres" />
+                        <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
+                                       value="*"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="nombres" placeholder="Solo letra y espacios" value="#{clienteController.selected.nombres}" 
+                                     title="Nombres" 
+                                     required="true" 
+                                     requiredMessage="Campo obligatorio">
+                            <f:validator validatorId="ValidarCampoSoloLetrasYespacio"/>
+                            <p:ajax update="msgNombres" event ="keyup" />
+                        </p:inputText>        
+                    </p:column>
+                    <p:column>
+                        <p:message for="nombres" id="msgNombres"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Apellidos" />
+                        <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
+                                       value="*"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="apellidos" placeholder="Solo letra y espacios" value="#{clienteController.selected.apellidos}" 
+                                     title="Apellidos" 
+                                     required="true" 
+                                     requiredMessage="Campo obligatorio">
+                            <f:validator validatorId="ValidarCampoSoloLetrasYespacio"/>
+                            <p:ajax update="msgApellidos" event ="keyup" />
+                        </p:inputText>
+                    </p:column>
+                    <p:column>
+                        <p:message for="apellidos" id="msgApellidos"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Dirección" />
+                        <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
+                                       value="*"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="direccion" value="#{clienteController.selected.direccion}" 
+                                     title="Dirección" required="true" 
+                                     requiredMessage="Campo obligatorio"/>
+                    </p:column>
+                    <p:column>
+                        <p:message for="direccion" />
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Barrio" />
+                        <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
+                                       value="*"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="barrio" value="#{clienteController.selected.barrio}" 
+                                     title="Barrio" required="true" 
+                                     requiredMessage="Campo obligatorio"/>
+                    </p:column>
+                    <p:column>
+                        <p:message for="barrio" />
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Estrato" />
+                        <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
+                                       value="*"/>
+                    </p:column>
+                    <p:column>
+                        <p:selectOneMenu style="width: 175px" id="estrato" value="#{clienteController.selected.estrato}">
+                            <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
+                            <f:selectItem itemLabel="1" itemValue="1"/>
+                            <f:selectItem itemLabel="2" itemValue="2"/>
+                            <f:selectItem itemLabel="3" itemValue="3"/>
+                            <f:selectItem itemLabel="4" itemValue="4"/>
+                            <f:selectItem itemLabel="5" itemValue="5"/>
+                            <f:selectItem itemLabel="6" itemValue="6"/>
+                            <f:validator validatorId="ValidarCamposSeleccionar"/>
+                        </p:selectOneMenu>
+                    </p:column>
+                    <p:column>
+                        <p:message for="estrato" />
+                    </p:column>
+                </p:row>
+                 <p:row>
+                    <p:column>
+                        <p:outputLabel value="Ciudad" />
+                        <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
+                                       value="*"/>
+                    </p:column>
+                    <p:column >
+                        <p:selectOneMenu filter="true" style="width: 175px" id="idCiudad" 
+                                         value="#{clienteController.ciudad.idCiudad}" >
+                            <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
+                            <f:selectItems value="#{ciudadController.itemsAvailableSelectOne}" var="idCiudadItem"
+                                           itemValue="#{idCiudadItem.idCiudad}"
+                                           itemLabel="#{idCiudadItem.nombre}"/>
+                            <f:validator validatorId="ValidarCamposSeleccionar"/>
+                        </p:selectOneMenu>        
+                    </p:column>
+                    <p:column>
+                        <p:message for="idCiudad" />
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Email" />
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="email" placeholder="ejemplo@ejemplo.com" value="#{clienteController.selected.email}" 
+                                     title="Email: ejemplo@ejemplo.com" >
+                            <f:validator validatorId="ValidarCampoEmail"/>
+                            <p:ajax update="msgEmail" event ="keyup" />
+                        </p:inputText>
+                    </p:column>
+                    <p:column>
+                        <p:message for="email" id="msgEmail"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Celular" />
+
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="celular" placeholder="Solo números" value="#{clienteController.selected.celular}" 
+                                     title="Celular">
+                        <f:validator validatorId="ValidarCampoNumericoCelular"/>
+                        <p:ajax update="msgCelular" event ="keyup" />
+                        </p:inputText>
+                    </p:column>
+                    <p:column>
+                        <p:message for="celular" id="msgCelular"/>
+                    </p:column>
+                </p:row>
+               
+                <p:row>
+                    <p:column colspan="2">
+                        <p:commandButton action="#{clienteController.registrarCliente()}" 
+                                         value="Registrar cliente" ajax="true" update="panel" />
+                    </p:column>
+                </p:row>
+
+            </p:panelGrid>
+
+        </h:form>
+        <p:dialog header="Información" modal="true" position="center" widgetVar="mensajeRegistroExitoso" closable="false">
+            <p:messages  style="font-size: 15px;"  showDetail="true" autoUpdate="true"/>
+            <h:form>
+                <p:commandButton  value="Aceptar" style="font-weight: normal;"
+                                  onclick="PF('mensajeRegistroExitoso').hide()"/>
+            </h:form>
+        </p:dialog>
+    </h:body>
+
+</html>

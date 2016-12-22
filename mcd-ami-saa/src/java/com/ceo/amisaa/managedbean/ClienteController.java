@@ -1,5 +1,6 @@
 package com.ceo.amisaa.managedbean;
 
+import com.ceo.amisaa.entidades.Ciudad;
 import com.ceo.amisaa.entidades.Cliente;
 import com.ceo.amisaa.entidades.EventosAmarre;
 import com.ceo.amisaa.entidades.EventosConsumo;
@@ -107,13 +108,18 @@ public class ClienteController implements Serializable {
     private CartesianChartModel consumo;
     private String trama;
     private String mensajeError;
+    private Ciudad ciudad;
 
     public ClienteController() {
         this.formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+        this.selected = new Cliente();
+        this.ciudad = new Ciudad();
     }
 
     @PostConstruct
     private void init() {
+        this.selected = new Cliente();
+        this.ciudad = new Ciudad();
         this.cargarClientes();
         existeTrafo = false;
     }
@@ -164,6 +170,14 @@ public class ClienteController implements Serializable {
 
     public void setDatosPlctu(String datosPlctu) {
         this.datosPlctu = datosPlctu;
+    }
+
+    public Ciudad getCiudad() {
+        return ciudad;
+    }
+
+    public void setCiudad(Ciudad ciudad) {
+        this.ciudad = ciudad;
     }
 
     public boolean isActivo() {
@@ -287,25 +301,6 @@ public class ClienteController implements Serializable {
         this.fechaInicioUsar = calendar.getTime();
     }
 
-    public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ClienteCreated"));
-        if (!JsfUtil.isValidationFailed()) {
-            items = null;    // Invalidate list of items to trigger re-query.
-        }
-    }
-
-    public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ClienteUpdated"));
-    }
-
-    public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ClienteDeleted"));
-        if (!JsfUtil.isValidationFailed()) {
-            selected = null; // Remove selection
-            items = null;    // Invalidate list of items to trigger re-query.
-        }
-    }
-
     public List<Cliente> getItems() {
         if (items == null) {
             items = getFacade().findAll();
@@ -356,6 +351,8 @@ public class ClienteController implements Serializable {
         }
     }
 
+    
+
     private void persist(PersistAction persistAction, String successMessage) {
         if (selected != null) {
             setEmbeddableKeys();
@@ -398,17 +395,71 @@ public class ClienteController implements Serializable {
 
     public void buscarPorNombresOApellidos() {
         this.items = getFacade().buscarPorNombresApellidos(this.nombreOApellidos.toLowerCase());
-
+        this.nombreOApellidos = "";
     }
 
+    public void reiniciarCampoBusqueda() {
+        this.nombreOApellidos = "";
+        this.items = ejbCliente.findAll();
+
+    }
     public void cargarClientes() {
         this.items = getFacade().findAll();
     }
 
+    public void registrarCliente() {
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        this.selected.setIdCiudad(ciudad);
+        this.ejbCliente.create(selected);
+        items = ejbCliente.findAll();
+        this.selected = new Cliente();
+        this.ciudad = new Ciudad();
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La información del cliente se registro con exito."));
+        requestContext.execute("PF('mensajeRegistroExitoso').show()");
+    }
+
+    public void editarInfoCliente() {
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        if (this.selected != null) {
+            this.ejbCliente.edit(this.selected);
+            requestContext.execute("PF('ClienteEditDialog').hide()");
+            requestContext.execute("PF('edicionCorrecta').show()");
+            this.selected = new Cliente();
+            this.ciudad = new Ciudad();
+        }
+    }
+
+    public void eliminarCliente() {
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        if (this.selected != null) {
+            if (true) {
+                this.ejbCliente.remove(this.selected);
+                requestContext.update("ClienteListForm");
+                requestContext.execute("PF('eliminarCliente').hide()");
+                requestContext.execute("PF('eliminacionCorrecta').show()");
+                this.selected = new Cliente();
+                this.ciudad = new Ciudad();
+                this.items = getFacade().findAll();
+            } else {
+                this.selected = new Cliente();
+                this.ciudad = new Ciudad();
+                requestContext.execute("PF('eliminarCliente').hide()");
+                requestContext.execute("PF('noSePuedeEliminar').show()");
+            }
+        }
+        reiniciarCampoBusqueda();
+    }
+
+    public void ventanaEliminar(Cliente cliente) {
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        this.selected = cliente;
+        requestContext.execute("PF('eliminarCliente').show()");
+    }
+
     public void seleccionarCliente(Cliente cliente) {
         this.selected = cliente;
-        this.nombreOApellidos="";
-        this.items= ejbCliente.findAll();
+        this.nombreOApellidos = "";
+        this.items = ejbCliente.findAll();
         this.rangoFechaCambiado1 = false;
         this.rangoFechaCambiado2 = false;
         this.rangoFechaCambiado3 = false;
@@ -478,7 +529,6 @@ public class ClienteController implements Serializable {
                                 energia = eventoConsumo.get(i).getEnergia() - eventoConsumo.get(i - 1).getEnergia();
                             }
                             consumoCliente.set(formatoFecha.format(eventoConsumo.get(i).getFechaHora()), energia);
-                            
 
                         }
                     }
@@ -529,6 +579,12 @@ public class ClienteController implements Serializable {
         this.rangoFechaCambiado3 = false;
         this.rangoFecha = "";
         this.clienteSeleccionado = false;
+    }
+
+    public void reiniciarObj() {
+        this.selected = new Cliente();
+        this.ciudad = new Ciudad();
+
     }
 
     public void reiniciarVaariables() {

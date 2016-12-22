@@ -71,7 +71,7 @@
                         <p:column width="200px;">
                             <p:commandButton style="font-style: italic;margin-left: 170px;font-weight: normal; color: black;" 
                                              value="Si" action="#{usuarioController.eliminarUsuario()}"/>
-                            <p:commandButton style="font-style: italic; margin-left: 10px;font-weight: normal; color: black;" value="No" onclick="PF('eliminarUsuario').hide()" action="#{plcTuController.newObj()}"/>
+                            <p:commandButton style="font-style: italic; margin-left: 10px;font-weight: normal; color: black;" value="No" onclick="PF('eliminarUsuario').hide()" action="#{usuarioController.reiniciarObj()}"/>
                         </p:column>
 
                     </p:row>
@@ -83,7 +83,7 @@
                 <p:panelGrid style="text-align:left;" styleClass="panelgrid">
                     <p:row>
                         <p:column>
-                            <h:outputLabel style="color: red;" value="No es posible elimicar el usuario."/>
+                            <h:outputLabel style="color: red;" value="No es posible eliminar el usuario."/>
                         </p:column>                                
                     </p:row>
                     <p:row>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ClienteViewDlg" widgetVar="ClienteViewDialog" modal="true" resizable="false" appendTo="@(body)" header="Información del cliente">
+            <h:form id="ClienteViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid >
+                        <p:row>
+                            <p:column style="background: #f2f5f9; font-weight: bold;">
+                                <h:outputText value="Cédula"/>
+
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{clienteController.selected.cedula}" />        
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column style="background: #f2f5f9; font-weight: bold;">
+                                <h:outputText value="Nombres"/>
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{clienteController.selected.nombres}" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column style="background: #f2f5f9; font-weight: bold;">
+                                <h:outputText value="Apellidos"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="#{clienteController.selected.apellidos}" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column style="background: #f2f5f9; font-weight: bold;">
+                                <h:outputText value="Dirección"/>
+
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{clienteController.selected.direccion}"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column style="background: #f2f5f9; font-weight: bold;">
+                                <h:outputText value="Barrio"/>
+
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{clienteController.selected.barrio}" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column style="background: #f2f5f9; font-weight: bold;">
+                                <h:outputText value="Estrato"/>
+
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{clienteController.selected.estrato}" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column style="background: #f2f5f9; font-weight: bold;">
+                                <h:outputText value="Email"/>
+
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{clienteController.selected.email}" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column style="background: #f2f5f9; font-weight: bold;">
+                                <h:outputText value="Número de celular"/>
+
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{clienteController.selected.celular}" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column style="background: #f2f5f9; font-weight: bold;">
+                                <h:outputText value="Ciudad"/>
+
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{clienteController.selected.idCiudad.nombre}"/>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                    <p:commandButton value="Cerrar" onclick="ClienteViewDialog.hide()" action="#{clienteController.reiniciarObj()}" />
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

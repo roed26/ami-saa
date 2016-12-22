@@ -8,12 +8,12 @@
 
     <ui:composition>
 
-        <p:dialog id="UsuarioViewDlg" closable="false" widgetVar="UsuarioViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundleRolUsuario.ViewUsuarioTitle}">
+        <p:dialog id="UsuarioViewDlg" closable="false" widgetVar="UsuarioViewDialog" modal="true" resizable="false" appendTo="@(body)" header="Información del usuario">
             <h:form id="UsuarioViewForm">
                 <h:panelGroup id="display">
                     <p:panelGrid  >
                         <p:row>
-                            <p:column style="background: #f2f5f9;">
+                            <p:column style="background: #f2f5f9; font-weight: bold;">
                                 <h:outputText value="#{bundleRolUsuario.ViewUsuarioLabel_cedula}"/>        
                             </p:column>
                             <p:column>
@@ -21,7 +21,7 @@
                             </p:column>
                         </p:row>
                         <p:row>
-                            <p:column style="background: #f2f5f9;">
+                            <p:column style="background: #f2f5f9; font-weight: bold;">
                                 <h:outputText value="#{bundleRolUsuario.ViewUsuarioLabel_nombres}"/>
 
                             </p:column>
@@ -30,7 +30,7 @@
                             </p:column>
                         </p:row>
                         <p:row>
-                            <p:column style="background: #f2f5f9;">
+                            <p:column style="background: #f2f5f9; font-weight: bold;">
                                 <h:outputText value="#{bundleRolUsuario.ViewUsuarioLabel_apellidos}"/>
 
                             </p:column>
@@ -39,7 +39,7 @@
                             </p:column>
                         </p:row>
                         <p:row>
-                            <p:column style="background: #f2f5f9;">
+                            <p:column style="background: #f2f5f9; font-weight: bold;">
                                 <h:outputText value="#{bundleRolUsuario.ViewUsuarioLabel_celular}"/>
 
 
@@ -49,7 +49,7 @@
                             </p:column>
                         </p:row>
                         <p:row>
-                            <p:column style="background: #f2f5f9;">
+                            <p:column style="background: #f2f5f9; font-weight: bold;">
                                 <h:outputText value="#{bundleRolUsuario.ViewUsuarioLabel_nombreUsuario}"/>
 
 

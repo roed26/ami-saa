@@ -30,26 +30,42 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
     public UsuarioFacade() {
         super(Usuario.class);
     }
+
     public List<Usuario> buscarPorDato(String dato) {
         Query query = getEntityManager().createNamedQuery("Usuario.findByDato");
         query.setParameter("dato", "%" + dato + "%");
         List<Usuario> resultList = query.getResultList();
         return resultList;
     }
+
     public boolean buscarPorId(String cedula) {
-        
+
         Query query = getEntityManager().createNamedQuery("Usuario.findByCedula");
         query.setParameter("cedula", cedula);
         List<Usuario> resultList = query.getResultList();
         return !resultList.isEmpty();
 
     }
+
     public boolean buscarPorNombreUsuario(String nombreUsuario) {
-        
+
         Query query = getEntityManager().createNamedQuery("Usuario.findByNombreUsuario");
         query.setParameter("nombreUsuario", nombreUsuario);
         List<Usuario> resultList = query.getResultList();
         return !resultList.isEmpty();
+
+    }
+
+    public Usuario buscarUsuarioPorNombreDeUsuario(String nombreUsuario) {
+
+        Query query = getEntityManager().createNamedQuery("Usuario.findByNombreUsuario");
+        query.setParameter("nombreUsuario", nombreUsuario);
+        List<Usuario> resultList = query.getResultList();
+        if (resultList.size() > 0) {
+            return resultList.get(0);
+        } else {
+            return null;
+        }
 
     }
 }

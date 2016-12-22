@@ -116,10 +116,10 @@ public class UsuarioSessionController implements Serializable {
 
             }
         } else if (this.grupoUsuarioRolEJB.buscarPorNombreUsuario(req.getUserPrincipal().getName()).get(0).getGrupoUsuarioRolPK().getIdRol() == 1) {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("/GymAdmDoc/faces/usuarioestandar/estandarMain.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/mcd-ami-saa/faces/plantilla/usuarioMain.xhtml");
             cedula = this.grupoUsuarioRolEJB.buscarPorNombreUsuario(req.getUserPrincipal().getName()).get(0).getUsuario().getCedula();
         } else {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("/GymAdmDoc/faces/usuario/usuarioMain.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/mcd-ami-saa/faces/plantilla/usuarioMain.xhtml");
             cedula = this.grupoUsuarioRolEJB.buscarPorNombreUsuario(req.getUserPrincipal().getName()).get(0).getUsuario().getCedula();
         }
     }
@@ -200,7 +200,14 @@ public class UsuarioSessionController implements Serializable {
         if (req.getUserPrincipal() == null) {
             return "";
         } else {
-            return req.getUserPrincipal().getName();
+            Usuario usuario= usuarioEJB.buscarUsuarioPorNombreDeUsuario(req.getUserPrincipal().getName());
+            if(usuario==null){
+            return "";
+            }else{
+               return usuario.getNombres()+" "+usuario.getApellidos();
+            }
+            
+            
         }
     }
 
