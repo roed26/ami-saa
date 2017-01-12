@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:body>
+        <h:outputLabel style="font-weight:bold ; font-size: 17px; color:black; " 
+                       value="Registro de un nuevo producto"/>
+        <br/>
+        <br/>
+        <h:outputLabel style="font-style: italic; font-size: 13px; color:black; " 
+                       value="Campos obligatorios "/>
+        <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
+                       value="*"/>
+        <br/>
+        <br/>
+        <h:form id="ProductoCreateForm">
+            <p:panelGrid id="panel" >
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Identificador del producto" />
+                        <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
+                                       value="*"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="id" value="#{productoController.selected.idProducto}" 
+                                     title="Identificador del producto" 
+                                     required="true" requiredMessage="Campo obligatorio">
+                            <f:validator validatorId="ValidarCampoIdProducto"/>
+                            <p:ajax update="msgIdProducto" event ="keyup" />
+                        </p:inputText>
+                    </p:column>
+                    <p:column>
+                        <p:message for="id" id="msgIdProducto"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Latitud"/>
+                        <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
+                                       value="*"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="latitud" placeholder="Campo numérico"
+                                     value="#{productoController.selected.latitud}" 
+                                     title="Latitud" required="true" 
+                                     requiredMessage="Campo obligatorio">
+                            <p:ajax update="msgLatitud" event ="keyup" />
+                        </p:inputText>
+                    </p:column>
+                    <p:column>
+                        <p:message for="latitud" id="msgLatitud"/>
+                        
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Longitud"/>
+                        <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
+                                       value="*"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="longitud" placeholder="Campo numérico"
+                                     value="#{productoController.selected.longitud}" 
+                                     title="Longitud" 
+                                     required="true" requiredMessage="Campo obligatorio">
+                        <p:ajax update="msgLongitud" event ="keyup" />
+                        </p:inputText>
+                    </p:column>
+                    <p:column>
+                        <p:message for="longitud" id="msgLongitud"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Estado" />
+                        <h:outputLabel style="font-style: italic;font-size: 14px;text-align: left; color:red;" 
+                                       value="*"/>
+                    </p:column>
+                    <p:column>
+                        <p:selectOneRadio  id="estado" value="#{productoController.selected.estado}"
+                                           required="true" requiredMessage="Seleccione un estado"
+                                           >
+                            <f:selectItem itemLabel="Activo" itemValue='A' />
+                            <f:selectItem itemLabel="Inactivo" itemValue='D' />    
+                        </p:selectOneRadio>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column colspan="3">
+                        <p:commandButton action="#{productoController.registrarProducto()}" value="Registrar" update="panel" />
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+
+        </h:form>
+        <p:dialog header="Información" modal="true" position="center" widgetVar="mensajeRegistroExitoso" closable="false">
+            <p:messages  style="font-size: 15px;"  showDetail="true" autoUpdate="true"/>
+            <h:form>
+                <p:commandButton  value="Aceptar" style="font-weight: normal;"
+                                  onclick="PF('mensajeRegistroExitoso').hide()"/>
+            </h:form>
+        </p:dialog>
+    </h:body>
+</html>

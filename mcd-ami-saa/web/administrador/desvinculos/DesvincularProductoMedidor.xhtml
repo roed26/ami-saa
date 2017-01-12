@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </h:head>
+    <h:body>
+        <h:form id="datosIngreso">
+            <h:panelGrid columns="2"> 
+                <p:commandButton style="left: 830px" 
+                                 value="Seleccionar un nuevo medidor"
+                                 onclick="PF('seleccionarCliente').show()" />
+            </h:panelGrid>
+        </h:form>
+        <h:form id="productoListForm" >
+            
+            <br/>
+            <p:panel id="tablaProductos" rendered="#{productoController.medidorSeleccionado}" >
+                <p:dataTable id="datalist" value="#{productoController.listaProductosConMedidor}" var="item"
+                             paginator="true"
+                             rowKey="#{item.idProducto}"
+                             rowIndexVar="i"
+                             rows="10"
+                             rowsPerPageTemplate="5,10"
+                             >
+                    <f:facet name="header">
+                        <h:outputLabel value="Producto vinculado al medidor: " style="font-size: 17px; font-weight: bold;"/>
+                        <p:outputLabel style="font-weight: bold; color: blue; font-size: 18px;" 
+                                       value="#{productoController.medidor.idMedidor}"/> 
+                    </f:facet>
+                    <p:column>
+
+                        <f:facet name="header">
+                            <h:outputText value="Identificador de producto"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idProducto}"/>
+                    </p:column>
+
+                    <p:column style="width:140px;text-align:center; background: #EBEDEB;" >
+                        <f:facet name="header">
+                            <h:outputText value="Accion"/>
+                        </f:facet>
+                        <p:commandButton value="Desvincular" action="#{productoController.desvincularProductoDeMedidor()}" />  
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+         
+        <p:dialog id="seleccionMedidor" visible="#{!productoController.medidorSeleccionado}" header="Seleccionar medidor" closable="false" resizable="false" width="450" position="center" modal="true" widgetVar="seleccionarMedidor">
+            
+            <h:form id="medidorListForm" >
+                <p:outputLabel value="Busque y seleccione el medidor del cual desea desvincular el producto" style="font-weight: bold; font-size: 16px;" />
+                <br/>
+                <h:panelGrid columns="2" >
+                    <p:outputLabel value="Buscar por:" />
+                    <p:inputText  placeholder="Identificador de medidor" style="width: 240px;"  value="#{medidorController.idMedidor}" >
+                        <p:ajax event="keyup" update="tablaMedidores" listener="#{medidorController.buscarPorId()}" />                                
+                    </p:inputText>                          
+                </h:panelGrid>
+                <br/>
+                <p:panel id="tablaMedidores">
+                    <p:dataTable id="datalist" value="#{medidorController.listaMedidoresActivosConVinculo}" var="item"
+                                 paginator="true"
+                                 rowKey="#{item.idMedidor}"
+                                 rows="10"
+                                 rowsPerPageTemplate="5,10"
+                                 >
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Identificador de medidor"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idMedidor}"/>
+                        </p:column>
+                        
+                        <p:column style="width:140px;text-align:center; background: #EBEDEB;" >
+                            <f:facet name="header">
+                                <h:outputText value="Accion"/>
+                            </f:facet>
+                            <p:commandButton 
+                                             actionListener="#{productoController.seleccionarMedidorDesvincular(item)}" 
+                                             icon="ui-icon-plus" 
+                                             value="Seleccionar"
+                                             ajax="true"
+                                             oncomplete="#{productoController.reiniciarVariable()}"
+                                             />
+                        </p:column>
+                    </p:dataTable>
+                    <h:panelGrid columns="2" >
+                    <p:commandButton id="clearButton"  
+                                     action="#{medidorController.cancelarSeleccionMedidorDesvincular()}" 
+                                     value="Cancelar"  
+                                     ajax="true"
+                                     />
+                </h:panelGrid>
+                </p:panel>
+            </h:form>
+        </p:dialog>
+        <p:dialog modal="true" header="Información" resizable="false" widgetVar="mensajeVinculo" closable="false">
+            <h:form>
+                <p:panelGrid style="text-align:left;" styleClass="panelgrid">
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="color: blue;" value="El producto fue desvinculado del medidor con exito."/>
+                        </p:column>                                
+                    </p:row>
+                    <p:row>
+                        <p:column width="250px;">
+                            <p:commandButton style="font-style: italic;margin-left: 60px;font-weight: normal;" 
+                                             value="Aceptar" onclick="PF('mensajeVinculo').hide()"
+                                             />                                    
+                        </p:column>
+
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+    </h:body>
+
+</html>

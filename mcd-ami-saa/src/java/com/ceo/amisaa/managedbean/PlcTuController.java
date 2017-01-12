@@ -41,6 +41,7 @@ public class PlcTuController implements Serializable {
 
     private List<PlcTu> items = null;
     private List<PlcTu> listaPlcTuSinVinculo;
+    private List<PlcTu> listaPlcTuConVinculo;
     private PlcTu objPlcTu;
     private Medidor medidor;
     private String dato;
@@ -116,6 +117,24 @@ public class PlcTuController implements Serializable {
         this.listaPlcTuSinVinculo = listaPlcTuSinVinculo;
     }
 
+    public List<PlcTu> getListaPlcTuConVinculo() {
+        this.getItems();
+        listaPlcTuConVinculo = new ArrayList<>();
+        for (int i = 0; i < items.size(); i++) {
+
+            if (items.get(i).getIdProducto() != null) {
+                listaPlcTuConVinculo.add(items.get(i));
+            }
+        }
+        
+        return listaPlcTuConVinculo;
+    }
+
+    public void setListaPlcTuConVinculo(List<PlcTu> listaPlcTuConVinculo) {
+        this.listaPlcTuConVinculo = listaPlcTuConVinculo;
+    }
+
+    
     public void ventanaEliminar(PlcTu selected) {
 
         RequestContext requestContext = RequestContext.getCurrentInstance();
@@ -208,6 +227,21 @@ public class PlcTuController implements Serializable {
         requestContext.execute("PF('mensajeVinculo').show()");
 
     }
+    
+    public void reiniciarVariablesVinculoPlcTuProducto() {
+
+        dato = "";
+        getListaPlcTuConVinculo();
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        FacesContext context = FacesContext.getCurrentInstance();
+        Application application = context.getApplication();
+        ViewHandler viewHandler = application.getViewHandler();
+        UIViewRoot viewRoot = viewHandler.createView(context, context.getViewRoot().getViewId());
+        context.setViewRoot(viewRoot);
+        context.renderResponse();
+        requestContext.execute("PF('seleccionarPlcTu').hide()");
+        requestContext.update("productoListForm");
+     }
 
     private void persist(PersistAction persistAction, String successMessage) {
         if (objPlcTu != null) {

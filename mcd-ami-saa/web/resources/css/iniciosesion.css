@@ -1,0 +1,92 @@
+
+#centrar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px; 
+    padding-top: 170px;
+
+
+}
+form {
+    background: white;
+    box-shadow: 8px 7px 72px 18px #6db3e4;
+    font-family: lato;
+    position: relative;
+    color: #333;
+    border-radius: 32px;
+    width: 34%;
+    height: 300px;
+}
+form header {
+    padding: 35px 15px;
+    color: black;
+    font-size: 1.2em;
+    font-weight: bold;
+    border-radius: 13px 13px 0 0;
+    text-align: center;
+
+}
+form label {
+    margin-left: 20px;
+    display: inline-block;
+    margin-top: 5px;
+    margin-bottom: 15px;
+
+}
+
+form button {
+    margin-top: 35px;
+    margin-bottom: 30px;
+    font-size: 17px !important;
+    font-weight: 400;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(51, 51, 51, 0.4);
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+}
+form button:hover {
+    background: #ff5252;
+}
+form .help {
+  margin-left: 60px;
+  font-size: 0.9em;
+  color: #777;
+  font-family: cursive;
+}
+
+
+.transparentBackground tr,
+.transparentBackground td { 
+    background: transparent !important; 
+    border: 0 !important;
+}
+
+.ui-widget {
+    font-size: 12px !important;
+}
+.ui-layout-north {
+    z-index: 20 !important;
+    overflow: visible !important;;
+}
+.ui-layout-north .ui-layout-unit-content {
+    overflow: visible !important;
+}
+.ui-widget-header {
+    text-align: center;
+    text-transform: uppercase;
+}
+.ui-button {
+    margin-top: 10px !important;
+}
+
+#footersesion {
+    margin:50px auto;
+    width:100%;
+    text-align:center;
+    height:80px;
+    /*background:url("../img/footer_bg.png") repeat-x;color:#fff;text-align:center*/
+    }
+#footersesion p {padding:10px;color:#8f887e}
+#footersesion a {color:white}
+#footersesion a:hover {color:#a90341}

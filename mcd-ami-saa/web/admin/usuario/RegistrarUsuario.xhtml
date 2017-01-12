@@ -134,11 +134,12 @@
                                     title="#{bundleRolUsuario.CreateUsuarioTitle_contrasena}" 
                                     required="true" requiredMessage="Campo obligatorio"
                                     >
-                            <f:validateLength minimum="6" />
+                            <f:validator validatorId="ValidarCampoMinimo6Caracteres"/>
+                            <p:ajax update="msgContrasena1" event ="keyup" />
                         </p:password>
                     </p:column>
                     <p:column>
-                        <p:message for="contrasena1" />
+                        <p:message for="contrasena1" id="msgContrasena1" />
                     </p:column>
                 </p:row>
                 <p:row>
@@ -152,11 +153,12 @@
                                     value="#{usuarioController.repetirContrasena}" 
                                     title="#{bundleRolUsuario.CreateUsuarioTitle_contrasena}" 
                                     required="true" requiredMessage="Campo obligatorio">
-                            <f:validateLength minimum="6" />
+                            <f:validator validatorId="ValidarCampoMinimo6Caracteres"/>
+                            <p:ajax update="msgContrasena2" event ="keyup" />
                         </p:password>
                     </p:column>
                     <p:column>
-                        <p:message for="contrasena2" />
+                        <p:message for="contrasena2" id="msgContrasena2"/>
                     </p:column>
                 </p:row>
                 <p:row>

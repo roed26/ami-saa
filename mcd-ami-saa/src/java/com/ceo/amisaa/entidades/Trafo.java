@@ -48,11 +48,11 @@ public class Trafo implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "latitud")
-    private double latitud;
+    private float latitud;
     @Basic(optional = false)
     @NotNull
     @Column(name = "longitud")
-    private double longitud;
+    private float longitud;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTrafo")
     private Collection<Macro> macroCollection;
     @OneToMany(mappedBy = "idTrafo")
@@ -67,7 +67,7 @@ public class Trafo implements Serializable {
         this.idTrafo = idTrafo;
     }
 
-    public Trafo(String idTrafo, double latitud, double longitud) {
+    public Trafo(String idTrafo, float latitud, float longitud) {
         this.idTrafo = idTrafo;
         this.latitud = latitud;
         this.longitud = longitud;
@@ -81,15 +81,15 @@ public class Trafo implements Serializable {
         this.idTrafo = idTrafo;
     }
 
-    public double getLatitud() {
+    public float getLatitud() {
         return latitud;
     }
 
-    public void setLatitud(double latitud) {
+    public void setLatitud(float latitud) {
         this.latitud = latitud;
     }
 
-    public double getLongitud() {
+    public float getLongitud() {
         return longitud;
     }
 

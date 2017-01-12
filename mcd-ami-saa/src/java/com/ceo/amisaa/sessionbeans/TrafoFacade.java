@@ -37,6 +37,12 @@ public class TrafoFacade extends AbstractFacade<Trafo> {
         List<Trafo> resultList = query.getResultList();
         return resultList;
     }
+    public boolean buscarPorIdBool(String idTrafo) {
+        Query query = getEntityManager().createNamedQuery("Trafo.findByIdTrafo");
+        query.setParameter("idTrafo", idTrafo);
+        List<Trafo> resultList = query.getResultList();
+        return !resultList.isEmpty();
+    }
     
     
     public Trafo buscarPorIdObj(String idTrafo) {

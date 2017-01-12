@@ -1,14 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.ceo.amisaa.managedbean;
 
+import com.ceo.amisaa.entidades.Cliente;
+import com.ceo.amisaa.entidades.EventosAmarre;
 import com.ceo.amisaa.entidades.EventosConsumoMacro;
 import com.ceo.amisaa.entidades.Macro;
+import com.ceo.amisaa.entidades.PlcMms;
+import com.ceo.amisaa.entidades.PlcTu;
 import com.ceo.amisaa.entidades.Producto;
 import com.ceo.amisaa.entidades.Trafo;
+import com.ceo.amisaa.servicios.ResultadosEstadistica;
+import com.ceo.amisaa.sessionbeans.EventosAmarreFacade;
 import com.ceo.amisaa.sessionbeans.EventosConsumoMacroFacade;
 import com.ceo.amisaa.sessionbeans.MacroFacade;
 import com.ceo.amisaa.sessionbeans.ProductoFacade;
@@ -34,6 +35,7 @@ import javax.inject.Named;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
+import org.primefaces.model.chart.PieChartModel;
 
 import org.primefaces.model.map.DefaultMapModel;
 import org.primefaces.model.map.LatLng;
@@ -48,6 +50,10 @@ public class AmarreController implements Serializable {
     private MacroFacade ejbMacro;
     @EJB
     private EventosConsumoMacroFacade ejbEventoConsumoMacro;
+    @EJB
+    private TrafoFacade ejbTrafo;
+    @EJB
+    private EventosAmarreFacade ejbEventosAmarre;
 
     private Date fechaInicio;
     private Date fechaInicioUsar;
@@ -63,15 +69,18 @@ public class AmarreController implements Serializable {
     private boolean torta;
     private boolean curvas;
     private SimpleDateFormat formatoFecha;
-    private CartesianChartModel consumo;
+    private CartesianChartModel porcentajeAmarre;
     private Trafo trafo;
     private Macro macro;
 
     //listas
     private List<EventosConsumoMacro> eventosConsumoMacro;
+    private List<EventosAmarre> eventosAmarre;
+
+    private PieChartModel modeloResultadosEstadisticas;
 
     public AmarreController() {
-
+        modeloResultadosEstadisticas = new PieChartModel();
         this.formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
     }
 
@@ -177,6 +186,14 @@ public class AmarreController implements Serializable {
         this.procesado = procesado;
     }
 
+    public PieChartModel getModeloResultadosEstadisticas() {
+        return modeloResultadosEstadisticas;
+    }
+
+    public void setModeloResultadosEstadisticas(PieChartModel modeloResultadosEstadisticas) {
+        this.modeloResultadosEstadisticas = modeloResultadosEstadisticas;
+    }
+
     public boolean isTrafoSeleccionado() {
         return trafoSeleccionado;
     }
@@ -193,12 +210,12 @@ public class AmarreController implements Serializable {
         this.formatoFecha = formatoFecha;
     }
 
-    public CartesianChartModel getConsumo() {
-        return consumo;
+    public CartesianChartModel getPorcentajeAmarre() {
+        return porcentajeAmarre;
     }
 
-    public void setConsumo(CartesianChartModel consumo) {
-        this.consumo = consumo;
+    public void setPorcentajeAmarre(CartesianChartModel porcentajeAmarre) {
+        this.porcentajeAmarre = porcentajeAmarre;
     }
 
     public Trafo getTrafo() {
@@ -220,20 +237,21 @@ public class AmarreController implements Serializable {
     public void seleccionarFecha() {
         RequestContext requestContext = RequestContext.getCurrentInstance();
         requestContext.execute("PF('seleccionarFecha').hide()");
+
         requestContext.execute("PF('seleccionarTrafo').show()");
     }
 
     public void seleccionarTrafo(Trafo trafo) {
         this.trafo = trafo;
+        estadistica();
         this.trafoSeleccionado = true;
-        this.procesado=false;
+        this.procesado = true;
         this.rangoFechaCambiado1 = false;
         this.rangoFechaCambiado2 = false;
         this.rangoFechaCambiado3 = false;
         RequestContext requestContext = RequestContext.getCurrentInstance();
         requestContext.execute("PF('seleccionarTrafo').hide()");
-        requestContext.execute("PF('seleccionarTipoGrafica').show()");
-
+        requestContext.update("estadisticas");
     }
 
     public void cambiarRangoFecha(ValueChangeEvent e) {
@@ -290,12 +308,86 @@ public class AmarreController implements Serializable {
 
     }
 
+    public void estadistica() {
+        porcentajeAmarre = new CartesianChartModel();
+        
+        final ChartSeries porcentajeAmarreDia = new ChartSeries("porcentaje de amarre");
+
+        List<Producto> listaProductosTrafo = new ArrayList<>();
+        List<ResultadosEstadistica> listaResultados = new ArrayList<>();
+        for (int i = 0; i < trafo.getProductoCollection().toArray().length; i++) {
+            listaProductosTrafo.add((Producto) trafo.getProductoCollection().toArray()[i]);
+        }
+
+        for (int j = 0; j < listaProductosTrafo.size(); j++) {
+            if (listaProductosTrafo.get(j).getPlcTuCollection().size() > 0) {
+                ResultadosEstadistica resultadosEstadistica = new ResultadosEstadistica();
+                resultadosEstadistica.setPlcTu((PlcTu) listaProductosTrafo.get(j).getPlcTuCollection().toArray()[0]);
+                listaResultados.add(resultadosEstadistica);
+            }
+        }
+        int contAmarrados = 1;
+        int contNoAmarrados = 0;
+
+        for (int i = 0; i < listaResultados.size(); i++) {
+            if (listaResultados.get(i).getAmarre() == 1) {
+                contAmarrados++;
+            } else {
+                contNoAmarrados++;
+            }
+        }
+        int contEncuetas = 0;
+
+        PlcMms plcMms = (PlcMms) this.trafo.getPlcMmsCollection().toArray()[0];
+        this.eventosAmarre = this.ejbEventosAmarre.listaEventosPorFecha(plcMms, fechaInicio, fechaFin);
+        if (this.eventosAmarre.size() > 0) {
+            int i = 0;
+            while (this.eventosAmarre.get(i).getFechaHora().getDay() == fechaInicio.getDay()) {
+                if (this.eventosAmarre.get(i).getMacPlcTu().equals(listaResultados.get(0).getPlcTu())) {
+                    contEncuetas++;
+                }
+                i++;
+            }
+            int cont = 0;
+            int respondio = 0;
+            int noRespondio = 0;
+            for (int j = 0; j < (this.eventosAmarre.size()); j++) {
+
+                if (this.eventosAmarre.get(j).getEstadoAmarre() == 0) {
+                    noRespondio++;
+                } else {
+                    respondio++;
+                }
+                if (cont == listaResultados.size()) {
+                    int total = noRespondio + respondio;
+                    double porcentajeAmarre = (respondio * 100) / total;
+                    porcentajeAmarreDia.set(formatoFecha.format(this.eventosAmarre.get(j).getFechaHora()), porcentajeAmarre);
+                    cont = 0;
+                    respondio = 0;
+                    noRespondio = 0;
+                } else {
+                    cont++;
+                }
+
+            }
+
+            porcentajeAmarre.addSeries(porcentajeAmarreDia);
+
+            modeloResultadosEstadisticas.set("Con amerre", contAmarrados);
+            modeloResultadosEstadisticas.set("Sin amarre", contNoAmarrados);
+
+            modeloResultadosEstadisticas.setTitle("Porcentajes amarre");
+            modeloResultadosEstadisticas.setLegendPosition("e");
+            modeloResultadosEstadisticas.setShowDataLabels(true);
+        }
+    }
+
     public void cambiarEstadoSeleccion() {
         this.trafoSeleccionado = false;
     }
 
     public void consultarConsumo() {
-        consumo = new CartesianChartModel();
+        porcentajeAmarre = new CartesianChartModel();
 
         final ChartSeries consumoMacromedidor = new ChartSeries("Consumo");
 
@@ -319,11 +411,11 @@ public class AmarreController implements Serializable {
 
                 }
             }
-            consumo.addSeries(consumoMacromedidor);
+            porcentajeAmarre.addSeries(consumoMacromedidor);
             sinConsumo = false;
         } else {
             consumoMacromedidor.set(0, 0);
-            consumo.addSeries(consumoMacromedidor);
+            porcentajeAmarre.addSeries(consumoMacromedidor);
             sinConsumo = true;
 
         }

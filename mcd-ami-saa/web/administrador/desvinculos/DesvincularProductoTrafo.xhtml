@@ -29,7 +29,7 @@
             </h:panelGrid>
             <br/>
             <p:panel id="tablaProductos" rendered="#{productoController.trafoSeleccionado}" >
-                <p:dataTable id="datalist" value="#{productoController.listaProductosSinTrafo}" var="item"
+                <p:dataTable id="datalist" value="#{productoController.listaProductosEnElTrafo}" var="item"
                              paginator="true"
                              rowKey="#{item.idProducto}"
                              rowIndexVar="i"
@@ -51,13 +51,13 @@
                         <f:facet name="header">
                             <h:outputText value="Accion"/>
                         </f:facet>
-                        <p:commandButton value="Vincular" action="#{productoController.vincularProductoATrafo(item)}" />  
+                        <p:commandButton value="Desvincular" action="#{productoController.desvincularProductoDeTrafo(item)}" />  
                     </p:column>
                 </p:dataTable>
             </p:panel>
         </h:form>
         <p:dialog header="Seleccionar Trafo" closable="false" visible="#{!productoController.trafoSeleccionado}" resizable="false" width="450" position="center" modal="true"  widgetVar="seleccionarTrafo">
-            <p:outputLabel value="Busque y seleccione el trafo al cual desea vincular el producto" style="background: #c2dfef; color: black;font-weight: bold; font-size: 16px;" />                    
+            <p:outputLabel value="Busque y seleccione el trafo del cual desea desvincular el producto" style="background: #c2dfef; color: black;font-weight: bold; font-size: 16px;" />                    
             <h:form id="trafoListForm">
                 <br/>
                 <h:panelGrid columns="2" id="panel">

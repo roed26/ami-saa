@@ -45,6 +45,7 @@ public class PlcMmsController implements Serializable {
     private Trafo trafo;
     private boolean trafoSeleccionado;
     private List<PlcMms> listaPlcMmsSinVinculo;
+    private List<PlcMms> listaPlcMmsVinculadosATrafo;
     private boolean maestroSeleccionado;
 
     public PlcMmsController() {
@@ -127,6 +128,18 @@ public class PlcMmsController implements Serializable {
 
     public void setListaPlcMmsSinVinculo(ArrayList<PlcMms> listaPlcMmsSinVinculo) {
         this.listaPlcMmsSinVinculo = listaPlcMmsSinVinculo;
+    }
+
+    public List<PlcMms> getListaPlcMmsVinculadosATrafo() {
+        listaPlcMmsVinculadosATrafo = new ArrayList<>();
+
+        listaPlcMmsVinculadosATrafo = this.ejbPlcMms.buscarPorIdTrafoLista(trafo);
+
+        return listaPlcMmsVinculadosATrafo;
+    }
+
+    public void setListaPlcMmsVinculadosATrafo(List<PlcMms> listaPlcMmsVinculadosATrafo) {
+        this.listaPlcMmsVinculadosATrafo = listaPlcMmsVinculadosATrafo;
     }
 
     public List<PlcMms> getItems() {
@@ -220,15 +233,32 @@ public class PlcMmsController implements Serializable {
     public void buscarDato() {
         this.items = ejbPlcMms.buscarPorDato(this.dato.toLowerCase());
         this.dato = "";
-        
+
     }
+
     public void reiniciarCampo() {
         this.dato = "";
         this.items = ejbPlcMms.findAll();
-        
-        
+
     }
+
     public void seleccionarTrafo(Trafo trafo) {
+        this.trafo = trafo;
+        trafoSeleccionado = true;
+
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        FacesContext context = FacesContext.getCurrentInstance();
+        Application application = context.getApplication();
+        ViewHandler viewHandler = application.getViewHandler();
+        UIViewRoot viewRoot = viewHandler.createView(context, context.getViewRoot().getViewId());
+        context.setViewRoot(viewRoot);
+        context.renderResponse();
+        requestContext.execute("PF('seleccionarTrafo').hide()");
+        requestContext.update("PlcMmsListForm");
+        requestContext.update("informacionTrafo");
+    }
+
+    public void seleccionarTrafoDesvincular(Trafo trafo) {
         this.trafo = trafo;
         trafoSeleccionado = true;
 
@@ -266,6 +296,16 @@ public class PlcMmsController implements Serializable {
     public void vincularTrafo(PlcMms plcMms) {
         this.objPlcMms = plcMms;
         this.objPlcMms.setIdTrafo(trafo);
+        this.ejbPlcMms.edit(this.objPlcMms);
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        trafoSeleccionado = false;
+        requestContext.update("PlcMmsListForm");
+        requestContext.execute("PF('mensajeDesvinculo').show()");
+    }
+
+    public void desvincularTrafo(PlcMms plcMms) {
+        this.objPlcMms = plcMms;
+        this.objPlcMms.setIdTrafo(null);
         this.ejbPlcMms.edit(this.objPlcMms);
         RequestContext requestContext = RequestContext.getCurrentInstance();
         trafoSeleccionado = false;

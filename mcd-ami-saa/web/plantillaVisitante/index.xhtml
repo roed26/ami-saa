@@ -1,37 +1,113 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./../templates/_visitantetmp.xhtml"
-                xmlns:p="http://primefaces.org/ui"
-                xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                
-                >
-    <h:outputStylesheet name="./css/style.css"/>
-    
-    <ui:define name="top">
-        <ui:include src="./menu.xhtml"/>
-    </ui:define>
-    <ui:define name="left">
-        <div>
-            <p:outputPanel id="menuPanel">
-                
-            </p:outputPanel>
-        </div>
-    </ui:define>
-    <ui:define name="content">
-        <p:outputPanel id="mainContentPanel">
-            
-        </p:outputPanel>
-    </ui:define>
-    <ui:define name="bottom">
-        <div id="footer">
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="./css/default.css"/>
+        <h:outputStylesheet name="./css/cssLayout.css"/>        
+        <h:outputStylesheet name="./css/style.css"/>
+        <h:outputStylesheet name="./css/iniciosesion.css"/>
+        <title>mcd-ami-saa</title>
+
+    </h:head>
+
+    <h:body>        
+        <div id="centrar">
+            <h:form >
+                <header>Iniciar sesión</header>
+                <p:panelGrid style="text-align: left" styleClass="panelgrid" class="transparentBackground" >
+                    <p:row >
+                        <p:column >
+                            <p:outputLabel value="Nombre de Usuario:" />
+                            <p:outputLabel style="color:red;"  value="*" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="nombreUsuario" value="#{usuarioSessionController.nombreDeUsuario}"  
+                                         label="NombreUsuario" required="true"  requiredMessage="Ingrese nombre de usuario"/>
+                        </p:column>
+                        <p:column  >
+                            <p:message for="nombreUsuario" id="msgUsuario" display="icon" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column >
+                            <p:outputLabel  value="Contraseña:" />
+                            <p:outputLabel style="color:red;" value="*" />
+                        </p:column>
+                        <p:column>
+                            <p:password id="contrasena"  value="#{usuarioSessionController.contrasena}"
+                                        label="contraseña" rendered="true" requiredMessage="Ingrese una contraseña">
+                                <f:validateLength minimum="6" />
+                                <p:ajax update="msgContrasena" event="keyup" />
+                            </p:password>                          
+                        </p:column>
+                        <p:column style="width: 40px; ">
+                            <p:message for="contrasena" id="msgContrasena" display="icon" />
+                        </p:column>
+                    </p:row>
+
+                    <!--<p:row>
+                        <p:column colspan="3" style="text-align: center">
+                            <div class="help">Entre 6 y 20 caracteres </div>
+                        </p:column>
+                    </p:row>-->
+
+                    <p:row>
+                        <p:column colspan="3" style="text-align: center; ">
+                            <br/>
+                            <p:link  style="color: blue; font-size: 14px" value="¿Has olvidado tu contraseña?">                                
+                            </p:link>                      
+
+
+                        </p:column>                        
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="3" style="text-align: center; ">
+                            <p:commandButton style="background: gainsboro; width: 150px; color:#000000; font-weight: bold; "
+                                             value="Iniciar sesión" action="#{usuarioSessionController.login()}"
+                                             ajax="false"
+                                             />
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </div>      
+        <div id="footersesion">
             <p:outputPanel id="buttomPanel">
                 <ui:include src="./footer.xhtml"/>
             </p:outputPanel>
         </div>
 
-    </ui:define>
 
-</ui:composition>
+
+        <p:dialog visible="#{usuarioSessionController.errorSesion}" 
+                  resizable="false" width="250"
+                  widgetVar="errorInicioSesion" closable="false"
+                  modal="true" 
+                  style="background: #C8CDD6"
+                  >
+            <p:panelGrid styleClass="panelgrid" style="text-align:center" >
+                <p:row >
+                    <p:column  style="background: #C8CDD6">
+                        <p:outputLabel value="El usuario o la contraseña no son correctos" />            
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column  style="background: #C8CDD6">
+                        <p:commandButton value="Aceptar" 
+                                         onclick="PF('errorInicioSesion').hide()"
+                                         />
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+
+        </p:dialog>
+
+    </h:body>
+
+</html>

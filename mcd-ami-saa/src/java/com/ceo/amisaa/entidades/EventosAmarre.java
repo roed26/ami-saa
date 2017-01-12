@@ -35,7 +35,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EventosAmarre.findByIdAmarre", query = "SELECT e FROM EventosAmarre e WHERE e.idAmarre = :idAmarre"),
     @NamedQuery(name = "EventosAmarre.findByEstadoAmarre", query = "SELECT e FROM EventosAmarre e WHERE e.estadoAmarre = :estadoAmarre"),
     @NamedQuery(name = "EventosAmarre.findByFechaHora", query = "SELECT e FROM EventosAmarre e WHERE e.fechaHora = :fechaHora"),
-    @NamedQuery(name = "EventosAmarre.findBylistaEventosPlcTu", query = "SELECT e FROM EventosAmarre e WHERE e.macPlcTu = :plcTu AND(e.fechaHora BETWEEN :fechaHoraInicio AND :fechaHoraFin)")
+    @NamedQuery(name = "EventosAmarre.findBylistaEventosPlcTu", query = "SELECT e FROM EventosAmarre e WHERE e.macPlcTu = :plcTu AND(e.fechaHora BETWEEN :fechaHoraInicio AND :fechaHoraFin)"),
+    @NamedQuery(name = "EventosAmarre.findBylistaEventosPorFecha", query = "SELECT e FROM EventosAmarre e WHERE e.macPlcMms = :plcMms AND (e.fechaHora BETWEEN :fechaHoraInicio AND :fechaHoraFin)")
 })
 public class EventosAmarre implements Serializable {
 

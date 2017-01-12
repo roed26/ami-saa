@@ -265,3 +265,17 @@ h3 {color:#3d3832;font-size:100%;margin:15px;border-bottom:1px solid #3d3832;pad
 table, table tr, table td {
     border: none !important;
 }
+#centrar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px; 
+    padding-top: 80px;
+
+
+}
+.transparentBackground tr,
+.transparentBackground td { 
+    background: transparent !important; 
+    border: 0 !important;
+}

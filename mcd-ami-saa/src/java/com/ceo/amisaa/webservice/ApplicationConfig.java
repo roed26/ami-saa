@@ -30,6 +30,7 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(com.ceo.amisaa.webservice.ClienteWebServices.class);
+        resources.add(com.ceo.amisaa.webservice.LoginWebServices.class);
         resources.add(com.ceo.amisaa.webservice.MacroWebServices.class);
         resources.add(com.ceo.amisaa.webservice.MedidorWebServices.class);
         resources.add(com.ceo.amisaa.webservice.PlcMcWebServices.class);

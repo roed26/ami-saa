@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </h:head>
+    <h:body >
+        <h:form id="datosIngreso">
+            <p:commandButton style="left: 820px" value="Seleccionar un nuevo producto" 
+                             onclick="PF('seleccionarPlcTu').show()" />
+        </h:form>
+        <h:form id="productoListForm" >
+            <br/>
+            <p:panel id="tablaProductos" rendered="#{productoController.plcTuSeleccionado}" >
+                <p:dataTable id="datalist" value="#{productoController.listaProductosEnElPlcTu}" var="item"
+                             paginator="true"
+                             rowKey="#{item.idProducto}"
+                             rowIndexVar="i"
+                             rows="10"
+                             rowsPerPageTemplate="5,10"
+                             >
+                    <f:facet name="header">
+                        <h:outputLabel value="Producto vinculado al PLC_TU: " style="font-size: 17px; font-weight: bold;"/>
+                        <h:outputLabel value="#{productoController.plcTu.idPlcTu} " style=" color: blue; font-size: 17px; font-weight: bold;"/>
+                    </f:facet>
+                    <p:column>
+
+                        <f:facet name="header">
+                            <h:outputText value="Identificador de producto"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idProducto}"/>
+                    </p:column>
+
+                    <p:column style="width:140px;text-align:center; background: #EBEDEB;" >
+                        <f:facet name="header">
+                            <h:outputText value="Accion"/>
+                        </f:facet>
+                        <p:commandButton value="Desvincular" action="#{productoController.desvincularProductoDePlcTu()}" />  
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+
+        <p:dialog id="seleccionPlcTu" closable="false" header="Seleccionar PLC_TU" visible="#{!productoController.plcTuSeleccionado}" resizable="false" width="850" position="center" modal="true" widgetVar="seleccionarPlcTu">
+
+            <h:form id="ListForm" >
+                <h:panelGrid style="margin-bottom: 5px;" columns="3" id="panel" >                      
+
+                    <h:outputLabel style="font-size: 14px; font-weight: bold;" value="Buscar PLC_TU " />
+                    <p:inputText style="width: 500px;" value="#{plcTuController.dato}"  
+                                 placeholder="Digite el identificador o la MAC del PLC_TU">
+                        <p:ajax event="keyup" update="datalist" listener="#{plcTuController.buscarDato()}" />                                
+                    </p:inputText>    
+                </h:panelGrid>
+                <p:dataTable style="text-align: center;" id="datalist" value="#{plcTuController.listaPlcTuConVinculo}" var="item"
+                             paginator="true"
+                             rowKey="#{item.idPlcTu}"
+                             rows="10"
+                             rowsPerPageTemplate="10,20,30,40,50"
+                             emptyMessage="No se encontraron dispositivos PLC_TU"
+
+                             >
+                    <f:facet name="header">
+                        <h:outputLabel value="Listado de dispositivos PLC_TU con un producto vinculado" style="font-size: 17px; font-weight: bold;"/>
+                    </f:facet>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Identificador PLC_TU"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idPlcTu}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header" >
+                            <h:outputText value="Dirección MAC PLC_TU"/>
+                        </f:facet>
+                        <h:outputText value="#{item.macPlcTu}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Versión firmware"/>
+                        </f:facet>
+                        <h:outputText value="#{item.versionFw}"/>
+                    </p:column>
+                    <p:column style="width:120px; text-align:center; background: #EBEDEB;" >
+                        <f:facet name="header">
+                            <h:outputText value="Acción"/>
+                        </f:facet>
+                        <p:commandButton action="#{productoController.seleccionarPlcTu(item)}"
+                                         icon="ui-icon-plus" 
+                                         value="Seleccionar"  
+                                         ajax="true"
+                                         oncomplete="#{productoController.reiniciarVariable()}"
+                                         />                    
+                    </p:column>
+                </p:dataTable>
+                <h:panelGrid columns="2" >
+                    <p:commandButton id="viewButton"  
+                                     value="Cancelar"  
+                                     ajax="true"
+                                     action="#{plcTuController.reiniciarVariablesVinculoPlcTuProducto()}"
+                                     />
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+
+
+        <p:dialog modal="true" id="msjVinculo" header="Información" resizable="false" widgetVar="mensajeDesvinculo" closable="false">
+            <h:form>
+                <p:panelGrid style="text-align:left;" styleClass="panelgrid">
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="color: blue;" value="El producto fue desvinculado del PLC_TU con exito."/>
+                        </p:column>                                
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:commandButton style="font-style: italic; font-weight: normal;" 
+                                             value="Aceptar" onclick="PF('mensajeDesvinculo').hide()"
+                                             ajax="false"
+                                             update="@all"
+                                             />                                    
+                        </p:column>
+
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+    </h:body>
+
+
+</html>

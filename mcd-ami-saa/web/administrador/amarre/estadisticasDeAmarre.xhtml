@@ -15,14 +15,79 @@
             <h:panelGrid columns="2"> 
 
                 <p:commandButton style="left: 840px;" value="Realizar nueva consulta" 
-                                 onclick="PF('seleccionarCliente').show()" />
+                                 onclick="PF('seleccionarFecha').show()" />
             </h:panelGrid>
             <br/>
             <br/>
         </h:form>
+        <!--<p:outputLabel value="Seleccione el (los) tipo(s) de grafica que desea visualizar"/>
+        <h:form>
+            <p:panelGrid>
+                <p:row>
+                    <p:column>
+                        <h:outputText value="Histograma: " />
+                    </p:column>
+                    <p:column>
+                        <p:selectBooleanCheckbox value="#{amarreController.histograma}" />
+                    </p:column>
+                    <p:column>
+                        <h:outputText value="Curva " />
+                    </p:column>
+                    <p:column>
+                        <p:selectBooleanCheckbox value="#{amarreController.histograma}" />
+                    </p:column>
+                    <p:column>
+                        <h:outputText value="Tortas " />
+                    </p:column>
+                    <p:column>
+                        <p:selectBooleanCheckbox value="#{amarreController.histograma}" />
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
 
+        </h:form>-->
         <p:separator/>
-        <h:form id="clienteSeleccionado">
+        <h:form id="estadisticas">
+            <p:panelGrid>
+                <p:row>
+                    <p:column rendered="#{amarreController.trafoSeleccionado}">
+                        <p:chart rendered="#{amarreController.procesado}" type="pie" widgetVar="browserChart1" model="#{amarreController.modeloResultadosEstadisticas}" style="width:250px;height:200px"  />
+                    </p:column>
+
+                </p:row>
+                <p:row>
+                    <p:column colspan="2" style="background: #EBEDEB; font-weight: bold" rendered="#{amarreController.trafoSeleccionado}">
+                        <p:outputLabel value="Porcentaje de dispositivos PLC_TU que repondieron las encuestas realizadas por el maestro"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column colspan="2" rendered="#{amarreController.trafoSeleccionado}">
+                        <p:barChart value="#{amarreController.porcentajeAmarre}" legendPosition="ne" 
+                                     style="height:400px; width: 850px; color: black; text-align: center;"
+                                    xaxisLabel="dias" yaxisLabel="% Respuesta" max="100" 
+                                    xaxisAngle="30"
+                                    />
+                    </p:column>
+
+                </p:row>
+                <p:row>
+                    <p:column style="background: #EBEDEB" rendered="#{amarreController.trafoSeleccionado}">
+                        <p:outputLabel value="Mejor PLC_TU"/>
+                    </p:column>
+                    <p:column style="background: #EBEDEB" rendered="#{amarreController.trafoSeleccionado}">
+                        <p:outputLabel value="Peor PLC_TU"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column rendered="#{amarreController.trafoSeleccionado}">
+                        <p:outputLabel value="Mejor PLC_TU"/>
+                    </p:column>
+                    <p:column rendered="#{amarreController.trafoSeleccionado}">
+                        <p:outputLabel value="Mejor PLC_TU"/>
+                    </p:column>
+                </p:row>
+                
+            </p:panelGrid>
 
 
         </h:form>
@@ -184,44 +249,10 @@
                     <p:commandButton id="viewButton"  
                                      value="Cancelar"  
                                      ajax="true"
-                                     action="#{amarreController.reiniciarVariables()}"
+
                                      />
                 </h:panelGrid>
 
-            </h:form>
-        </p:dialog>
-        <p:dialog closable="false"  header="Seleccionar tipos de grafica" resizable="false" position="center" modal="true"  widgetVar="seleccionarTipoGrafica">
-            <p:outputLabel value="Seleccione el (los) tipo(s) de grafica que desea visualizar"/>
-            <h:form>
-                <p:panelGrid>
-                    <p:row>
-                        <p:column>
-                            <h:outputText value="Histograma: " />
-                        </p:column>
-                        <p:column>
-                            <p:selectBooleanCheckbox value="#{amarreController.histograma}" />
-                        </p:column>
-                        <p:column>
-                            <h:outputText value="Curva " />
-                        </p:column>
-                        <p:column>
-                            <p:selectBooleanCheckbox value="#{amarreController.histograma}" />
-                        </p:column>
-                        <p:column>
-                            <h:outputText value="Tortas " />
-                        </p:column>
-                        <p:column>
-                            <p:selectBooleanCheckbox value="#{amarreController.histograma}" />
-                        </p:column>
-                    </p:row>
-                    <p:row>
-                        <p:column>
-                            <p:commandButton value="Aceptar" action="#{amarreController.procesarConsulta()}"/>
-                        </p:column>
-                    </p:row>                  
-
-                </p:panelGrid>
-                
             </h:form>
         </p:dialog>
 

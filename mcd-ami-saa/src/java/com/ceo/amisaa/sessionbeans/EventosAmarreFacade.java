@@ -6,6 +6,7 @@
 package com.ceo.amisaa.sessionbeans;
 
 import com.ceo.amisaa.entidades.EventosAmarre;
+import com.ceo.amisaa.entidades.PlcMms;
 import com.ceo.amisaa.entidades.PlcTu;
 import java.util.Date;
 import java.util.List;
@@ -36,6 +37,14 @@ public class EventosAmarreFacade extends AbstractFacade<EventosAmarre> {
     public List<EventosAmarre> listaEventos(PlcTu plcTu, Date fechaHoraInicio, Date fechaHoraFin) {
         Query query = getEntityManager().createNamedQuery("EventosAmarre.findBylistaEventosPlcTu");
         query.setParameter("plcTu", plcTu);
+        query.setParameter("fechaHoraInicio", fechaHoraInicio);
+        query.setParameter("fechaHoraFin", fechaHoraFin);
+        List<EventosAmarre> resultList = query.getResultList();
+        return resultList;
+    }
+    public List<EventosAmarre> listaEventosPorFecha(PlcMms plcMms,Date fechaHoraInicio, Date fechaHoraFin) {
+        Query query = getEntityManager().createNamedQuery("EventosAmarre.findBylistaEventosPorFecha");
+        query.setParameter("plcMms", plcMms);
         query.setParameter("fechaHoraInicio", fechaHoraInicio);
         query.setParameter("fechaHoraFin", fechaHoraFin);
         List<EventosAmarre> resultList = query.getResultList();

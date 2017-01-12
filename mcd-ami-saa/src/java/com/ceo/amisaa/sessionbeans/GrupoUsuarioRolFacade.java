@@ -30,11 +30,34 @@ public class GrupoUsuarioRolFacade extends AbstractFacade<GrupoUsuarioRol> {
     public GrupoUsuarioRolFacade() {
         super(GrupoUsuarioRol.class);
     }
-    public List<GrupoUsuarioRol> buscarPorNombreUsuario(String nombreUsuario)
-    {
+
+    public List<GrupoUsuarioRol> buscarPorNombreUsuario(String nombreUsuario) {
         Query query = getEntityManager().createNamedQuery("GrupoUsuarioRol.findByNombreUsuario");
         query.setParameter("nombreUsuario", nombreUsuario);
         List<GrupoUsuarioRol> resultList = query.getResultList();
         return resultList;
+    }
+
+    public GrupoUsuarioRol buscarPorNombreUsuarioObj(String nombreUsuario) {
+        Query query = getEntityManager().createNamedQuery("GrupoUsuarioRol.findByNombreUsuario");
+        query.setParameter("nombreUsuario", nombreUsuario);
+        List<GrupoUsuarioRol> resultList = query.getResultList();
+        if (resultList.size() > 0) {
+            return resultList.get(0);
+        } else {
+            return null;
+        }
+
+    }
+    public boolean buscarPorNombreUsuarioBool(String nombreUsuario) {
+        Query query = getEntityManager().createNamedQuery("GrupoUsuarioRol.findByNombreUsuario");
+        query.setParameter("nombreUsuario", nombreUsuario);
+        List<GrupoUsuarioRol> resultList = query.getResultList();
+        if (resultList.size() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 }

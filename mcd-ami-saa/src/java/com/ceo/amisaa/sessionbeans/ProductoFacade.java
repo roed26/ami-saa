@@ -7,6 +7,7 @@ package com.ceo.amisaa.sessionbeans;
 
 import com.ceo.amisaa.entidades.Producto;
 import com.ceo.amisaa.entidades.Cliente;
+import com.ceo.amisaa.entidades.PlcMc;
 import com.ceo.amisaa.entidades.Trafo;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -45,16 +46,39 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         }
         return producto;
     }    
+    
+    public List<Producto> buscarProductosDeCliente(Cliente cliente) {
+        
+        Query query = getEntityManager().createNamedQuery("Producto.findByCedula");
+        query.setParameter("cedula", cliente);
+        List<Producto> resultList = query.getResultList();
+        
+        return resultList;
+        
+        
+    }    
     public List<Producto> buscarPorId(String idProducto) {
         Query query = getEntityManager().createNamedQuery("Producto.findByProductos");
         query.setParameter("idProducto", "%" + idProducto + "%");
         List<Producto> resultList = query.getResultList();
         return resultList;
     }
-    
+    public boolean buscarPorIdBool(String idProducto) {
+        Query query = getEntityManager().createNamedQuery("Producto.findByIdProducto");
+        query.setParameter("idProducto", idProducto);
+        List<Producto> resultList = query.getResultList();
+        return !resultList.isEmpty();
+    }
     public List<Producto> buscarListaProductosTrafo(Trafo idTrafo) {
         Query query = getEntityManager().createNamedQuery("Producto.findByProductosTrafo");
         query.setParameter("idTrafo", idTrafo );
+        List<Producto> resultList = query.getResultList();
+        return resultList;
+    }
+    
+    public List<Producto> buscarListaProductosPlcMc(PlcMc plcMc) {
+        Query query = getEntityManager().createNamedQuery("Producto.findByProductosPlcMc");
+        query.setParameter("macPlcMc", plcMc );
         List<Producto> resultList = query.getResultList();
         return resultList;
     }

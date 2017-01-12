@@ -40,6 +40,10 @@ public class RoutingController implements Serializable {
         this.ruta = "/administrador/plcTu/VincularPlcTu.xhtml";
     }
 
+    public void irDesvincularPlcTu() {
+        this.ruta = "/administrador/desvinculos/DesvincularProductoPlcTu.xhtml";
+    }
+
     public void irGestionPlcMc() {
         this.ruta = "/administrador/plcMc/listadoPlcMc.xhtml";
     }
@@ -51,17 +55,31 @@ public class RoutingController implements Serializable {
     public void irVincularPlcMc() {
         this.ruta = "/administrador/plcMc/VincularPlcMc.xhtml";
     }
+    public void irDesvincularPlcMc() {
+        this.ruta = "/administrador/desvinculos/DesvincularProductosPlcMc.xhtml";
+    }
 
     public void irVincularProductoTrafo() {
         this.ruta = "/administrador/vinculos/VincularProductoTrafo.xhtml";
     }
 
+    public void irDesvincularProductoTrafo() {
+        this.ruta = "/administrador/desvinculos/DesvincularProductoTrafo.xhtml";
+    }
+
     public void irVincularProductoCliente() {
         this.ruta = "/administrador/vinculos/VincularProductoCliente.xhtml";
+    }
+    public void irDesvincularProductoCliente() {
+        this.ruta = "/administrador/desvinculos/DesvincularProductoCliente.xhtml";
     }
 
     public void irVincularProductoMedidor() {
         this.ruta = "/administrador/vinculos/VincularProductoMedidor.xhtml";
+    }
+
+    public void irDesvincularProductoMedidor() {
+        this.ruta = "/administrador/desvinculos/DesvincularProductoMedidor.xhtml";
     }
 
     public void irGestionPlcMms() {
@@ -74,6 +92,10 @@ public class RoutingController implements Serializable {
 
     public void irVincularPlcMms() {
         this.ruta = "/administrador/plcMms/VincularPlcMms.xhtml";
+    }
+
+    public void irDesvincularPlcMms() {
+        this.ruta = "/administrador/desvinculos/DesvincularPlcMms.xhtml";
     }
 
     public void irEstadoAmarre() {
@@ -134,6 +156,22 @@ public class RoutingController implements Serializable {
 
     public void irGestionarCliente() {
         this.ruta = "/admin/cliente/ListadoClientes.xhtml";
+    }
+
+    public void irRegistrarProducto() {
+        this.ruta = "/administrador/producto/RegistrarProducto.xhtml";
+    }
+
+    public void irGestionarProducto() {
+        this.ruta = "/administrador/producto/ListadoProductos.xhtml";
+    }
+
+    public void irRegistrarTrafo() {
+        this.ruta = "/administrador/trafo/RegistrarTrafo.xhtml";
+    }
+
+    public void irGestionarTrafo() {
+        this.ruta = "/administrador/trafo/ListadoTrafos.xhtml";
     }
 
     public void irGestionarUsuario() {

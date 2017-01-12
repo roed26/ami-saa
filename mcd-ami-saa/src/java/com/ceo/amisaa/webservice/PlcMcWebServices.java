@@ -66,7 +66,7 @@ public class PlcMcWebServices extends AbstractFacade<PlcMc> {
 
     @GET
     @Override
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
     public List<PlcMc> findAll() {
         return super.findAll();
     }

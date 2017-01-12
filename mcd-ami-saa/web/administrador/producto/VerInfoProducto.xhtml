@@ -13,7 +13,7 @@
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{productoController.selected != null}">
                         <h:outputText value="#{bundle.ViewProductoLabel_id}"/>
-                        <h:outputText value="#{productoController.selected.id}" title="#{bundle.ViewProductoTitle_id}"/>
+                        <h:outputText value="#{productoController.selected.idProducto}" title="#{bundle.ViewProductoTitle_id}"/>
                         <h:outputText value="#{bundle.ViewProductoLabel_estado}"/>
                         <h:outputText value="#{productoController.selected.estado}" title="#{bundle.ViewProductoTitle_estado}"/>
                         <h:outputText value="#{bundle.ViewProductoLabel_latitud}"/>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </h:head>
+    <h:body>
+        <h:form id="datosIngreso">
+            <h:panelGrid columns="2"> 
+                <p:commandButton style="left: 830px" 
+                                 value="Seleccionar un nuevo cliente"
+                                 onclick="PF('seleccionarCliente').show()" />
+            </h:panelGrid>
+        </h:form>
+        <h:form id="productoListForm" >
+
+            <h:panelGrid columns="2" rendered="#{productoController.clienteSeleccionado}" >
+                <p:outputLabel value="Buscar por:" />
+                <p:inputText  placeholder="Identificador de producto" style="width: 240px;"  value="#{productoController.idProducto}" >
+                    <p:ajax event="keyup" update="tablaProductos" listener="#{productoController.buscarPorId()}" />                                
+                </p:inputText>                          
+            </h:panelGrid>
+            <br/>
+            <p:panel id="tablaProductos" rendered="#{productoController.clienteSeleccionado}" >
+                <p:dataTable id="datalist" value="#{productoController.listaProductosDeCliente}" var="item"
+                             paginator="true"
+                             rowKey="#{item.idProducto}"
+                             rowIndexVar="i"
+                             rows="10"
+                             rowsPerPageTemplate="5,10"
+                             >
+                    <f:facet name="header">
+                        <h:outputLabel value="Listado de productos vinculados al cliente: " style="font-size: 17px; font-weight: bold;"/>
+                        <p:outputLabel style="font-weight: bold; color: blue; font-size: 18px;" 
+                               value="#{productoController.idCliente}"/> 
+                    </f:facet>
+                    <p:column>
+
+                        <f:facet name="header">
+                            <h:outputText value="Identificador de producto"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idProducto}"/>
+                    </p:column>
+
+                    <p:column style="width:140px;text-align:center; background: #EBEDEB;" >
+                        <f:facet name="header">
+                            <h:outputText value="Accion"/>
+                        </f:facet>
+                        <p:commandButton value="Desvincular" action="#{productoController.desvincularProductoDeCliente(item)}" />  
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+        <p:dialog header="Seleccionar cliente" closable="flase" visible="#{!productoController.clienteSeleccionado}" resizable="false" width="850" position="center" modal="true"  widgetVar="seleccionarCliente">
+            <p:outputLabel value="Busque y seleccione el cliente que desea vincular al producto" style="background: #c2dfef; color: black;font-weight: bold; font-size: 16px;" />                    
+            <h:form id="ClienteListForm">
+                <br/>
+                <h:panelGrid columns="2">
+                    <p:outputLabel value="Buscar por:" />
+                    <p:inputText  placeholder="Nombres, apellidos o cédula " style="width: 240px;"  value="#{clienteController.nombreOApellidos}" >
+                        <p:ajax event="keyup" update="datalist" listener="#{clienteController.buscarPorNombresOApellidos()}" />                                
+                    </p:inputText>                          
+                </h:panelGrid>
+                <br/>
+
+                <p:dataTable id="datalist" value="#{clienteController.listaClientes}" var="item"
+                             paginator="true"
+                             rowKey="#{item.cedula}"
+                             rows="7"
+                             >
+
+                    <p:column >
+                        <f:facet name="header">
+                            <h:outputText value="Cédula"/>
+                        </f:facet>
+                        <h:outputText value="#{item.cedula}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Nombres"/>
+                        </f:facet>
+                        <h:outputText value="#{item.nombres}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Apellidos"/>
+                        </f:facet>
+                        <h:outputText value="#{item.apellidos}"/>
+                    </p:column>
+
+                    <p:column style="text-align: center; width: 120px; background: #EBEDEB;">
+                        <f:facet name="header">
+                            <h:outputText value="Accion"/>
+                        </f:facet>
+                        <p:commandButton id="viewButton"  
+                                         action="#{productoController.seleccionarCliente(item)}" 
+                                         icon="ui-icon-plus" 
+                                         value="Seleccionar"  
+                                         oncomplete="#{productoController.reiniciarVariable()}"
+                                         />
+                    </p:column>
+                </p:dataTable>
+                <h:panelGrid columns="2" >
+                    <p:commandButton id="viewButton"  
+                                     action="#{clienteController.reiniciarVaariables()}" 
+                                     value="Cancelar"  
+                                     ajax="true"
+                                     />
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+        <p:dialog modal="true" header="Información" resizable="false" widgetVar="mensajeVinculo" closable="false">
+            <h:form>
+                <p:panelGrid style="text-align:left;" styleClass="panelgrid">
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="color: blue;" value="El cliente fue desvinculado dell producto con exito."/>
+                        </p:column>                                
+                    </p:row>
+                    <p:row>
+                        <p:column width="250px;">
+                            <p:commandButton style="font-style: italic;margin-left: 60px;font-weight: normal;" 
+                                             value="Aceptar" onclick="PF('mensajeVinculo').hide()"
+                                             />                                    
+                        </p:column>
+
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+    </h:body>
+
+</html>

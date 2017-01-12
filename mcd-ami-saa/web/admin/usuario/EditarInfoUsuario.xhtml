@@ -32,7 +32,10 @@
                                 <p:commandLink style="color: blue;" value="Modificar" action="#{usuarioController.mostrarModificarNombres()}"/>
                             </p:column>
                             <p:column  rendered="#{!usuarioController.mostrarNombres}">
-                                <p:inputText value="#{usuarioController.nombres}"/>  
+                                <p:inputText id="nombres" value="#{usuarioController.nombres}">
+                                    <f:validator validatorId="ValidarCampoSoloLetrasYespacio"/>
+                                    <p:ajax update="msgNombres" event ="keyup" />
+                                </p:inputText>  
                             </p:column>
                             <p:column  rendered="#{!usuarioController.mostrarNombres}">
                                 <p:commandLink style="color: blue;" value="Aceptar" update="display,:UsuarioListForm:datalist" action="#{usuarioController.actualizarNombres()}"
@@ -41,6 +44,15 @@
                                                action="#{usuarioController.cancelarActualizarNombres()}"
                                                />
                             </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+
+                            </p:column>
+                            <p:column colspan="3" >
+                                <p:message for="nombres" id="msgNombres"/>
+                            </p:column>
+
                         </p:row>
                         <p:row>
                             <p:column>
@@ -53,7 +65,10 @@
                                 <p:commandLink style="color: blue;" value="Modificar" action="#{usuarioController.mostrarModificarApellidos()}"/>
                             </p:column>
                             <p:column  rendered="#{!usuarioController.mostrarApellidos}">
-                                <p:inputText value="#{usuarioController.apellidos}"/>  
+                                <p:inputText id="apellidos" value="#{usuarioController.apellidos}">
+                                    <f:validator validatorId="ValidarCampoSoloLetrasYespacio"/>
+                                    <p:ajax update="msgApellidos" event ="keyup" />
+                                </p:inputText>
                             </p:column>
                             <p:column  rendered="#{!usuarioController.mostrarApellidos}">
                                 <p:commandLink style="color: blue;" value="Aceptar" update="display,:UsuarioListForm:datalist" action="#{usuarioController.actualizarApellidos()}"
@@ -62,6 +77,15 @@
                                                action="#{usuarioController.cancelarActualizarApellidos()}"
                                                />
                             </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+
+                            </p:column>
+                            <p:column colspan="3">
+                                <p:message for="apellidos" id="msgApellidos"/>
+                            </p:column>
+
                         </p:row>
                         <p:row>
                             <p:column>
@@ -74,7 +98,10 @@
                                 <p:commandLink style="color: blue;" value="Modificar" action="#{usuarioController.mostrarModificarCelular()}"/>
                             </p:column>
                             <p:column  rendered="#{!usuarioController.mostrarCelular}">
-                                <p:inputText value="#{usuarioController.celular}"/>  
+                                <p:inputText id="celular" value="#{usuarioController.celular}">  
+                                    <f:validator validatorId="ValidarCampoNumerico"/>
+                                    <p:ajax update="msgCelular" event ="keyup" />
+                                </p:inputText>
                             </p:column>
                             <p:column  rendered="#{!usuarioController.mostrarCelular}">
                                 <p:commandLink style="color: blue;" value="Aceptar" update="display,:UsuarioListForm:datalist" action="#{usuarioController.actualizarCelular()}"
@@ -84,7 +111,15 @@
                                                />
                             </p:column>
                         </p:row>
+                        <p:row>
+                            <p:column>
 
+                            </p:column>
+                            <p:column colspan="3">
+                                <p:message for="celular" id="msgCelular"/>
+                            </p:column>
+
+                        </p:row>
                         <p:row>
                             <p:column>
                                 <p:outputLabel value="Nombre de usuario" />
@@ -96,7 +131,8 @@
                                 <p:commandLink style="color: blue;" value="Modificar" action="#{usuarioController.mostrarModificarNombreDeUsuario()}"/>
                             </p:column>
                             <p:column  rendered="#{!usuarioController.mostrarNombreDeUsuario}">
-                                <p:inputText value="#{usuarioController.nombreDeUsuario}"/>  
+                                <p:inputText id="nombreUsuario"  value="#{usuarioController.nombreDeUsuario}">  
+                                </p:inputText>
                             </p:column>
                             <p:column  rendered="#{!usuarioController.mostrarNombreDeUsuario}">
                                 <p:commandLink style="color: blue;" value="Aceptar" update="display,:UsuarioListForm:datalist" action="#{usuarioController.actualizarNombreDeUsuario()}"
@@ -108,6 +144,16 @@
                         </p:row>
                         <p:row>
                             <p:column>
+
+                            </p:column>
+                            <p:column colspan="3">
+                                <p:message for="nombreUsuario" id="msgNombreUsuario"/>
+                            </p:column>
+
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
                                 <p:outputLabel value="Contraseña" />
                             </p:column>
                             <p:column rendered="#{usuarioController.mostrarContrasena}">
@@ -117,7 +163,8 @@
                                 <p:commandLink style="color: blue;" value="Modificar" action="#{usuarioController.mostrarModificarContrasena()}"/>
                             </p:column>
                             <p:column  rendered="#{!usuarioController.mostrarContrasena}">
-                                <p:password value="#{usuarioController.contrasena}"/>  
+                                <p:password id="contrasena" value="#{usuarioController.contrasena}">
+                                </p:password>  
                             </p:column>
                             <p:column  rendered="#{!usuarioController.mostrarContrasena}">
                                 <p:commandLink style="color: blue;" value="Aceptar" 
@@ -129,15 +176,27 @@
                                                />
                             </p:column>
                         </p:row>
-                        
-                        <p:outputLabel value="#{bundleRolUsuario.EditUsuarioLabel_contrasena}" for="contrasena" />
-                        <p:inputText id="contrasena" value="#{usuarioController.usuario.contrasena}" title="#{bundleRolUsuario.EditUsuarioTitle_contrasena}" required="true" requiredMessage="#{bundleRolUsuario.EditUsuarioRequiredMessage_contrasena}"/>
+                        <p:row>
+                            <p:column>
+
+                            </p:column>
+                            <p:column colspan="3">
+                                <p:message for="contrasena" id="msgContrasena"/>
+                            </p:column>
+
+                        </p:row>
                     </p:panelGrid>
-                    
+
                     <p:commandButton value="Cerrar" onclick="UsuarioEditDialog.hide()" action="#{usuarioController.reiniciarObj()}"/>
                 </h:panelGroup>
             </h:form>
         </p:dialog>
-
+        <p:dialog header="Información" modal="true" position="center" widgetVar="mensajeRegistroExitoso" closable="false">
+            <p:messages  style="font-size: 15px;"  showDetail="true" autoUpdate="true"/>
+            <h:form>
+                <p:commandButton  value="Aceptar" style="font-weight: normal;"
+                                  onclick="PF('mensajeRegistroExitoso').hide()"/>
+            </h:form>
+        </p:dialog>
     </ui:composition>
 </html>

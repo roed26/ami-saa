@@ -152,6 +152,20 @@ public class PlcMcController implements Serializable {
         return items;
     }
 
+    public List<PlcMc> getListaPlcMcConVinculo() {
+        List<PlcMc> listaPlcMcConVinculo = new ArrayList<>();
+        if (items == null) {
+            items = getFacade().findAll();
+        }
+        
+        for (int i = 0; i < items.size(); i++) {
+            if(items.get(i).getProductoCollection().toArray().length>0){
+             listaPlcMcConVinculo.add(items.get(i));
+            }
+        }
+        
+        return listaPlcMcConVinculo;
+    }
     public boolean isEstadoActivo() {
         if (objPlcMc.getEstado().equalsIgnoreCase("A")) {
             estadoActivo = true;
@@ -300,6 +314,7 @@ public class PlcMcController implements Serializable {
 
     public void seleccionarPlcMc(PlcMc plcMc) {
         idPlcMc = plcMc.getIdPlcMc();
+        this.objPlcMc=plcMc;
         plcMcSeleccionado = true;
         dato = "";
         RequestContext requestContext = RequestContext.getCurrentInstance();
@@ -310,7 +325,7 @@ public class PlcMcController implements Serializable {
     }
 
     public void vincularProductos() {
-        this.objPlcMc = ejbPlcMc.buscarPorId(idPlcMc);
+        
         if (this.productos.size() > 0) {
             for (int i = 0; i < this.productos.size(); i++) {
                 Producto producto = this.productos.get(i);
@@ -324,6 +339,25 @@ public class PlcMcController implements Serializable {
             requestContext.execute("PF('mensajeVinculo').show()");
             this.objPlcMc = new PlcMc();
         }
+        this.items=ejbPlcMc.findAll();
+    }
+    
+    public void desvincularProductos() {
+        
+        if (this.productos.size() > 0) {
+            for (int i = 0; i < this.productos.size(); i++) {
+                Producto producto = this.productos.get(i);
+                producto.setMacPlcMc(null);
+                this.ejbProducto.edit(producto);
+            }
+            this.plcMcSeleccionado = false;
+            RequestContext requestContext = RequestContext.getCurrentInstance();
+            requestContext.update("informacionPlcMc");
+            requestContext.update("ProductosListForm");
+            requestContext.execute("PF('mensajeVinculo').show()");
+            this.objPlcMc = new PlcMc();
+        }
+        this.items=ejbPlcMc.findAll();
     }
 
     public void registrarPlcMc() {

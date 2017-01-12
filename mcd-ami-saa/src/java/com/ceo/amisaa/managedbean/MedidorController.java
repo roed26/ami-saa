@@ -104,8 +104,19 @@ public class MedidorController implements Serializable {
 
     public List<Medidor> getListaMedidoresActivos() {
         List<Medidor> lista = new ArrayList<>();
+        this.items= ejbFacade.findAll();
         for (int i = 0; i < items.size(); i++) {
             if (items.get(i).getIdProducto() == null && items.get(i).getEstado().equalsIgnoreCase("FA")) {
+                lista.add(items.get(i));
+            }
+        }
+        return lista;
+    }
+    
+    public List<Medidor> getListaMedidoresActivosConVinculo() {
+        List<Medidor> lista = new ArrayList<>();
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).getIdProducto() != null && items.get(i).getEstado().equalsIgnoreCase("FA")) {
                 lista.add(items.get(i));
             }
         }
@@ -160,9 +171,33 @@ public class MedidorController implements Serializable {
         idMedidor = "";
         items = ejbFacade.findAll();
         RequestContext requestContext = RequestContext.getCurrentInstance();
+        FacesContext context = FacesContext.getCurrentInstance();
+        Application application = context.getApplication();
+        ViewHandler viewHandler = application.getViewHandler();
+        UIViewRoot viewRoot = viewHandler.createView(context, context.getViewRoot().getViewId());
+        context.setViewRoot(viewRoot);
+        context.renderResponse();
         requestContext.execute("PF('seleccionarMedidor').hide()");
+        requestContext.update("productoListForm");
+        requestContext.update("informacionMedidor");
+        
     }
 
+    public void cancelarSeleccionMedidorDesvincular() {
+        idMedidor = "";
+        items = ejbFacade.findAll();
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        FacesContext context = FacesContext.getCurrentInstance();
+        Application application = context.getApplication();
+        ViewHandler viewHandler = application.getViewHandler();
+        UIViewRoot viewRoot = viewHandler.createView(context, context.getViewRoot().getViewId());
+        context.setViewRoot(viewRoot);
+        context.renderResponse();
+        requestContext.execute("PF('seleccionarMedidor').hide()");
+        requestContext.update("productoListForm");
+     
+        
+    }
     public void registrarMedidor() {
         ejbFacade.create(medidor);
         RequestContext requestContext = RequestContext.getCurrentInstance();

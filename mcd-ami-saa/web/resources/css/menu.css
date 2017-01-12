@@ -1,201 +1,8 @@
-#tituloContenido
-{ 
-    text-align: center;
-    font-size: 20pt;
-    margin-top: 5px;
-    margin-bottom: 20px;
-
-}
-body {
-    padding-left: 0%;
-    padding-right: 0%;
-    line-height: 1;
-    font-size: 12px;
-    font-family: Verdana, "Verdana CE",  Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
-}
-
-#header{
-    background-color: white;
-    box-shadow: 0px 0px 8px 2px rgba(0,0,0,0.5);
-    margin-bottom: 5px;
-}
-
-
-#header .con_escudo_titulo {
-    position: relative;
-    top: 70px;
-    /* padding-left: 25px; */
-    background: linear-gradient(to right,rgb(255, 255, 255)0%,rgb(255, 255, 255)51%,rgb(255, 255, 255)100%);
-    /* box-shadow: 0px 0px 8px 2px rgba(0,0,0,0.5); */
-    height: 88px;
-}
-
-#header .con_escudo_titulo .logo {
-    position: relative;
-    z-index: 1;
-    float: left;
-    margin-top: 8px;
-    margin-left: 13px;
-    background: url(../img/logoapp.png) no-repeat;
-}
-
-.notificaciones
-{    
-    float: right;
-    padding-left: 17px;
-    /*width: 68px;
-    height: 100px;
-    padding-top: 33px; */
-}
-
-#ciruculonotificacionconteo
-{
-    float: left;
-    width: 16px;
-    height: 16px;
-    text-align: center;
-    border-radius: 10px;
-    background-color: #D20005;
-    color: #FFFFFF;
-    font-size: 10pt;
-
-}
-
-#header .bottom{
-    height: 100px;
-    background: linear-gradient(to right,rgb(17,177,230)0%,rgb(34, 126, 156)51%,rgb(17,177,230) 100%);
-}
-
-#menu {
-    float: left;
-    width: 17%;
-    min-width: 125px;
-}
-
-#menuVisitante {
-    float: top;
-    background: linear-gradient(to right,rgb(17,177,230)0%,rgb(34, 126, 156)51%,rgb(17,177,230) 100%);
-    padding: 12px;
-
-    min-width: 125px;
-}
-
-#tituloMenu{
-    text-align: center;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding: 5px;
-    border-radius: 5px;
-    background-color: rgba(194,223,239,0.5);
-}
-
-#content{
-    background-color: white;
-    padding: 5px;
-    margin-left: 16%;
-    font-size: 12px !important;
-    min-height: 450px;
-    box-shadow: 0px 0px 10px 1px rgba(0,0,0,0.7);
-}
-
-#contentVisitante{
-    background-color: white;
-    padding: 5px;
-    font-size: 12px !important;
-    min-height: 450px;
-    box-shadow: 0px 0px 10px 1px rgba(0,0,0,0.7);
-}
-
-
-.ui-datatable th{
-    font-size: 13px !important;
-}
-
-
-.ui-panel-titlebar{
-    padding-bottom: 0px !important;
-}
-
-.CampoLabelObligatorios
-{
-    font-style: italic;
-    font-size: 15px;    
-}
-.CampoLabelEspecificacion
-{
-    font-style: italic;
-    font-size: 10px;
-}
-
-.BotonesSesion
-{
-    position: absolute;
-    padding: 5px;
-    color: #FFFFFF;
-    text-align: center;
-    border: 2px  solid #ffffff;
-    border-style: dashed;
-    right: 30px;
-    top: 10px;
-    border-radius: 10px;    
-}
-
-.panelgrid , .panelgrid tr , .panelgrid td
-{
-    border-style: none !important
-
-}
-
-.ui-datatable .ui-paginator {
-    background:  transparent;
-    border:0;
-}
-
-.ui-paginator-page{
-    border: 0;
-
-}
-.ui-datatable .ui-datatable-header {
-    border-bottom: 0px none;
-    background: transparent;
-    border: 0;
-    text-align: left;
-}
-
-.ui-widget .ui-widget {
-    border:none;
-}
-
-.ui-breadcrumb ul li span {
-    display: block;
-    overflow: hidden;
-    color: black;
-}
-
-.ui-menu .ui-menuitem {
-    width: 100%;
-    float: left;
-    clear: both;
-    margin: 1px 0;
-    padding: 0;
-    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+100&1+0,0+100;White+to+Transparent */
-    background: -moz-radial-gradient(center, ellipse cover,  rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%); /* FF3.6-15 */
-    background: -webkit-radial-gradient(center, ellipse cover,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* Chrome10-25,Safari5.1-6 */
-    background: radial-gradient(ellipse at center,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
-
-}
-
-.ui-corner-all {
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
-    border-radius: 5px !important;
-}
-
 .ui-menu {
-    width: 15em !important;
-    padding: 0em !important;
-    
+    width: 12.5em;
+    padding:0.3em;
+    position:relative;
+    outline: 0 none;
 }
 
 .ui-menu.ui-menu-dynamic {
@@ -223,7 +30,7 @@ body {
     width:100%;
     float:left;
     clear:both;
-    margin:4px 0;
+    margin:1px 0;
     padding:0;
 }
 
@@ -668,15 +475,13 @@ body {
     white-space: nowrap;
 }
 
-
-
-.ui-widget-header {
-    border: 1px solid #a8a8a8;
-    background: #c4c4c4 url(/mcd-ami-saa/faces/javax.faces.resource/images/ui-bg_highlight-soft_100_c4c4c4_1x100.png?ln=primefaces-aristo) 50% 50% repeat-x;
-    background: #c4c4c4 linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0)) !important;
-    background: rgba(196, 196, 196, 0) -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0)), to(rgba(255,255,255,0)))!important;
-    background: #c4c4c4 -moz-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0))!important;
-    color: #333;
-    font-weight: bold;
-    text-shadow: 0px 1px 0px rgba(255,255,255,0.7);
+/* Responsive */
+@media (max-width: 35em) {    
+    .ui-steps .ui-steps-item .ui-menuitem-link {
+        padding: 0.5em;
+    }
+    
+    .ui-steps .ui-steps-item .ui-steps-title {
+        display: none;
+    }
 }

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </h:head>
+    <h:body>
+        <h:form id="datosIngreso">
+            <h:panelGrid columns="2"> 
+                <p:commandButton style="left: 830px" 
+                                 value="Seleccionar un nuevo trafo"
+                                 action="#{plcMmsController.reiniciarVariable()}"
+                                 onclick="PF('seleccionarTrafo').show()" />
+            </h:panelGrid>
+        </h:form>
+        <h:form id="PlcMmsListForm" >
+            <h:panelGrid style="margin-bottom: 5px;" columns="3" rendered="#{plcMmsController.trafoSeleccionado}">                      
+
+                <h:outputLabel style="font-size: 12px; font-weight: bold;" value="Buscar PLC_MMS" />
+                <p:inputText style="width: 500px;" value="#{plcMmsController.dato}"  
+                             placeholder="Digite el identificador o la MAC del PLC_MMS">
+                    <p:ajax event="keyup" update="datalist" listener="#{plcMmsController.buscarDato()}" />                                
+                </p:inputText>    
+            </h:panelGrid>
+            <p:dataTable style="text-align: center;" id="datalist" value="#{plcMmsController.listaPlcMmsVinculadosATrafo}" var="item"
+                         paginator="true"
+                         rowKey="#{item.idPlcMms}"
+                         rows="10"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         emptyMessage="No se encontraron dispositivos PLC_MMS"
+                         rendered="#{plcMmsController.trafoSeleccionado}"
+                         >
+                <f:facet name="header">
+                    <h:outputLabel value="Listado de dispositivos PLC_MMS vinculados al trafo: " style="font-size: 17px; font-weight: bold;"/>
+                    <p:outputLabel style="font-weight: bold; color: blue; font-size: 18px;" 
+                               value="#{plcMmsController.trafo.idTrafo}"/>
+                </f:facet>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Identificador PLC_MMS"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idPlcMms}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header" >
+                        <h:outputText value="Dirección MAC PLC_MMS"/>
+                    </f:facet>
+                    <h:outputText value="#{item.macPlcMms}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Versión firmware"/>
+                    </f:facet>
+                    <h:outputText value="#{item.versionFw}"/>
+                </p:column>
+                <p:column style="width:120px;text-align:center; background: #EBEDEB;" >
+                    <f:facet name="header">
+                        <h:outputText value="Acción"/>
+                    </f:facet>
+                    <p:commandButton value="Desvincular" action="#{plcMmsController.desvincularTrafo(item)}" />                    
+                </p:column>
+            </p:dataTable>
+
+        </h:form>
+        <p:dialog header="Seleccionar Trafo" visible="#{!plcMmsController.trafoSeleccionado}" closable="false" resizable="false" width="500" position="center" modal="true"  widgetVar="seleccionarTrafo">
+            <p:outputLabel value="Busque y seleccione el trafo del cual desea desvincular un PLC_MMS" style="background: #c2dfef; color: black;font-weight: bold; font-size: 16px;" />                    
+            <h:form id="trafoListForm">
+                <br/>
+                <h:panelGrid columns="2" id="panel">
+                    <p:outputLabel value="Buscar trafo " />
+                    <p:inputText  placeholder="Digite el identificador del trafo" style="width: 240px;"  value="#{trafoController.idTrafo}" >
+                        <p:ajax event="keyup" update="tablaTrafos" listener="#{trafoController.buscarPorId()}" />                                
+                    </p:inputText>                          
+
+                    <br/>
+                    <p:panel id="tablaTrafos">
+                        <p:dataTable id="datalist" value="#{trafoController.listaTrafos}" var="item"
+                                     paginator="true"
+                                     rowKey="#{item.idTrafo}"
+                                     rows="7"
+
+                                     >
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Identificador de producto"/>
+                                </f:facet>
+                                <h:outputText value="#{item.idTrafo}"/>
+                            </p:column>
+                            <p:column style="width:120px;text-align:center; background: #EBEDEB;">
+                                <f:facet name="header">
+                                    <h:outputText value="Accion"/>
+                                </f:facet>
+                                <p:commandButton id="viewButton"  
+                                                 action="#{plcMmsController.seleccionarTrafoDesvincular(item)}" 
+                                                 icon="ui-icon-plus" 
+                                                 value="Seleccionar"  
+                                                 ajax="true"
+                                                 oncomplete="#{plcMmsController.reiniciarVariable()}"
+                                                 />
+                            </p:column>
+
+                        </p:dataTable>
+                    </p:panel>
+                </h:panelGrid>
+                <h:panelGrid columns="2" >
+                    <p:commandButton id="viewButton"  
+                                     action="#{trafoController.reiniciarVariablesPlcMms()}" 
+                                     value="Cancelar"  
+                                     ajax="true"
+                                     />
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+        <p:dialog modal="true" header="Información" resizable="false" widgetVar="mensajeDesvinculo" closable="false">
+            <h:form>
+                <p:panelGrid style="text-align:left;" styleClass="panelgrid">
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="color: blue;" value="El PLC_MMS fue desvinculado del trafo con exito."/>
+                        </p:column>                                
+                    </p:row>
+                    <p:row>
+                        <p:column width="250px;">
+                            <p:commandButton style="font-style: italic;margin-left: 60px;font-weight: normal;" 
+                                             value="Aceptar" onclick="PF('mensajeVinculo').hide()"
+                                             />                                    
+                        </p:column>
+
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+    </h:body>
+
+</html>

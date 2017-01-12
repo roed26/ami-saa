@@ -18,9 +18,15 @@ import com.ceo.amisaa.sessionbeans.PlcMmsFacade;
 import com.ceo.amisaa.sessionbeans.PlcTuFacade;
 import com.ceo.amisaa.sessionbeans.ProductoFacade;
 import com.ceo.amisaa.sessionbeans.TrafoFacade;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -69,7 +75,7 @@ public class TrafoController implements Serializable {
     private ClienteFacade ejbCliente;
 
     private List<Trafo> items = null;
-    private Trafo selected;
+    private Trafo trafo;
     private boolean trafoSeleccionado;
     private String idTrafo;
     private Producto producto;
@@ -77,7 +83,6 @@ public class TrafoController implements Serializable {
     private PlcTu plcTu;
     private PlcMms plcMms;
     private Macro macro;
-    private Trafo trafo;
     private Cliente cliente;
     private List<EventosAmarre> eventoAmarre;
     private List<PlcTu> listPlcTu;
@@ -98,6 +103,7 @@ public class TrafoController implements Serializable {
     private String mensajeError;
 
     public TrafoController() {
+        this.trafo = new Trafo();
         this.formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
     }
 
@@ -111,15 +117,16 @@ public class TrafoController implements Serializable {
         resultado = new ArrayList<>();
         estadosDeAmarre = new ArrayList<>();
         this.clientes = true;
+        this.trafo = new Trafo();
 
     }
 
     public Trafo getSelected() {
-        return selected;
+        return trafo;
     }
 
     public void setSelected(Trafo selected) {
-        this.selected = selected;
+        this.trafo = selected;
     }
 
     public String getIdTrafo() {
@@ -245,9 +252,9 @@ public class TrafoController implements Serializable {
     }
 
     public Trafo prepareCreate() {
-        selected = new Trafo();
+        trafo = new Trafo();
         initializeEmbeddableKey();
-        return selected;
+        return trafo;
     }
 
     public void create() {
@@ -264,7 +271,7 @@ public class TrafoController implements Serializable {
     public void destroy() {
         persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("TrafoDeleted"));
         if (!JsfUtil.isValidationFailed()) {
-            selected = null; // Remove selection
+            trafo = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
@@ -286,6 +293,12 @@ public class TrafoController implements Serializable {
 
     public void buscarPorId() {
         this.items = getFacade().buscarPorId(idTrafo);
+        this.idTrafo = "";
+    }
+
+    public void reiniciarCampoBusqueda() {
+        this.idTrafo = "";
+        this.items = ejbTrafo.findAll();
 
     }
 
@@ -346,13 +359,13 @@ public class TrafoController implements Serializable {
     }
 
     private void persist(PersistAction persistAction, String successMessage) {
-        if (selected != null) {
+        if (trafo != null) {
             setEmbeddableKeys();
             try {
                 if (persistAction != PersistAction.DELETE) {
-                    getFacade().edit(selected);
+                    getFacade().edit(trafo);
                 } else {
-                    getFacade().remove(selected);
+                    getFacade().remove(trafo);
                 }
                 JsfUtil.addSuccessMessage(successMessage);
             } catch (EJBException ex) {
@@ -394,7 +407,7 @@ public class TrafoController implements Serializable {
     }
 
     public void seleccionarTrafo(Trafo trafo) {
-        this.selected = trafo;
+        this.trafo = trafo;
         this.rangoFechaCambiado1 = false;
         this.rangoFechaCambiado2 = false;
         this.rangoFechaCambiado3 = false;
@@ -405,7 +418,7 @@ public class TrafoController implements Serializable {
     }
 
     public void cancelarConsulta() {
-        this.selected = new Trafo();
+        this.trafo = new Trafo();
         this.trafoSeleccionado = false;
         RequestContext requestContext = RequestContext.getCurrentInstance();
         requestContext.execute("PF('seleccionarFecha').hide()");
@@ -425,7 +438,7 @@ public class TrafoController implements Serializable {
         context.renderResponse();
 
         reiniciarListas();
-        this.macro = ejbMacro.buscarMacroPorTrafoObj(selected);
+        this.macro = ejbMacro.buscarMacroPorTrafoObj(trafo);
         if (macro != null) {
             if (fechaInicio.after(fechaFin)) {
                 FacesContext.getCurrentInstance().addMessage("formFecha:fechaInicio", new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "la fecha de inicio no puede ser mayor a la fecha de fin."));
@@ -441,7 +454,7 @@ public class TrafoController implements Serializable {
     }
 
     public void seleccionarTrafoSolicitud(Trafo trafo) {
-        this.selected = trafo;
+        this.trafo = trafo;
         this.trafoSeleccionado = true;
         RequestContext requestContext = RequestContext.getCurrentInstance();
         requestContext.update("envioSolicitud");
@@ -452,7 +465,7 @@ public class TrafoController implements Serializable {
     }
 
     public void cancelarSolicitud() {
-        this.selected = null;
+        this.trafo = null;
         trafoSeleccionado = false;
         RequestContext requestContext = RequestContext.getCurrentInstance();
         requestContext.execute("PF('enviarSolicitud').hide()");
@@ -469,14 +482,14 @@ public class TrafoController implements Serializable {
         context.setViewRoot(viewRoot);
         context.renderResponse();
 
-        this.macro = ejbMacro.buscarMacroPorTrafoObj(selected);
+        this.macro = ejbMacro.buscarMacroPorTrafoObj(trafo);
         if (macro != null) {
             this.trama = "$@1";
-            this.plcMms = ejbPlcMms.buscarPorIdTrafoObj(selected);
+            this.plcMms = ejbPlcMms.buscarPorIdTrafoObj(trafo);
             if (this.plcMms != null) {
                 if (this.plcMms.getNumeroCelular() != null) {
-
-                    String numeroCelular = this.plcMms.getNumeroCelular();
+                    String numeroCelular = "&msisdn=57" + this.plcMms.getNumeroCelular();
+                    //String numeroCelular = this.plcMms.getNumeroCelular();
                     enviarMensaje(numeroCelular, trama);
                 } else {
                     this.mensajeError = "El maestro asociado al trafo no tiene un número de celular";
@@ -503,7 +516,7 @@ public class TrafoController implements Serializable {
 
     public void cargarLista() {
 
-        this.listaProductos = this.ejbProducto.buscarListaProductosTrafo(selected);
+        this.listaProductos = this.ejbProducto.buscarListaProductosTrafo(trafo);
         if (listaProductos.size() > 0) {
             for (int i = 0; i < this.listaProductos.size(); i++) {
                 this.cliente = ejbCliente.find(listaProductos.get(i).getCedula().getCedula());
@@ -523,7 +536,57 @@ public class TrafoController implements Serializable {
     }
 
     public void enviarMensaje(String numeroCelular, String trama) {
-       
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        FacesContext context = FacesContext.getCurrentInstance();
+        Application application = context.getApplication();
+        ViewHandler viewHandler = application.getViewHandler();
+        UIViewRoot viewRoot = viewHandler.createView(context, context.getViewRoot().getViewId());
+        context.setViewRoot(viewRoot);
+        context.renderResponse();
+        try {
+            String data = "";
+            data += "username=" + URLEncoder.encode("roed26", "ISO-8859-1");
+            data += "&password=" + URLEncoder.encode("rosario26@", "ISO-8859-1");
+            data += "&message=" + URLEncoder.encode(trama, "ISO-8859-1");
+            data += "&want_report=1";
+            data += numeroCelular;
+
+            URL url = new URL("https://bulksms.vsms.net/eapi/submission/send_sms/2/2.0");
+
+            URLConnection conn = url.openConnection();
+            conn.setDoOutput(true);
+            OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+            wr.write(data);
+            wr.flush();
+
+            // Get the response
+            BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String line;
+            String dat = null;
+            while ((line = rd.readLine()) != null) {
+                String respuesta[] = line.split("\\|");
+
+                if (!respuesta[0].equalsIgnoreCase("25")) {
+                    requestContext.execute("PF('exitoEnvioMensaje').show()");
+                    this.trafoSeleccionado = false;
+                } else {
+                    this.mensajeError = "No cuenta con suficiente saldo para enviar la solicitud";
+                    requestContext.update("formMensajeError");
+                    requestContext.execute("PF('enviarSolicitud').hide()");
+                    requestContext.execute("PF('errorEnvioMensaje').show()");
+                    this.trafoSeleccionado = false;
+                }
+            }
+            wr.close();
+            rd.close();
+            this.trafoSeleccionado = false;
+
+        } catch (Exception e) {
+            this.mensajeError = "Error inesperado, intente nuevamente";
+            requestContext.update("errorEnvioSolicitud");
+            requestContext.execute("PF('errorEnvioMensaje').show()");
+            this.trafoSeleccionado = false;
+        }
     }
 
     public void cargarTrafos() {
@@ -538,9 +601,10 @@ public class TrafoController implements Serializable {
         estadosDeAmarre = new ArrayList<>();
 
     }
-    public void reiniciarVariables(){
-    
-        idTrafo="";
+
+    public void reiniciarVariables() {
+
+        idTrafo = "";
         cargarTrafos();
         RequestContext requestContext = RequestContext.getCurrentInstance();
         FacesContext context = FacesContext.getCurrentInstance();
@@ -553,11 +617,12 @@ public class TrafoController implements Serializable {
         requestContext.update("productoListForm");
         requestContext.update("informacionProducto");
     }
-    public void reiniciarVariablesPlcMms(){
-    
-        idTrafo="";
+
+    public void reiniciarVariablesPlcMms() {
+
+        idTrafo = "";
         cargarTrafos();
-            RequestContext requestContext = RequestContext.getCurrentInstance();
+        RequestContext requestContext = RequestContext.getCurrentInstance();
         FacesContext context = FacesContext.getCurrentInstance();
         Application application = context.getApplication();
         ViewHandler viewHandler = application.getViewHandler();
@@ -568,6 +633,59 @@ public class TrafoController implements Serializable {
         requestContext.update("PlcMmsListForm");
         requestContext.update("informacionTrafo");
     }
+
+    public void ventanaEliminar(Trafo trafo) {
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        this.trafo = trafo;
+        requestContext.execute("PF('eliminarTrafo').show()");
+    }
+
+    public void eliminarTrafo() {
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        if (this.trafo != null) {
+            if (this.trafo.getMacroCollection().isEmpty() && this.trafo.getPlcMmsCollection().isEmpty() && this.trafo.getProductoCollection().isEmpty()) {
+                this.ejbTrafo.remove(this.trafo);
+                requestContext.update("TrafoListForm");
+                requestContext.execute("PF('eliminarTrafo').hide()");
+                requestContext.execute("PF('eliminacionCorrecta').show()");
+                this.trafo = new Trafo();
+                
+            } else {
+                this.trafo = new Trafo();
+                requestContext.execute("PF('eliminarTrafo').hide()");
+                requestContext.execute("PF('noSePuedeEliminar').show()");
+                requestContext.update("TrafoListForm");
+            }
+        }
+        reiniciarCampoBusqueda();
+    }
+
+    public void reiniciarObj() {
+        this.producto = new Producto();
+        this.producto.setEstado("A");
+    }
+
+    public void registrarTrafo() {
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        ejbTrafo.create(this.trafo);
+        items = ejbTrafo.findAll();
+        this.trafo = new Trafo();
+
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La información del trafo se registro con exito."));
+        requestContext.execute("PF('mensajeRegistroExitoso').show()");
+
+    }
+
+    public void editarInfoTrafo() {
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        if (this.trafo != null) {
+            this.ejbTrafo.edit(this.trafo);
+            requestContext.execute("PF('TrafoEditDialog').hide()");
+            requestContext.execute("PF('edicionCorrecta').show()");
+            this.trafo = new Trafo();
+        }
+    }
+
     /*private void cargarResultados() {
         for (int i = 0; i < listaClientes.size(); i++) {
             

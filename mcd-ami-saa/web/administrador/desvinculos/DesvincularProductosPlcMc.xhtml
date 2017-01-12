@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </h:head>
+    <h:body>
+        <h:form id="datosIngreso">
+            <h:panelGrid columns="2"> 
+                <p:commandButton style=" left: 830px;" value="Seleccionar nuevo PLC_MC" 
+                                 onclick="PF('seleccionarPlcMc').show()" />
+            </h:panelGrid>
+        </h:form>
+        <h:form id="informacionPlcMc" >
+            <p:outputLabel rendered="#{plcMcController.plcMcSeleccionado}" 
+                           style="font-weight: bold; color: black; font-size: 18px;" 
+                           value="Seleccione el (los) producto(s) que desea desvincular del dispositivo PLC_MC: "/> 
+            <p:outputLabel rendered="#{plcMcController.plcMcSeleccionado}" 
+                           style="font-weight: bold; color: blue; font-size: 18px;" 
+                           value="#{plcMcController.idPlcMc}"/> 
+        </h:form>
+
+        <h:form  id="ProductosListForm">
+            <h:panelGrid columns="2" rendered="#{plcMcController.plcMcSeleccionado}">
+                <p:outputLabel value="Buscar: " />
+                <p:inputText  placeholder="Digite el identificador del producto" style="width: 340px;"  value="#{productoController.idProducto}" >
+                    <p:ajax event="keyup" update="tablaProdcutos" listener="#{productoController.buscarPorId()}" />                                
+                </p:inputText>                          
+            </h:panelGrid>
+            <p:dataTable style="text-align: center;" id="tablaProdcutos" value="#{productoController.listaProductosDelPlcMc(plcMcController.selected)}" var="item"
+                         selection="#{plcMcController.productos}"
+                         paginator="true"
+                         rowKey="#{item.idProducto}"
+                         rows="10"
+                         rowIndexVar="i"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         emptyMessage="No se encontraron productos"
+                         rendered="#{plcMcController.plcMcSeleccionado}"
+                         >
+
+                <f:facet name="header">
+                    <h:outputLabel value="Listado de productos vinculado al PLC_MC" style="font-size: 17px; font-weight: bold;"/>
+                </f:facet>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Identificador de producto"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idProducto}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Nombre del cliente"/>
+                    </f:facet>
+                    <h:outputText value="#{productoController.listaClientes[i].getNombres()} "/>
+                    <h:outputText value="#{productoController.listaClientes[i].getApellidos()}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Dirección del cliente"/>
+                    </f:facet>
+                    <h:outputText value="#{productoController.listaClientes[i].getDireccion()}"/>
+                </p:column>
+
+                <p:column style="width:90px;text-align:center; background: #EBEDEB;" selectionMode="multiple" >
+                    <f:facet name="header">
+                        <h:outputText value="Seleccionar"/>
+                    </f:facet>
+                </p:column>
+            </p:dataTable>
+            <h:panelGrid style="margin-bottom: 5px;" columns="3" rendered="#{plcMcController.plcMcSeleccionado}">          
+                <p:commandButton disabled="#{!plcMcController.plcMcSeleccionado}" 
+                                 value="Desvincular" 
+                                 action="#{plcMcController.desvincularProductos()}"/>
+            </h:panelGrid>
+        </h:form>
+
+        <p:dialog header="Seleccionar PLC_MC" closable="false" visible="#{!plcMcController.plcMcSeleccionado}" resizable="false" width="850" position="center" modal="true"  widgetVar="seleccionarPlcMc">
+            <p:outputLabel value="Busque y seleccione el PLC_MC del cual desea desvincular el (los) producto(s) " style="font-weight: bold; font-size: 16px;" />
+            <br/>
+            <h:form id="PlcMcListForm">
+                <h:panelGrid style="margin-bottom: 10px;" columns="3">                      
+                    <h:outputLabel class="CampoLabel" value="Buscar " />
+                    <p:inputText style="width: 500px;" value="#{plcMcController.dato}"  
+                                 placeholder="Digite el identificador o la MAC del PLC_MC">
+                        <p:ajax event="keyup" update="datalist" listener="#{plcMcController.buscarDato()}" />                                
+                    </p:inputText>    
+                </h:panelGrid>
+                <p:dataTable id="datalist" value="#{plcMcController.listaPlcMcConVinculo}" var="item"
+                             paginator="true"
+                             rowKey="#{item.idPlcMc}"
+                             rows="10"
+                             style="text-align: center;"
+                             rowsPerPageTemplate="10,20,30,40,50"
+                             emptyMessage="No se encontraron dispositivos PLC_MC"
+                             >                      
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Identificador PLC_MC"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idPlcMc}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Dirección MAC PLC_MC"/>
+                        </f:facet>
+                        <h:outputText value="#{item.macPlcMc}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Versión firmware"/>
+                        </f:facet>
+                        <h:outputText value="#{item.versionFw}"/>
+                    </p:column>
+
+                    <p:column style="width:140px;text-align:center; background: #EBEDEB;">
+                        <f:facet name="header">
+                            <h:outputText value="Accion"/>
+                        </f:facet>
+                        <p:commandButton id="viewButton"  
+                                         actionListener="#{plcMcController.seleccionarPlcMc(item)}" 
+                                         icon="ui-icon-plus" value="Seleccionar"  
+                                         ajax="true"
+                                        oncomplete="#{plcMcController.reiniciarVariables()}"
+                                         />
+                    </p:column>
+                </p:dataTable>
+                <h:panelGrid columns="2" >
+                    <p:commandButton id="viewButton"  
+                                     action="#{plcMcController.cancelarSeleccion()}" 
+                                     value="Cancelar"  
+                                     ajax="true"
+                                     />
+                </h:panelGrid>
+            </h:form>
+
+        </p:dialog>
+        <p:dialog modal="true" header="Información" resizable="false" widgetVar="mensajeVinculo" closable="false">
+            <h:form>
+                <p:panelGrid style="text-align:left;" styleClass="panelgrid">
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="color: blue;" value="Se desvincularon el (los) producto(s) del PLC_MC con exito."/>
+                        </p:column>                                
+                    </p:row>
+                    <p:row>
+                        <p:column width="200px;">
+                            <p:commandButton style="font-style: italic;margin-left: 60px;font-weight: normal;" 
+                                             value="Aceptar" onclick="PF('mensajeVinculo').hide()"
+                                             />                                    
+                        </p:column>
+
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog> 
+    </h:body>
+
+</html>

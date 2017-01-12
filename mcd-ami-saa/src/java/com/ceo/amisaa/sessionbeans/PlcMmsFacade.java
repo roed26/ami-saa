@@ -67,6 +67,14 @@ public class PlcMmsFacade extends AbstractFacade<PlcMms> {
         }
         return plcMms;
     }
+    
+    public List<PlcMms> buscarPorIdTrafoLista(Trafo idTrafo) {
+        Query query = getEntityManager().createNamedQuery("PlcMms.findByIdTrafoObj");
+        query.setParameter("idTrafo", idTrafo);
+        List<PlcMms> resultList = query.getResultList();
+        
+        return resultList;
+    }
 
     public boolean buscarPorId(String idPlcMms) {
         Query query = getEntityManager().createNamedQuery("PlcMms.findByIdPlcMms");
