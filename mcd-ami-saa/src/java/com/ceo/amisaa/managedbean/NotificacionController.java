@@ -32,6 +32,8 @@ public class NotificacionController implements Serializable {
     
     private boolean mostrarnotificacion = false;
     
+    private Notificacion notificacionSelected;    
+    
     
     /**
      * Creates a new instance of NotificacionController
@@ -98,5 +100,22 @@ public class NotificacionController implements Serializable {
 
     public void setMostrarnotificacion(boolean mostrarnotificacion) {
         this.mostrarnotificacion = mostrarnotificacion;
+    }
+    
+    
+    public Notificacion getNotificacionSelected() {
+        return notificacionSelected;
+    }
+
+    public void setNotificacionSelected(Notificacion notificacionSelected) {
+        this.notificacionSelected = notificacionSelected;
+    }
+    
+    
+    public void seleccionarNotificacion(Notificacion notificacion,RoutingController routingController)
+    {
+        notificacionSelected = notificacion;
+        
+        routingController.irNotificacion();
     }
 }

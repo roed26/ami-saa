@@ -22,7 +22,11 @@
                           #{notificacionesNuevasController.formatiarTipoEvento(notificacion.tipoEvento)}
                     </p:column>
                     <p:column headerText="Acciones">
-                         
+                        <h:form>
+                            <p:commandLink value="ver" action="#{notificacionController.seleccionarNotificacion(notificacion, routingController)}" 
+                                           actionListener="#{addNavegacionController.addNotificacion()}"
+                                           ajax="false"/>
+                        </h:form> 
                     </p:column>    
                </p:dataTable>
     </h:body>

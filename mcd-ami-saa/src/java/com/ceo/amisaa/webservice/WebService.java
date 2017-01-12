@@ -46,8 +46,8 @@ public class WebService {
      */
     //private  final String  RUTAFTPDIR = "/home/geovanny/ftp";
     //private  final String  RUTAFTPDIRMMAESTROS = "/home/geovanny/archivos/maestros/";
-    private  final String  RUTAFTPDIR = "/home/amisaaftp/ftp";
-    private  final String  RUTAFTPDIRMMAESTROS = "/home/amisaaftp/archivos/maestros/";
+    private  final String  RUTAFTPDIR = "/home/usuarioftp/amisaaftp/ftp";
+    private  final String  RUTAFTPDIRMMAESTROS = "/home/usuarioftp/amisaaftp/archivos/maestros/";
     @Context
     private UriInfo context;  
     

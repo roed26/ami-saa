@@ -3,28 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/ami/ami-saa/mcd-ami-saa/web/administrador/trafo/solicitudEstadoTR.xhtml</file>
-            <file>file:/D:/ami/ami-saa/mcd-ami-saa/src/java/com/ceo/amisaa/managedbean/PlcMmsController.java</file>
-            <file>file:/D:/ami/ami-saa/mcd-ami-saa/src/java/com/ceo/amisaa/managedbean/ClienteController.java</file>
-            <file>file:/D:/ami/ami-saa/mcd-ami-saa/src/java/com/ceo/amisaa/entidades/EventosConsumo.java</file>
-            <file>file:/D:/ami/ami-saa/mcd-ami-saa/web/administrador/plcTu/VincularPlcTu.xhtml</file>
-            <file>file:/D:/ami/ami-saa/mcd-ami-saa/web/administrador/plcMms/VincularPlcMms.xhtml</file>
-            <file>file:/D:/ami/ami-saa/mcd-ami-saa/src/java/com/ceo/amisaa/entidades/PlcMc.java</file>
-            <file>file:/D:/ami/ami-saa/mcd-ami-saa/src/conf/MANIFEST.MF</file>
-            <file>file:/D:/ami/ami-saa/mcd-ami-saa/web/administrador/plcMc/VincularPlcMc.xhtml</file>
-            <file>file:/D:/ami/ami-saa/mcd-ami-saa/src/java/com/ceo/amisaa/sessionbeans/EventosConsumoFacade.java</file>
-            <file>file:/D:/ami/ami-saa/mcd-ami-saa/web/administrador/cliente/estadoAmarre.xhtml</file>
-            <file>file:/D:/ami/ami-saa/mcd-ami-saa/src/java/com/ceo/amisaa/managedbean/PlcTuController.java</file>
-            <file>file:/D:/ami/ami-saa/mcd-ami-saa/src/java/com/ceo/amisaa/entidades/EventosConsumoMc.java</file>
-            <file>file:/D:/ami/ami-saa/mcd-ami-saa/src/java/com/ceo/amisaa/entidades/Macro.java</file>
-            <file>file:/D:/ami/ami-saa/mcd-ami-saa/src/conf/persistence.xml</file>
-            <file>file:/D:/ami/ami-saa/mcd-ami-saa/src/java/com/ceo/amisaa/sessionbeans/EventosAmarreFacade.java</file>
-            <file>file:/D:/ami/ami-saa/mcd-ami-saa/web/administrador/trafo/listaClientes.xhtml</file>
-            <file>file:/D:/ami/ami-saa/mcd-ami-saa/src/java/com/ceo/amisaa/entidades/EventosAmarre.java</file>
-            <file>file:/D:/ami/ami-saa/mcd-ami-saa/src/java/com/ceo/amisaa/managedbean/ProductoController.java</file>
-            <file>file:/D:/ami/ami-saa/mcd-ami-saa/web/administrador/eventosConsumo/consumoPorCliente.xhtml</file>
-            <file>file:/D:/ami/ami-saa/mcd-ami-saa/src/java/com/ceo/amisaa/managedbean/TrafoController.java</file>
-            <file>file:/D:/ami/ami-saa/mcd-ami-saa/src/java/com/ceo/amisaa/managedbean/PlcMcController.java</file>
+            <file>file:/Users/aranda/Documents/Amisaa%20ultima%20version/ami-saa/mcd-ami-saa/web/administrador/notificaciones/notificaciones.xhtml</file>
         </group>
     </open-files>
 </project-private>

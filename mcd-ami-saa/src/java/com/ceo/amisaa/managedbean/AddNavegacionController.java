@@ -38,7 +38,7 @@ public class AddNavegacionController implements Serializable {
         this.menuNavegacion.addElement(inicio);
     }
 
-    public void addNotificacion() {
+    public void addNotificacions() {
         this.menuNavegacion = new DefaultMenuModel();
         DefaultMenuItem index = new DefaultMenuItem();
         index.setValue("Index");
@@ -47,6 +47,25 @@ public class AddNavegacionController implements Serializable {
         notificacion.setValue("Notificaciones");
 
         this.menuNavegacion.addElement(index);
+        this.menuNavegacion.addElement(notificacion);
+
+    }
+    
+    public void addNotificacion() {
+        this.menuNavegacion = new DefaultMenuModel();
+        DefaultMenuItem index = new DefaultMenuItem();
+        index.setValue("Index");
+
+        DefaultMenuItem notificacions = new DefaultMenuItem();
+        notificacions.setValue("Notificaciones");
+        
+        DefaultMenuItem notificacion = new DefaultMenuItem();
+        notificacion.setValue("Notificación");
+        
+        
+
+        this.menuNavegacion.addElement(index);
+        this.menuNavegacion.addElement(notificacions);
         this.menuNavegacion.addElement(notificacion);
 
     }

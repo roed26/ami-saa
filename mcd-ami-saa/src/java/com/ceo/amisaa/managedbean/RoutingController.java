@@ -163,4 +163,9 @@ public class RoutingController implements Serializable {
     public void irNotificaciones() {
         this.ruta = "/administrador/notificaciones/notificaciones.xhtml";
     }
+    
+    public void irNotificacion()
+    {
+        this.ruta = "/administrador/notificaciones/notificacion.xhtml";
+    }
 }
