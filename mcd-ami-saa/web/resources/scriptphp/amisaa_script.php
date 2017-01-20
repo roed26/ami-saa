@@ -5,7 +5,7 @@ este Script contiene la logica necesariara para revisar la carpeta donde llegan 
 archivos enviados por cada maestro, y si hay archivos notificar al servidor;
 */
 
-$ruta_carpeta = '/home/geovanny/ftp'; //directorio ftp donde llegan los archivos
+$ruta_carpeta = '/home/usuarioftp/amisaaftp/ftp'; //directorio ftp donde llegan los archivos
 $url = 'http://localhost:8080/mcd-ami-saa/webresources/webservice'; //url del servicio rest del servidor
 /***
 esta Funcion que revisa que la carpeta ftp esta vacia si no esta

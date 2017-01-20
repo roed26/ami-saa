@@ -48,6 +48,10 @@ public class NotificacionesNuevasController {
             case 1:
                 tipoeventoformater="Evento de Amarre y Consumo entre MMS y TU";
             break;
+            
+            case 2:
+                tipoeventoformater="Evento de Amarre y Consumo entre MMS y MC";
+            break;
                 
         }
         

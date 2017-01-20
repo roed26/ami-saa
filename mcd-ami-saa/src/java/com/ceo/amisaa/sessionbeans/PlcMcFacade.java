@@ -58,6 +58,18 @@ public class PlcMcFacade extends AbstractFacade<PlcMc> {
         }
 
     }
+    
+    public PlcMc findByMacPlcMc(String macPlcMc) {
+        Query query = getEntityManager().createNamedQuery("PlcMc.findByMacPlcMc");
+        query.setParameter("macPlcMc", macPlcMc);
+        List<PlcMc> resultList = query.getResultList();
+        if (resultList.size() > 0) {
+            return resultList.get(0);
+        } else {
+            return null;
+        }
+
+    }
 
     public boolean buscarPorMac(String macPlcMc) {
         Query query = getEntityManager().createNamedQuery("PlcMc.findByMacPlcMc");
