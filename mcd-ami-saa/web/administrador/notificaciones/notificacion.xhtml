@@ -8,9 +8,10 @@
     </h:head>
     <h:body>
 
-        <div id="tituloContenido">#{notificacionesNuevasController.formatiarTipoEvento(notificacionController.notificacionSelected.tipoEvento)}</div>
+        
         
         <h:form id="formNotificacionTipo1" rendered="#{notificacionController.notificacionTipo1}">
+            <div id="tituloContenido">#{notificacionesNuevasController.formatiarTipoEvento(notificacionController.notificacionSelected)}</div>
             <p:panelGrid>
                 
                 <p:row>
@@ -210,6 +211,53 @@
                     </p:row>
                 </p:panelGrid>
             </p:dialog>
+            
+        </h:form>
+        
+        <h:form id="formNotificacionTipoError" rendered="#{notificacionController.notificacionTipoError}">
+            <div id="tituloContenido">Archivo no procesado</div>
+            <p:panelGrid>
+                <p:row>
+                    <p:column>
+                        Nombre del archivo: 
+                    </p:column>
+                    
+                    <p:column>
+                        #{notificacionController.nombreArchivo}
+                    </p:column>
+                </p:row>
+                
+                <p:row>
+                    <p:column>
+                        Accion:
+                    </p:column>
+                    
+                    <p:column>
+                        Movido a la carpeta pendientes
+                    </p:column>
+                </p:row>
+                
+                <p:row>
+                    <p:column>
+                        Motivo:
+                    </p:column>
+                    
+                    <p:column>
+                        #{notificacionController.notificacionSelected.motivo}
+                    </p:column>
+                </p:row>
+                
+                <p:row>
+                    <p:column>
+                        Ubicación:
+                    </p:column>
+                    
+                    <p:column>
+                        archivos/pendientes/#{notificacionController.nombreArchivo}
+                    </p:column>
+                </p:row>
+                
+            </p:panelGrid>
             
         </h:form>
         

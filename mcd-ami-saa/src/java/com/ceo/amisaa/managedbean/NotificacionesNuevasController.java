@@ -40,11 +40,15 @@ public class NotificacionesNuevasController {
         this.notificacionesnuevas = notificacionesnuevas;
     }
     
-    public String formatiarTipoEvento(int tipoevento)
+    public String formatiarTipoEvento(Notificacion n)
     {
+        int tipoevento= n.getTipoEvento();
         String tipoeventoformater="";
         switch(tipoevento)
         {
+            case -1:
+                tipoeventoformater = "Archivo no Procesado: " + n.getMotivo();
+            break;
             case 1:
                 tipoeventoformater="Evento de Amarre y Consumo entre MMS y TU";
             break;

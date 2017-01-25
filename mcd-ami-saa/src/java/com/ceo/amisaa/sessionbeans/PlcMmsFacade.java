@@ -99,4 +99,15 @@ public class PlcMmsFacade extends AbstractFacade<PlcMms> {
         return !resultList.isEmpty();
 
     }
+    
+    public PlcMms findByIdPlcMms(String idPlcMms)
+    {
+        Query query = getEntityManager().createNamedQuery("PlcMms.findByIdPlcMms");
+        query.setParameter("idPlcMms", idPlcMms);
+        List<PlcMms> resultList = query.getResultList();
+        if (resultList.size() > 0) {
+            return  resultList.get(0);
+        } 
+        return null;
+    }
 }

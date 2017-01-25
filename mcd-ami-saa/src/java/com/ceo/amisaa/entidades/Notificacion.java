@@ -74,6 +74,10 @@ public class Notificacion implements Serializable {
     private Collection<EventosConsumo> eventosConsumoCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idNotificacion")
     private Collection<EventosConsumoMc> eventosConsumoMcCollection;
+    
+    @Size(max = 100)
+    @Column(name = "motivo")
+    private String motivo;
 
     public Notificacion() {
     }
@@ -89,6 +93,16 @@ public class Notificacion implements Serializable {
         this.revisadoNotificacion = revisadoNotificacion;
     }
 
+    public String getMotivo() {
+        return motivo;
+    }
+
+    public void setMotivo(String motivo) {
+        this.motivo = motivo;
+    }
+
+    
+    
     public Integer getIdNotificacion() {
         return idNotificacion;
     }

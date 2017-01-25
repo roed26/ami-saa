@@ -42,6 +42,8 @@ public class NotificacionController implements Serializable {
     
     private boolean notificacionTipo2 = false;
     
+    private boolean notificacionTipoError = false;
+    
     private Notificacion notificacionSelected;  
     
     private PlcMms plcMmsNotificacion;
@@ -144,6 +146,14 @@ public class NotificacionController implements Serializable {
     public void setNotificacionTipo2(boolean notificacionTipo2) {
         this.notificacionTipo2 = notificacionTipo2;
     }
+    
+    public boolean isNotificacionTipoError() {
+        return notificacionTipoError;
+    }
+
+    public void setNotificacionTipoError(boolean notificacionTipoError) {
+        this.notificacionTipoError = notificacionTipoError;
+    }
 
     public PlcMms getPlcMmsNotificacion() {
         return plcMmsNotificacion;
@@ -189,18 +199,25 @@ public class NotificacionController implements Serializable {
     {
         notificacionSelected = notificacion;
         
-        if(notificacionSelected.getTipoEvento() == 1)
-        {
-            listaEventosAmareNotificacion =  new ArrayList(notificacionSelected.getEventosAmarreCollection());
-            listaEventosConsumoNotificacion = new ArrayList(notificacionSelected.getEventosConsumoCollection());
-            plcMmsNotificacion = listaEventosAmareNotificacion.get(0).getIdPlcMms();
-            notificacionTipo1 = true;
-            notificacionTipo2 = false;
-        }
-        else if(notificacionSelected.getTipoEvento() == 2)
-        {
-            notificacionTipo1 = false;
-            notificacionTipo2 = true;
+        switch (notificacionSelected.getTipoEvento()) {
+            case 1:
+                listaEventosAmareNotificacion =  new ArrayList(notificacionSelected.getEventosAmarreCollection());
+                listaEventosConsumoNotificacion = new ArrayList(notificacionSelected.getEventosConsumoCollection());
+                plcMmsNotificacion = listaEventosAmareNotificacion.get(0).getIdPlcMms();
+                notificacionTipo1 = true;
+                notificacionTipo2 = false;
+                notificacionTipoError= false;
+                break;
+            case 2:
+                notificacionTipo1 = false;
+                notificacionTipo2 = true;
+                notificacionTipoError = false;
+                break;
+            case -1:
+                notificacionTipo1 = false;
+                notificacionTipo2 = false;
+                notificacionTipoError = true;
+                break;
         }
         
         //notificacionSelected.setRevisadoNotificacion(1);
@@ -234,5 +251,14 @@ public class NotificacionController implements Serializable {
         
         requestContext.update("idDialogConsumo");
         requestContext.execute("PF('dialogConsumo').show()");
+    }
+    
+    public String getNombreArchivo()
+    {
+        String ruta = notificacionSelected.getRutaarchivoNotificacion();
+        
+        String nombre = ruta.substring(ruta.lastIndexOf("/")+1);
+        
+        return nombre;
     }
 }
