@@ -64,11 +64,15 @@ public class PlcTuFacade extends AbstractFacade<PlcTu> {
 
     }
     
-    public List<PlcTu> getPorMac(String macPlcTu) {
+    public PlcTu getPorMac(String macPlcTu) {
         Query query = getEntityManager().createNamedQuery("PlcTu.findByMacPlcTu");
         query.setParameter("macPlcTu", macPlcTu);
         List<PlcTu> resultList = query.getResultList();
-        return resultList;
+        if(resultList.size()>0)
+        {
+            return resultList.get(0);
+        }
+        return null;
 
     }
     

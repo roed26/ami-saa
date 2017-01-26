@@ -8,7 +8,362 @@
     </h:head>
     <h:body>
 
-        <div id="tituloContenido">Notificación</div>
+        
+        
+        <h:form id="formNotificacionTipo1" rendered="#{notificacionController.notificacionTipo1}">
+            <div id="tituloContenido">#{notificacionesNuevasController.formatiarTipoEvento(notificacionController.notificacionSelected)}</div>
+            <p:panelGrid>
+                
+                <p:row>
+                    <p:column>
+                        Fecha :
+                    </p:column>
+                    <p:column>
+                        #{notificacionController.notificacionSelected.fechaNotificacion}
+                    </p:column>
+                    
+                </p:row>
+                
+                <p:row>
+                    <p:column>
+                        Mac Mms :
+                    </p:column>
+                    <p:column>
+                        <p:commandLink value="#{notificacionController.plcMmsNotificacion.macPlcMms}"/>
+                    </p:column>
+                    
+                </p:row>
+                
+                <p:row>
+                    <p:column>
+                        Ubicación del trafo :
+                    </p:column>
+                    <p:column>
+                        <p:commandLink >                            
+                            <p:graphicImage width="20" height="20" value="./../resources/img/iconos/ubicacion.png"/>
+                        </p:commandLink>
+                    </p:column>
+                    
+                </p:row>
+                
+            </p:panelGrid>
+            
+            <br/>
+            <br/>
+            <p:dataTable value="#{notificacionController.listaEventosAmareNotificacion}"
+                         var="eventoAmarre" >
+                
+                <p:column style="text-align: center;"   headerText="Hora (HH:mm:ss)">
+                    <p:commandLink  value="#{eventoAmarre.fechaHora.hours}:#{eventoAmarre.fechaHora.minutes}:#{eventoAmarre.fechaHora.seconds}"/>
+                </p:column>
+                
+                <p:column style="text-align: center;"   headerText="Mac Tu">
+                    <p:commandLink title="informacion del dispositivo"  value="#{eventoAmarre.macPlcTu.macPlcTu}"/>
+                </p:column>
+                <p:column style="text-align: center;"  headerText="Cliente">
+                    <p:commandLink title="Datos del cliente"  actionListener="#{notificacionController.verCliente(eventoAmarre.macPlcTu.idProducto.cedula)}">
+                        <p:graphicImage width="40" height="40" value="./../resources/img/iconos/datos_cliente.png"/>
+                    </p:commandLink>
+                </p:column>
+                
+                <p:column style="text-align: center;" headerText="Ubicacion">
+                    <p:commandLink title="ver la Ubicacion del dispositivo">
+                        <p:graphicImage width="40" height="40" value="./../resources/img/iconos/ubicacion.png"/>
+                    </p:commandLink>
+                </p:column>
+                <p:column  style="text-align: center;" headerText="Estado amarre">  
+                    <p:graphicImage rendered="#{eventoAmarre.estadoAmarre == 1}"  width="30" height="30" value="./../resources/img/estado/activo.png"/>
+                    
+                    <p:graphicImage rendered="#{eventoAmarre.estadoAmarre == 0}" width="30" height="30" value="./../resources/img/estado/inactivo.png"/>
+                </p:column>
+                
+                <p:column style="text-align: center;" headerText="Consumos">
+                    <p:commandLink title="ver Consumos" actionListener="#{notificacionController.verEventoConsumo(eventoAmarre.macPlcTu)}">
+                        <p:graphicImage width="50" height="50" value="./../resources/img/iconos/consumo.png"/>
+                    </p:commandLink>
+                </p:column>
+                
+            </p:dataTable>
+            
+        </h:form>
+        
+        <h:form id="idDialogCliente">
+            <p:dialog modal="true" position="center" header="Cliente" widgetVar="dialogCliente"  closable="true">
+                
+                <p:panelGrid>
+                    
+                    <p:row>
+                        <p:column>
+                            Cedula
+                        </p:column>
+                        
+                        <p:column>
+                            #{notificacionController.clienteSelected.cedula}
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            Nombre
+                        </p:column>
+                        
+                        <p:column>
+                            #{notificacionController.clienteSelected.nombres} 
+                            #{notificacionController.clienteSelected.apellidos}
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            Dirección
+                        </p:column>
+                        
+                        <p:column>
+                            #{notificacionController.clienteSelected.direccion} 
+                            
+                        </p:column>
+                    </p:row>
+                    
+                     <p:row>
+                        <p:column>
+                            Barrio
+                        </p:column>
+                        
+                        <p:column>
+                            #{notificacionController.clienteSelected.barrio} 
+                            
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            Barrio
+                        </p:column>
+                        
+                        <p:column>
+                            #{notificacionController.clienteSelected.barrio} 
+                            
+                        </p:column>
+                    </p:row>
+                    
+                     <p:row>
+                        <p:column>
+                            Estrato
+                        </p:column>
+                        
+                        <p:column>
+                            #{notificacionController.clienteSelected.estrato}
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            Correo Electrónico
+                        </p:column>
+                        
+                        <p:column>
+                            #{notificacionController.clienteSelected.email}
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+                
+            </p:dialog>
+        </h:form>
+        
+        <h:form id="idDialogConsumo">
+            <p:dialog  modal="true" position="center" header="Evento Consumo" widgetVar="dialogConsumo"  closable="true">
+                
+                <p:panelGrid>
+                    <p:row>
+                        <p:column style="font-size: 20px; font-weight: bold;">
+                            Energia: 
+                        </p:column>
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo1}">
+                            #{notificacionController.eventosConsumoSelected.energia}
+                        </p:column>
+                        
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo2}">
+                            #{notificacionController.eventosConsumoMcSelected.energia}
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column style="font-size: 20px; font-weight: bold;">
+                            Potencia:  
+                        </p:column>
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo1}">
+                            #{notificacionController.eventosConsumoSelected.potencia}
+                        </p:column>
+                        
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo2}">
+                            #{notificacionController.eventosConsumoMcSelected.potencia}
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column style="font-size: 20px; font-weight: bold;">
+                            Voltaje: 
+                        </p:column>
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo1}">
+                            #{notificacionController.eventosConsumoSelected.voltaje}
+                        </p:column>
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo2}">
+                            #{notificacionController.eventosConsumoMcSelected.voltaje}
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column style="font-size: 20px; font-weight: bold;" >
+                            Corriente: 
+                        </p:column>
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo1}">
+                            #{notificacionController.eventosConsumoSelected.corriente}
+                        </p:column>
+                        
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo2}">
+                            #{notificacionController.eventosConsumoMcSelected.corriente}
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+            </p:dialog>
+            
+        </h:form>
+        
+        <h:form id="formNotificacionTipoError" rendered="#{notificacionController.notificacionTipoError}">
+            <div id="tituloContenido">Archivo no procesado</div>
+            <p:panelGrid>
+                <p:row>
+                    <p:column>
+                        Nombre del archivo: 
+                    </p:column>
+                    
+                    <p:column>
+                        #{notificacionController.nombreArchivo}
+                    </p:column>
+                </p:row>
+                
+                <p:row>
+                    <p:column>
+                        Accion:
+                    </p:column>
+                    
+                    <p:column>
+                        Movido a la carpeta pendientes
+                    </p:column>
+                </p:row>
+                
+                <p:row>
+                    <p:column>
+                        Motivo:
+                    </p:column>
+                    
+                    <p:column>
+                        #{notificacionController.notificacionSelected.motivo}
+                    </p:column>
+                </p:row>
+                
+                <p:row>
+                    <p:column>
+                        Ubicación:
+                    </p:column>
+                    
+                    <p:column>
+                        archivos/pendientes/#{notificacionController.nombreArchivo}
+                    </p:column>
+                </p:row>
+                
+            </p:panelGrid>
+            
+        </h:form>
+        
+        
+        
+        <h:form id="formNotificacionTipo2" rendered="#{notificacionController.notificacionTipo2}">
+            <div id="tituloContenido">#{notificacionesNuevasController.formatiarTipoEvento(notificacionController.notificacionSelected)}</div>
+            <p:panelGrid>
+                
+                <p:row>
+                    <p:column>
+                        Fecha :
+                    </p:column>
+                    <p:column>
+                        #{notificacionController.notificacionSelected.fechaNotificacion}
+                    </p:column>
+                    
+                </p:row>
+                
+                <p:row>
+                    <p:column>
+                        Mac Mms :
+                    </p:column>
+                    <p:column>
+                        <p:commandLink value="#{notificacionController.plcMmsNotificacion.macPlcMms}"/>
+                    </p:column>
+                    
+                </p:row>
+                
+                <p:row>
+                    <p:column>
+                        Mac Mc :
+                    </p:column>
+                    <p:column>
+                        <p:commandLink value="#{notificacionController.plcMcNotificacion.macPlcMc}"/>
+                    </p:column>
+                    
+                </p:row>
+                
+                <p:row>
+                    <p:column>
+                        Ubicación del trafo :
+                    </p:column>
+                    <p:column>
+                        <p:commandLink >                            
+                            <p:graphicImage width="20" height="20" value="./../resources/img/iconos/ubicacion.png"/>
+                        </p:commandLink>
+                    </p:column>
+                    
+                </p:row>
+                
+            </p:panelGrid>
+            
+            <br/>
+            <br/>
+            <p:dataTable value="#{notificacionController.listaEventosAmarreMcNotificacion}"
+                         var="eventoAmarreMc" >
+                
+                <p:column style="text-align: center;"   headerText="Hora (HH:mm:ss)">
+                    #{eventoAmarreMc.fechaHora.hours}:#{eventoAmarreMc.fechaHora.minutes}:#{eventoAmarreMc.fechaHora.seconds}
+                </p:column>
+                
+                <p:column style="text-align: center;"   headerText="Id Medidor">
+                    <p:commandLink title="Informacion del dispositivo"  value="#{eventoAmarreMc.idMedidor.idMedidor}"/>
+                </p:column>
+                <p:column style="text-align: center;"  headerText="Cliente">
+                    <p:commandLink title="Datos del cliente"  actionListener="#{notificacionController.verCliente(eventoAmarreMc.idMedidor.idProducto.cedula)}">
+                        <p:graphicImage width="40" height="40" value="./../resources/img/iconos/datos_cliente.png"/>
+                    </p:commandLink>
+                </p:column>
+                
+                <p:column style="text-align: center;" headerText="Ubicacion">
+                    <p:commandLink title="ver la Ubicacion del dispositivo">
+                        <p:graphicImage width="40" height="40" value="./../resources/img/iconos/ubicacion.png"/>
+                    </p:commandLink>
+                </p:column>
+                <p:column  style="text-align: center;" headerText="Estado amarre">  
+                    <p:graphicImage rendered="#{eventoAmarreMc.estadoAmarre == 1}"  width="30" height="30" value="./../resources/img/estado/activo.png"/>
+                    
+                    <p:graphicImage rendered="#{eventoAmarreMc.estadoAmarre == 0}" width="30" height="30" value="./../resources/img/estado/inactivo.png"/>
+                </p:column>
+                
+                <p:column style="text-align: center;" headerText="Consumos">
+                    <p:commandLink title="ver Consumos" actionListener="#{notificacionController.verEventoConsumoMc(eventoAmarreMc.idMedidor)}">
+                        <p:graphicImage width="50" height="50" value="./../resources/img/iconos/consumo.png"/>
+                    </p:commandLink>
+                </p:column>
+                
+            </p:dataTable>
+            
+        </h:form>
         
         
     </h:body>
