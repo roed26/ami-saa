@@ -58,16 +58,16 @@
                 </p:column>
                 
                 <p:column style="text-align: center;"   headerText="Mac Tu">
-                    <p:commandLink  value="#{eventoAmarre.macPlcTu.macPlcTu}"/>
+                    <p:commandLink title="informacion del dispositivo"  value="#{eventoAmarre.macPlcTu.macPlcTu}"/>
                 </p:column>
                 <p:column style="text-align: center;"  headerText="Cliente">
-                    <p:commandLink  actionListener="#{notificacionController.verCliente(eventoAmarre.macPlcTu.idProducto.cedula)}">
+                    <p:commandLink title="Datos del cliente"  actionListener="#{notificacionController.verCliente(eventoAmarre.macPlcTu.idProducto.cedula)}">
                         <p:graphicImage width="40" height="40" value="./../resources/img/iconos/datos_cliente.png"/>
                     </p:commandLink>
                 </p:column>
                 
                 <p:column style="text-align: center;" headerText="Ubicacion">
-                    <p:commandLink>
+                    <p:commandLink title="ver la Ubicacion del dispositivo">
                         <p:graphicImage width="40" height="40" value="./../resources/img/iconos/ubicacion.png"/>
                     </p:commandLink>
                 </p:column>
@@ -78,7 +78,7 @@
                 </p:column>
                 
                 <p:column style="text-align: center;" headerText="Consumos">
-                    <p:commandLink actionListener="#{notificacionController.verEventoConsumo(eventoAmarre.macPlcTu)}">
+                    <p:commandLink title="ver Consumos" actionListener="#{notificacionController.verEventoConsumo(eventoAmarre.macPlcTu)}">
                         <p:graphicImage width="50" height="50" value="./../resources/img/iconos/consumo.png"/>
                     </p:commandLink>
                 </p:column>
@@ -178,8 +178,12 @@
                         <p:column style="font-size: 20px; font-weight: bold;">
                             Energia: 
                         </p:column>
-                        <p:column style="font-size: 20px;">
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo1}">
                             #{notificacionController.eventosConsumoSelected.energia}
+                        </p:column>
+                        
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo2}">
+                            #{notificacionController.eventosConsumoMcSelected.energia}
                         </p:column>
                     </p:row>
                     
@@ -187,8 +191,12 @@
                         <p:column style="font-size: 20px; font-weight: bold;">
                             Potencia:  
                         </p:column>
-                        <p:column style="font-size: 20px;">
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo1}">
                             #{notificacionController.eventosConsumoSelected.potencia}
+                        </p:column>
+                        
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo2}">
+                            #{notificacionController.eventosConsumoMcSelected.potencia}
                         </p:column>
                     </p:row>
                     
@@ -196,8 +204,11 @@
                         <p:column style="font-size: 20px; font-weight: bold;">
                             Voltaje: 
                         </p:column>
-                        <p:column style="font-size: 20px;">
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo1}">
                             #{notificacionController.eventosConsumoSelected.voltaje}
+                        </p:column>
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo2}">
+                            #{notificacionController.eventosConsumoMcSelected.voltaje}
                         </p:column>
                     </p:row>
                     
@@ -205,8 +216,12 @@
                         <p:column style="font-size: 20px; font-weight: bold;" >
                             Corriente: 
                         </p:column>
-                        <p:column style="font-size: 20px;">
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo1}">
                             #{notificacionController.eventosConsumoSelected.corriente}
+                        </p:column>
+                        
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo2}">
+                            #{notificacionController.eventosConsumoMcSelected.corriente}
                         </p:column>
                     </p:row>
                 </p:panelGrid>
@@ -258,6 +273,95 @@
                 </p:row>
                 
             </p:panelGrid>
+            
+        </h:form>
+        
+        
+        
+        <h:form id="formNotificacionTipo2" rendered="#{notificacionController.notificacionTipo2}">
+            <div id="tituloContenido">#{notificacionesNuevasController.formatiarTipoEvento(notificacionController.notificacionSelected)}</div>
+            <p:panelGrid>
+                
+                <p:row>
+                    <p:column>
+                        Fecha :
+                    </p:column>
+                    <p:column>
+                        #{notificacionController.notificacionSelected.fechaNotificacion}
+                    </p:column>
+                    
+                </p:row>
+                
+                <p:row>
+                    <p:column>
+                        Mac Mms :
+                    </p:column>
+                    <p:column>
+                        <p:commandLink value="#{notificacionController.plcMmsNotificacion.macPlcMms}"/>
+                    </p:column>
+                    
+                </p:row>
+                
+                <p:row>
+                    <p:column>
+                        Mac Mc :
+                    </p:column>
+                    <p:column>
+                        <p:commandLink value="#{notificacionController.plcMcNotificacion.macPlcMc}"/>
+                    </p:column>
+                    
+                </p:row>
+                
+                <p:row>
+                    <p:column>
+                        Ubicación del trafo :
+                    </p:column>
+                    <p:column>
+                        <p:commandLink >                            
+                            <p:graphicImage width="20" height="20" value="./../resources/img/iconos/ubicacion.png"/>
+                        </p:commandLink>
+                    </p:column>
+                    
+                </p:row>
+                
+            </p:panelGrid>
+            
+            <br/>
+            <br/>
+            <p:dataTable value="#{notificacionController.listaEventosAmarreMcNotificacion}"
+                         var="eventoAmarreMc" >
+                
+                <p:column style="text-align: center;"   headerText="Hora (HH:mm:ss)">
+                    #{eventoAmarreMc.fechaHora.hours}:#{eventoAmarreMc.fechaHora.minutes}:#{eventoAmarreMc.fechaHora.seconds}
+                </p:column>
+                
+                <p:column style="text-align: center;"   headerText="Id Medidor">
+                    <p:commandLink title="Informacion del dispositivo"  value="#{eventoAmarreMc.idMedidor.idMedidor}"/>
+                </p:column>
+                <p:column style="text-align: center;"  headerText="Cliente">
+                    <p:commandLink title="Datos del cliente"  actionListener="#{notificacionController.verCliente(eventoAmarreMc.idMedidor.idProducto.cedula)}">
+                        <p:graphicImage width="40" height="40" value="./../resources/img/iconos/datos_cliente.png"/>
+                    </p:commandLink>
+                </p:column>
+                
+                <p:column style="text-align: center;" headerText="Ubicacion">
+                    <p:commandLink title="ver la Ubicacion del dispositivo">
+                        <p:graphicImage width="40" height="40" value="./../resources/img/iconos/ubicacion.png"/>
+                    </p:commandLink>
+                </p:column>
+                <p:column  style="text-align: center;" headerText="Estado amarre">  
+                    <p:graphicImage rendered="#{eventoAmarreMc.estadoAmarre == 1}"  width="30" height="30" value="./../resources/img/estado/activo.png"/>
+                    
+                    <p:graphicImage rendered="#{eventoAmarreMc.estadoAmarre == 0}" width="30" height="30" value="./../resources/img/estado/inactivo.png"/>
+                </p:column>
+                
+                <p:column style="text-align: center;" headerText="Consumos">
+                    <p:commandLink title="ver Consumos" actionListener="#{notificacionController.verEventoConsumoMc(eventoAmarreMc.idMedidor)}">
+                        <p:graphicImage width="50" height="50" value="./../resources/img/iconos/consumo.png"/>
+                    </p:commandLink>
+                </p:column>
+                
+            </p:dataTable>
             
         </h:form>
         
