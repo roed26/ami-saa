@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="EventosConsumoViewDlg" widgetVar="EventosConsumoViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewEventosConsumoTitle}">
+            <h:form id="EventosConsumoViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{eventosConsumoController.selected != null}">
+                        <h:outputText value="#{bundle.ViewEventosConsumoLabel_idConsumo}"/>
+                        <h:outputText value="#{eventosConsumoController.selected.idConsumo}" title="#{bundle.ViewEventosConsumoTitle_idConsumo}"/>
+                        <h:outputText value="#{bundle.ViewEventosConsumoLabel_energia}"/>
+                        <h:outputText value="#{eventosConsumoController.selected.energia}" title="#{bundle.ViewEventosConsumoTitle_energia}"/>
+                        <h:outputText value="#{bundle.ViewEventosConsumoLabel_potencia}"/>
+                        <h:outputText value="#{eventosConsumoController.selected.potencia}" title="#{bundle.ViewEventosConsumoTitle_potencia}"/>
+                        <h:outputText value="#{bundle.ViewEventosConsumoLabel_voltaje}"/>
+                        <h:outputText value="#{eventosConsumoController.selected.voltaje}" title="#{bundle.ViewEventosConsumoTitle_voltaje}"/>
+                        <h:outputText value="#{bundle.ViewEventosConsumoLabel_corriente}"/>
+                        <h:outputText value="#{eventosConsumoController.selected.corriente}" title="#{bundle.ViewEventosConsumoTitle_corriente}"/>
+                        <h:outputText value="#{bundle.ViewEventosConsumoLabel_fechaHora}"/>
+                        <h:outputText value="#{eventosConsumoController.selected.fechaHora}" title="#{bundle.ViewEventosConsumoTitle_fechaHora}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewEventosConsumoLabel_idPlcMc}"/>
+                        <h:outputText value="#{eventosConsumoController.selected.idPlcMc}" title="#{bundle.ViewEventosConsumoTitle_idPlcMc}"/>
+                        <h:outputText value="#{bundle.ViewEventosConsumoLabel_idPlcMms}"/>
+                        <h:outputText value="#{eventosConsumoController.selected.idPlcMms}" title="#{bundle.ViewEventosConsumoTitle_idPlcMms}"/>
+                        <h:outputText value="#{bundle.ViewEventosConsumoLabel_idPlcTu}"/>
+                        <h:outputText value="#{eventosConsumoController.selected.idPlcTu}" title="#{bundle.ViewEventosConsumoTitle_idPlcTu}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="EventosConsumoViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+
+      >
+
+    <body>
+        <h:form id="datosIngreso">
+            <h:panelGrid columns="2"> 
+                <p:commandButton style="left: 830px" value="Seleccionar un nuevo trafo"
+                                 onclick="PF('seleccionarTrafo').show()" />
+            </h:panelGrid>
+        </h:form>
+        <p:growl id="messages" showDetail="true" />
+        
+        <f:view contentType="text/html">
+            <p:gmap id="gmap" center="#{geoAmarreController.centroMapa}" zoom="15" type="HYBRID" style="width:100%;height:600px"
+                    model="#{geoAmarreController.puntosModelo}"  widgetVar="map" >
+                <p:ajax event="overlaySelect" listener="#{geoAmarreController.onMarkerSelect}" />
+            </p:gmap>
+        </f:view>
+       
+        
+        <p:dialog closable="false" header="Seleccionar Trafo" visible="#{!geoAmarreController.trafoSeleccionado}" resizable="false" width="450" position="center" modal="true"  widgetVar="seleccionarTrafo">
+            <p:outputLabel value="Busque y seleccione el trafo " style="background: #c2dfef; color: black;font-weight: bold; font-size: 16px;" />                    
+            <h:form id="trafoListForm">
+                <br/>
+                <h:panelGrid columns="2">
+                    <p:outputLabel value="Buscar trafo " />
+                    <p:inputText  placeholder="Digite el identificador del trafo" style="width: 240px;"  value="#{trafoController.idTrafo}" >
+                        <p:ajax event="keyup" update="tablaTrafos" listener="#{trafoController.buscarPorId()}" />                                
+                    </p:inputText>                          
+                </h:panelGrid>
+                <br/>
+                <p:panel id="tablaTrafos">
+                    <p:dataTable id="datalist" value="#{trafoController.listaTrafos}" var="item"
+                                 paginator="true"
+                                 rowKey="#{item.idTrafo}"
+                                 rows="10"
+                                 rowsPerPageTemplate="5,10"
+                                 >
+                        <p:column style="width:auto;">
+                            <f:facet name="header">
+                                <h:outputText value="Identificador de Trafo"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idTrafo}"/>
+                        </p:column>
+                        <p:column style="width:120px; text-align:center; background: #EBEDEB;">
+                            <f:facet name="header">
+                                <h:outputText value="Accion"/>
+                            </f:facet>
+                            <p:commandButton id="viewButton"  
+                                             actionListener="#{geoAmarreController.seleccionarTrafo(item)}" 
+                                             icon="ui-icon-plus" 
+                                             value="Seleccionar"  
+                                             ajax="false"
+                                             update="@all"
+                                             />
+                        </p:column>
+
+                    </p:dataTable>
+                </p:panel>
+                <h:panelGrid columns="2" >
+                    <p:commandButton id="viewButton"  
+                                     value="Cancelar"  
+                                     ajax="true"
+                                     action="#{trafoController.reiniciarVariables()}"
+                                     />
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+          <p:dialog header="Seleccionar rango de fecha" closable="false" resizable="false"  position="center" modal="true"  widgetVar="seleccionarFecha">
+            <h:form id="formFecha" style="text-align: center; font-weight: bold; color: black;">
+                <p:outputLabel style="font-weight: bold; font-size: 14px; " value="Seleccione el rango de fecha para conocer el estado de amarre del cliente" />
+                <br/>
+                <br/>
+                <p:panelGrid id="panel">
+                    <p:row>
+                        <p:column colspan="2">
+                            <p:selectOneRadio id="rangoFecha" 
+                                              value="#{geoAmarreController.rangoFecha}" 
+                                              valueChangeListener="#{geoAmarreController.cambiarRangoFecha}"
+                                              required="true"
+                                              requiredMessage="Seleccione un rango de fecha"
+                                              >
+                                <f:selectItem itemValue="1" itemLabel=" Última semana " />
+                                <f:selectItem itemValue="2" itemLabel=" Último mes " />
+                                <f:selectItem itemValue="3" itemLabel="Seleccionar rango de fecha " />
+                                <f:ajax  execute="ocupacion"  render="panel"/>
+                            </p:selectOneRadio>
+                        </p:column>
+                        <p:column>
+                            <p:message for="rangoFecha"/>
+                        </p:column>
+
+                    </p:row>
+                    <p:row rendered="#{geoAmarreController.rangoFechaCambiado1}">
+                        <p:column >
+                            <h:outputText value="Fecha de inicio"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{geoAmarreController.formatoFecha.format(geoAmarreController.fechaInicio)}"/>
+                        </p:column>
+
+                    </p:row>
+                    <p:row rendered="#{geoAmarreController.rangoFechaCambiado1}">
+                        <p:column >
+                            <h:outputText value="Fecha de fin"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{geoAmarreController.formatoFecha.format(geoAmarreController.fechaFin)}"/>
+                        </p:column>
+
+                    </p:row>
+                    <p:row rendered="#{geoAmarreController.rangoFechaCambiado2}">
+                        <p:column >
+                            <h:outputText value="Fecha de inicio"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{geoAmarreController.formatoFecha.format(geoAmarreController.fechaInicio)}"/>
+                        </p:column>
+
+                    </p:row>
+                    <p:row rendered="#{geoAmarreController.rangoFechaCambiado2}">
+                        <p:column >
+                            <h:outputText value="Fecha de fin"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{geoAmarreController.formatoFecha.format(geoAmarreController.fechaFin)}"/>
+                        </p:column>
+
+                    </p:row>
+                    <p:row rendered="#{geoAmarreController.rangoFechaCambiado3}">
+                        <p:column >
+                            <h:outputText value="Fecha de inicio"/>
+                        </p:column>
+                        <p:column>
+                            <p:calendar value="#{geoAmarreController.fechaInicio}" size="14" id="fechaInicio"  required="true" 
+                                        requiredMessage="Seleccione una fecha de inicio."
+                                        showOn="button"
+                                        navigator="true" yearRange="c-100:c" pattern="yyyy-MM-dd" 
+                                        placeholder="aaaa-mm-dd"
+                                        >
+                                <f:validator validatorId="ValidarCampoFecha"/>
+                            </p:calendar>
+                        </p:column>
+                        <p:column>
+                            <p:message for="fechaInicio" />
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{geoAmarreController.rangoFechaCambiado3}">
+                        <p:column >
+                            <h:outputText value="Fecha de fin"/>
+                        </p:column>
+                        <p:column >
+                            <p:calendar value="#{geoAmarreController.fechaFin}" size="14" id="fechaFin"  required="true" 
+                                        requiredMessage="Seleccione una fecha de fin." 
+                                        showOn="button" navigator="true" yearRange="c-100:c" pattern="yyyy-MM-dd" 
+                                        placeholder="aaaa-mm-dd"
+                                        >
+                                <f:validator validatorId="ValidarCampoFecha"/>                               
+                            </p:calendar>
+                        </p:column>
+                        <p:column>
+                            <p:message for="fechaFin" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="2" style="text-align: right;">
+                            <p:commandButton 
+                                value="Aceptar"  
+                                ajax="true" 
+                                update="panel"
+                                actionListener="#{geoAmarreController.procesarConsulta()}"
+
+                                oncomplete="#{clienteController.cambiarEstadoSeleccion()}"
+                                />
+                        
+                            <p:commandButton 
+                                value="Cancelar"  
+                                onclick="PF('seleccionarFecha').hide()"
+                                actionListener="#{geoAmarreController.cancelarProceso()}"
+
+
+                                />
+                        </p:column>
+                    </p:row>                   
+                </p:panelGrid>
+
+            </h:form>
+
+        </p:dialog>
+        
+        <p:dialog header="Información de estado de amarre del cliente" closable="true" resizable="false"  position="center" modal="true"  widgetVar="productoEstadoAmarre">
+            <p:separator/>
+            <h:form id="productoSeleccionado">
+
+                <p:outputLabel style="font-weight: bold; font-size: 16px; color: black;" value="Información de estado de amarre del cliente" rendered="#{clienteController.clienteSeleccionado}"/>
+                <p:separator/>
+                <br/>
+                <p:panelGrid id="panel">
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Nombre del cliente: " style="font-weight: bold; color: black;"/>
+                        </p:column>
+                        <p:column colspan="2">
+                            <p:outputLabel value="#{geoAmarreController.producto.cedula.nombres} "/>
+                            <p:outputLabel value="#{geoAmarreController.producto.cedula.apellidos}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Dirección: " style="font-weight: bold; color: black;"/>
+                        </p:column>
+                        <p:column colspan="2">
+                            <p:outputLabel value="#{geoAmarreController.producto.cedula.direccion}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{!geoAmarreController.existeTrafo}">
+                        <p:column colspan="3">
+                            <p:outputLabel value="Este cliente no tiene un producto asociado " style="font-weight: bold; color: Red;"/>
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{geoAmarreController.existeTrafo}">
+                        <p:column colspan="3" style="background: #c2dfef; text-align: center; font-weight: bold; color: black;">
+                            <p:outputLabel value="Producto"/>
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{geoAmarreController.existeTrafo}">
+                        <p:column >
+                            <p:outputLabel style="font-weight: bold;" value="Identificador"/>
+                        </p:column>
+                        <p:column colspan="2">
+                            <p:outputLabel style="font-weight: bold;" value="#{geoAmarreController.producto.idProducto}"/>
+                        </p:column>
+
+                    </p:row>
+                    <p:row rendered="#{geoAmarreController.existeTrafo}">
+                        <p:column colspan="3" style="background: #c2dfef; text-align: center; font-weight: bold; color: black;">
+                            <p:outputLabel value="Trafo al cual esta vinculado"/>
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{geoAmarreController.existeTrafo}">
+                        <p:column style="background: #EBEDEB; text-align: center;">
+                            <p:outputLabel value="Identificador de trafo"/>
+                        </p:column>
+                        <p:column style="background: #EBEDEB; text-align: center;">
+                            <p:outputLabel value="Latitud"/>
+                        </p:column>
+                        <p:column style="background: #EBEDEB; text-align: center;">
+                            <p:outputLabel value="Longitud"/>
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{geoAmarreController.existeTrafo}">
+                        <p:column >
+                            <p:outputLabel value="#{geoAmarreController.trafo.idTrafo}"/>
+                        </p:column>
+                        <p:column >
+                            <p:outputLabel value="#{geoAmarreController.trafo.latitud}"/>
+                        </p:column>
+                        <p:column >
+                            <p:outputLabel value="#{geoAmarreController.trafo.longitud}"/>
+                        </p:column>
+                    </p:row>
+
+                    <p:row rendered="#{geoAmarreController.existeTrafo}">
+                        <p:column colspan="3" style="background: #c2dfef; text-align: center; font-weight: bold; color: black;">
+                            <p:outputLabel value="Estado de amarre"/>
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{geoAmarreController.existeTrafo}">
+                        <p:column rendered="#{geoAmarreController.activo}">
+                            <p:outputLabel style="font-size: 17px; font-weight: bold;" value="Hay amarre"/>
+                        </p:column>
+                        <p:column colspan="2" rendered="#{geoAmarreController.activo}">
+                            <p:graphicImage width="20" height="20" value="./../resources/img/estado/activo.png"/>
+                        </p:column>
+                        <p:column style="vertical-align: middle;" rendered="#{!geoAmarreController.activo}">
+                            <p:outputLabel style="font-size: 17px; font-weight: bold;" value="Sin amarre"/>
+                        </p:column>
+                        <p:column colspan="2" style="vertical-align: middle;" rendered="#{!geoAmarreController.activo}">
+                            <p:graphicImage width="20" height="20" value="./../resources/img/estado/inactivo.png"/>
+                        </p:column>
+
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+        
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXroWbv5-OtudGXwL0NgbV9TrlfLwafPA"
+        type="text/javascript"></script>
+        <script type="text/javascript">
+                            var currentMarker = null;
+
+                            function handlePointClick(event) {
+                                if (currentMarker === null) {
+                                    document.getElementById('lat').value = event.latLng.lat();
+                                    document.getElementById('lng').value = event.latLng.lng();
+
+                                    currentMarker = new google.maps.Marker({
+                                        position: new google.maps.LatLng(event.latLng.lat(), event.latLng.lng())
+                                    });
+
+                                    PF('map').addOverlay(currentMarker);
+
+                                    PF('dlg').show();
+                                }
+                            }
+
+                            function markerAddComplete() {
+                                var title = document.getElementById('title');
+                                currentMarker.setTitle(title.value);
+                                title.value = "";
+
+                                currentMarker = null;
+                                PF('dlg').hide();
+                            }
+
+                            function cancel() {
+                                PF('dlg').hide();
+                                currentMarker.setMap(null);
+                                currentMarker = null;
+
+                                return false;
+                            }
+        </script>
+    </body>
+</html>

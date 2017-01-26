@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        
+    </h:head>
+    <h:body>
+        <h:form id="datosIngreso" >
+            <h:panelGrid columns="2" > 
+                <p:commandButton style="left: 850px" action="#{consumoController.cambiarEstadoSeleccion}" value="Realizar nueva consulta" 
+                                 onclick="PF('seleccionarTrafo').show()" />
+            </h:panelGrid>
+            <br/>
+        </h:form>
+
+        <h:form id="trafoSeleccionado">
+
+            <p:outputLabel style="font-weight: bold; font-size: 16px; color: black;" value="Información de consumo" rendered="#{consumoController.trafoSeleccionado}"/>
+            <p:separator/>
+            <br/>
+            <p:panelGrid  rendered="#{consumoController.trafoSeleccionado}">
+                <p:row>
+                    <p:column rowspan="6" rendered="#{!consumoController.sinConsumo}">
+                        <p:barChart value="#{consumoController.consumo}" legendPosition="ne" 
+                                    title="Consumo" style="height:auto; width: auto; color: red;"
+                                    xaxisLabel="dias" yaxisLabel="Kw/h" 
+
+                                    />
+                    </p:column>
+                    <p:column rowspan="6" rendered="#{consumoController.sinConsumo}">
+                        <p:barChart value="#{consumoController.consumo}" legendPosition="ne" 
+                                    title="El macromedidor no registra consumo en esta fecha" style="height:300px; width: 400px; color: red;"
+                                    xaxisLabel="dias" yaxisLabel="Kw/h" 
+                                    xaxisAngle="270"
+
+                                    />
+                    </p:column>
+                    <p:column colspan="2" style="height: 20px; background: #EBEDEB; text-align: center;">
+                        <p:outputLabel value="Informacion del macromedidor " style="font-weight: bold; color: black;"/>
+                    </p:column>
+                    
+                    
+                </p:row>
+                <p:row>
+                    <p:column style="background: #c2dfef; height: 20px;" >
+                        <p:outputLabel value="Identificador:" style="font-weight: bold; color: black;"/>                        
+                    </p:column>
+                    <p:column style="background: #c2dfef; height: 20px;">
+                        <p:outputLabel value="#{consumoController.macro.idMacro} " style="font-weight: bold; color: black;"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column style="height: 20px;">
+                        <p:outputLabel value="Marca:" style="font-weight: bold; color: black;"/>                        
+                    </p:column>
+                    <p:column style="height: 20px;">
+                        <p:outputLabel value="#{consumoController.macro.marca} " style="font-weight: bold; color: black;"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column style="background: #c2dfef; height: 20px; " >
+                        <p:outputLabel value="Modelo:" style="font-weight: bold; color: black;"/>                        
+                    </p:column>
+                    <p:column style="background: #c2dfef; height: 20px; ">
+                        <p:outputLabel value="#{consumoController.macro.modelo} " style="font-weight: bold; color: black;"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column style="height: 20px;">
+                        <p:outputLabel value="Tipo:" style="font-weight: bold; color: black;"/>                        
+                    </p:column>
+                    <p:column style="height: 20px;">
+                        <p:outputLabel value="#{consumoController.macro.tipo} " style="font-weight: bold; color: black;"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column style="background: #c2dfef; height: 20px; " >
+                        <p:outputLabel value="Estado:" style="font-weight: bold; color: black;"/>                        
+                    </p:column>
+                    <p:column rendered="#{consumoController.macro.estado.equalsIgnoreCase('A')}" style="height: 20px; background: #c2dfef; ">
+                        <p:graphicImage width="20" height="20" value="./../resources/img/estado/activo.png"/>
+                        <p:outputLabel value="Activo" style="font-weight: bold; color: black;"/>
+                    </p:column>
+                    <p:column rendered="#{!consumoController.macro.estado.equalsIgnoreCase('A')}" style="height: 20px; background: #c2dfef; ">
+                        <p:graphicImage width="20" height="20" value="./../resources/img/estado/inactivo.png"/>
+                        <p:outputLabel value=" Inactivo" style="font-weight: bold; color: black;"/>
+                    </p:column>
+                </p:row>
+                
+            </p:panelGrid>
+        </h:form>
+
+        <p:dialog closable="false" visible="#{!consumoController.trafoSeleccionado}" header="Seleccionar trafo" resizable="false" width="400" position="center"  widgetVar="seleccionarTrafo">
+            <p:outputLabel style="font-weight: bold; font-size: 16px" value="Busque y selecciones el trafo " />
+            <h:form id="listaTrafos">
+                <br/>
+                <h:panelGrid columns="2">
+                    <p:outputLabel value="Buscar " />
+                    <p:inputText  placeholder="Digite el identificador del trafo" style="width: 220px;"  value="#{trafoController.idTrafo}" >
+                        <p:ajax event="keyup" update="tablaTrafos" listener="#{trafoController.buscarPorId()}" />                                
+                    </p:inputText>                          
+                </h:panelGrid>
+                <br/>
+                <p:panel id="tablaTrafos">
+                    <p:dataTable id="datalist" value="#{trafoController.listaTrafos}" var="item"
+                                 paginator="true"
+                                 rowKey="#{item.idTrafo}"
+                                 rows="5"
+
+                                 >
+                        <p:column style="text-align: center; width: 180px">
+                            <f:facet name="header">
+                                <h:outputText value="Identificador de trafo"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idTrafo}"/>
+                        </p:column>
+
+                        <p:column style="width: 100px; background: #EBEDEB;">
+                            <f:facet name="header">
+                                <h:outputText value="Accion"/>
+                            </f:facet>
+                            <p:commandButton id="viewButton"  
+                                             action="#{consumoController.seleccionarTrafo(item)}" 
+                                             icon="ui-icon-plus" value="Seleccionar"  
+                                             />
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+                <h:panelGrid columns="2" >
+                    <p:commandButton id="viewButton"  
+                                     value="Cancelar"  
+                                     ajax="true"
+                                     action="#{trafoController.reiniciarVariables()}"
+                                     />
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+        
+        
+        <p:dialog header="Seleccionar rango de fecha" resizable="false" width="500px" position="center" modal="true"  widgetVar="seleccionarFecha">
+            <h:form id="formFecha" style="text-align: center; font-weight: bold; color: black;">
+                <p:outputLabel style="font-weight: bold; font-size: 14px; " value="Seleccione el rango de fecha para conocer el consumo del macromedidor vinculado al trafo: " />
+                <p:outputLabel style="font-weight: bold; font-size: 15px; color: blue; " value="#{consumoController.trafo.idTrafo}" />
+                <br/>
+                <br/>
+                <p:panelGrid id="panel">
+                    <p:row>
+                        <p:column colspan="2">
+                            <p:selectOneRadio id="rangoFecha" 
+                                              value="#{consumoController.rangoFecha}" 
+                                              valueChangeListener="#{consumoController.cambiarRangoFecha}"
+                                              required="true"
+                                              requiredMessage="Seleccione un rango de fecha"
+                                              >
+                                <f:selectItem itemValue="1" itemLabel=" Última semana " />
+                                <f:selectItem itemValue="2" itemLabel=" Último mes " />
+                                <f:selectItem itemValue="3" itemLabel="Seleccionar rango de fecha " />
+                                <f:ajax  execute="ocupacion"  render="panel"/>
+                            </p:selectOneRadio>
+                        </p:column>
+                        <p:column>
+                            <p:message for="rangoFecha"/>
+                        </p:column>
+
+                    </p:row>
+                    <p:row rendered="#{consumoController.rangoFechaCambiado1}">
+                        <p:column >
+                            <h:outputText value="Fecha de inicio"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{consumoController.formatoFecha.format(consumoController.fechaInicio)}"/>
+                        </p:column>
+
+                    </p:row>
+                    <p:row rendered="#{consumoController.rangoFechaCambiado1}">
+                        <p:column >
+                            <h:outputText value="Fecha de fin"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{consumoController.formatoFecha.format(consumoController.fechaFin)}"/>
+                        </p:column>
+
+                    </p:row>
+                    <p:row rendered="#{consumoController.rangoFechaCambiado2}">
+                        <p:column >
+                            <h:outputText value="Fecha de inicio"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{consumoController.formatoFecha.format(consumoController.fechaInicio)}"/>
+                        </p:column>
+
+                    </p:row>
+                    <p:row rendered="#{consumoController.rangoFechaCambiado2}">
+                        <p:column >
+                            <h:outputText value="Fecha de fin"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{consumoController.formatoFecha.format(consumoController.fechaFin)}"/>
+                        </p:column>
+
+                    </p:row>
+                    <p:row rendered="#{consumoController.rangoFechaCambiado3}">
+                        <p:column >
+                            <h:outputText value="Fecha de inicio"/>
+                        </p:column>
+                        <p:column>
+                            <p:calendar value="#{consumoController.fechaInicio}" size="14" id="fechaInicio"  required="true" 
+                                        requiredMessage="Seleccione una fecha de inicio."
+                                        showOn="button"
+                                        navigator="true" yearRange="c-100:c" pattern="yyyy-MM-dd" 
+                                        placeholder="aaaa-mm-dd"
+                                        >
+                                <f:validator validatorId="ValidarCampoFecha"/>
+                            </p:calendar>
+                        </p:column>
+                        <p:column>
+                            <p:message for="fechaInicio"/>
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{consumoController.rangoFechaCambiado3}">
+                        <p:column >
+                            <h:outputText value="Fecha de fin"/>
+                        </p:column>
+                        <p:column >
+                            <p:calendar value="#{consumoController.fechaFin}" size="14" id="fechaFin"  required="true" 
+                                        requiredMessage="Seleccione una fecha de fin." 
+                                        showOn="button" navigator="true" yearRange="c-100:c" pattern="yyyy-MM-dd" 
+                                        placeholder="aaaa-mm-dd"
+                                        >
+                                <f:validator validatorId="ValidarCampoFecha"/>                               
+                            </p:calendar>
+                        </p:column>
+                        <p:column>
+                            <p:message for="fechaFin"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="2" style="text-align: right;">
+                            <p:commandButton 
+                                value="Aceptar"  
+                                update="panel"
+                                action="#{consumoController.procesarConsulta()}"
+                                oncomplete="#{consumoController.cambiarEstadoSeleccion()}"
+                                />
+                        </p:column>
+                    </p:row>                   
+                </p:panelGrid>
+
+            </h:form>
+
+        </p:dialog>
+    </h:body>    
+</html>

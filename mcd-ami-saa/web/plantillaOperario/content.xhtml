@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Content</title>
+    </h:head>
+    <h:body>
+        <p:panel>
+            <div>
+                <div >
+                    <p:outputPanel id="panelContent">
+                        <p:outputPanel>
+                            <ui:include src="#{routingControllerOperario.ruta}" /> 
+                        </p:outputPanel>
+                    </p:outputPanel>
+                </div>
+            </div>
+        </p:panel>
+    </h:body>
+</html>
+

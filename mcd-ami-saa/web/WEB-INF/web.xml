@@ -69,8 +69,4 @@
         <description>rol operario</description>
         <role-name>Operario</role-name>
     </security-role>
-    <security-role>
-        <description>rol desarrollador</description>
-        <role-name>Desarrollador</role-name>
-    </security-role>
 </web-app>

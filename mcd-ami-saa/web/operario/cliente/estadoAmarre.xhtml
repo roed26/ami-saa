@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Estado amarre clientes </title>
+    </h:head>
+    <h:body>
+        <h:form id="datosIngreso">
+            <h:panelGrid columns="2"> 
+
+                <p:commandButton style="left: 840px;" value="Seleccionar nuevo cliente" 
+                                 onclick="PF('seleccionarCliente').show()" />
+            </h:panelGrid>
+            <br/>
+            <br/>
+        </h:form>
+
+        <p:separator/>
+        <h:form id="clienteSeleccionado">
+
+            <p:outputLabel style="font-weight: bold; font-size: 16px; color: black;" value="Información de estado de amarre del cliente" rendered="#{clienteController.clienteSeleccionado}"/>
+            <p:separator/>
+            <br/>
+            <p:panelGrid id="panel"  rendered="#{clienteController.clienteSeleccionado}">
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Nombre del cliente: " style="font-weight: bold; color: black;"/>
+                    </p:column>
+                    <p:column colspan="2">
+                        <p:outputLabel value="#{clienteController.selected.nombres} "/>
+                        <p:outputLabel value="#{clienteController.selected.apellidos}"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Dirección: " style="font-weight: bold; color: black;"/>
+                    </p:column>
+                    <p:column colspan="2">
+                        <p:outputLabel value="#{clienteController.selected.direccion}"/>
+                    </p:column>
+                </p:row>
+                <p:row rendered="#{!clienteController.existeTrafo}">
+                    <p:column colspan="3">
+                        <p:outputLabel value="Este cliente no tiene un producto asociado " style="font-weight: bold; color: Red;"/>
+                    </p:column>
+                </p:row>
+                <p:row rendered="#{clienteController.existeTrafo}">
+                    <p:column colspan="3" style="background: #c2dfef; text-align: center; font-weight: bold; color: black;">
+                        <p:outputLabel value="Producto"/>
+                    </p:column>
+                </p:row>
+                <p:row rendered="#{clienteController.existeTrafo}">
+                    <p:column >
+                        <p:outputLabel style="font-weight: bold;" value="Identificador"/>
+                    </p:column>
+                    <p:column colspan="2">
+                        <p:outputLabel style="font-weight: bold;" value="#{clienteController.producto.idProducto}"/>
+                    </p:column>
+
+                </p:row>
+                <p:row rendered="#{clienteController.existeTrafo}">
+                    <p:column colspan="3" style="background: #c2dfef; text-align: center; font-weight: bold; color: black;">
+                        <p:outputLabel value="Trafo al cual esta vinculado"/>
+                    </p:column>
+                </p:row>
+                <p:row rendered="#{clienteController.existeTrafo}">
+                    <p:column style="background: #EBEDEB; text-align: center;">
+                        <p:outputLabel value="Identificador de trafo"/>
+                    </p:column>
+                    <p:column style="background: #EBEDEB; text-align: center;">
+                        <p:outputLabel value="Latitud"/>
+                    </p:column>
+                    <p:column style="background: #EBEDEB; text-align: center;">
+                        <p:outputLabel value="Longitud"/>
+                    </p:column>
+                </p:row>
+                <p:row rendered="#{clienteController.existeTrafo}">
+                    <p:column >
+                        <p:outputLabel value="#{clienteController.trafo.idTrafo}"/>
+                    </p:column>
+                    <p:column >
+                        <p:outputLabel value="#{clienteController.trafo.latitud}"/>
+                    </p:column>
+                    <p:column >
+                        <p:outputLabel value="#{clienteController.trafo.longitud}"/>
+                    </p:column>
+                </p:row>
+
+                <p:row rendered="#{clienteController.existeTrafo}">
+                    <p:column colspan="3" style="background: #c2dfef; text-align: center; font-weight: bold; color: black;">
+                        <p:outputLabel value="Estado de amarre"/>
+                    </p:column>
+                </p:row>
+                <p:row rendered="#{clienteController.existeTrafo}">
+                    <p:column rendered="#{clienteController.activo}">
+                        <p:outputLabel style="font-size: 17px; font-weight: bold;" value="Hay amarre"/>
+                    </p:column>
+                    <p:column colspan="2" rendered="#{clienteController.activo}">
+                        <p:graphicImage width="20" height="20" value="./../resources/img/estado/activo.png"/>
+                    </p:column>
+                    <p:column style="vertical-align: middle;" rendered="#{!clienteController.activo}">
+                        <p:outputLabel style="font-size: 17px; font-weight: bold;" value="Sin amarre"/>
+                    </p:column>
+                    <p:column colspan="2" style="vertical-align: middle;" rendered="#{!clienteController.activo}">
+                        <p:graphicImage width="20" height="20" value="./../resources/img/estado/inactivo.png"/>
+                    </p:column>
+
+                </p:row>
+            </p:panelGrid>
+        </h:form>
+        <p:dialog header="Seleccionar cliente" closable="false" visible="#{!clienteController.clienteSeleccionado}" resizable="false" width="850" position="center" modal="true"  widgetVar="seleccionarCliente">
+            <h:form id="ClienteListForm">
+                <br/>
+                <h:panelGrid columns="2">
+                    <p:outputLabel value="Buscar por:" />
+                    <p:inputText  placeholder="Nombres, apellidos o cédula " style="width: 240px;"  value="#{clienteController.nombreOApellidos}" >
+                        <p:ajax event="keyup" update="datalist" listener="#{clienteController.buscarPorNombresOApellidos()}" />                                
+                    </p:inputText>                          
+                </h:panelGrid>
+                <br/>
+
+                <p:dataTable id="datalist" value="#{clienteController.listaClientes}" var="item"
+                             paginator="true"
+                             rowKey="#{item.cedula}"
+                             rows="10"
+                             rowsPerPageTemplate="5,10"
+                             >
+
+                    <p:column >
+                        <f:facet name="header">
+                            <h:outputText value="Cédula"/>
+                        </f:facet>
+                        <h:outputText value="#{item.cedula}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Nombres"/>
+                        </f:facet>
+                        <h:outputText value="#{item.nombres}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Apellidos"/>
+                        </f:facet>
+                        <h:outputText value="#{item.apellidos}"/>
+                    </p:column>
+
+                    <p:column style="text-align: center; width: 120px; background: #EBEDEB;">
+                        <f:facet name="header">
+                            <h:outputText value="Accion"/>
+                        </f:facet>
+                        <p:commandButton id="viewButton"  actionListener="#{clienteController.seleccionarCliente(item)}" icon="ui-icon-plus" value="Seleccionar"  />
+                    </p:column>
+                </p:dataTable>
+                <h:panelGrid columns="2" >
+                    <p:commandButton id="viewButton"  
+                                     action="#{clienteController.reiniciarVaariables()}" 
+                                     value="Cancelar"  
+                                     ajax="true"
+                                     />
+                </h:panelGrid>
+
+            </h:form>
+        </p:dialog>
+
+        <p:dialog header="Seleccionar rango de fecha" closable="false" resizable="false"  position="center" modal="true"  widgetVar="seleccionarFecha">
+            <h:form id="formFecha" style="text-align: center; font-weight: bold; color: black;">
+                <p:outputLabel style="font-weight: bold; font-size: 14px; " value="Seleccione el rango de fecha para conocer el estado de amarre del cliente" />
+                <br/>
+                <br/>
+                <p:panelGrid id="panel">
+                    <p:row>
+                        <p:column colspan="2">
+                            <p:selectOneRadio id="rangoFecha" 
+                                              value="#{clienteController.rangoFecha}" 
+                                              valueChangeListener="#{clienteController.cambiarRangoFecha}"
+                                              required="true"
+                                              requiredMessage="Seleccione un rango de fecha"
+                                              >
+                                <f:selectItem itemValue="1" itemLabel=" Última semana " />
+                                <f:selectItem itemValue="2" itemLabel=" Último mes " />
+                                <f:selectItem itemValue="3" itemLabel="Seleccionar rango de fecha " />
+                                <f:ajax  execute="ocupacion"  render="panel"/>
+                            </p:selectOneRadio>
+                        </p:column>
+                        <p:column>
+                            <p:message for="rangoFecha"/>
+                        </p:column>
+
+                    </p:row>
+                    <p:row rendered="#{clienteController.rangoFechaCambiado1}">
+                        <p:column >
+                            <h:outputText value="Fecha de inicio"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{clienteController.formatoFecha.format(clienteController.fechaInicio)}"/>
+                        </p:column>
+
+                    </p:row>
+                    <p:row rendered="#{clienteController.rangoFechaCambiado1}">
+                        <p:column >
+                            <h:outputText value="Fecha de fin"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{clienteController.formatoFecha.format(clienteController.fechaFin)}"/>
+                        </p:column>
+
+                    </p:row>
+                    <p:row rendered="#{clienteController.rangoFechaCambiado2}">
+                        <p:column >
+                            <h:outputText value="Fecha de inicio"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{clienteController.formatoFecha.format(clienteController.fechaInicio)}"/>
+                        </p:column>
+
+                    </p:row>
+                    <p:row rendered="#{clienteController.rangoFechaCambiado2}">
+                        <p:column >
+                            <h:outputText value="Fecha de fin"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{clienteController.formatoFecha.format(clienteController.fechaFin)}"/>
+                        </p:column>
+
+                    </p:row>
+                    <p:row rendered="#{clienteController.rangoFechaCambiado3}">
+                        <p:column >
+                            <h:outputText value="Fecha de inicio"/>
+                        </p:column>
+                        <p:column>
+                            <p:calendar value="#{clienteController.fechaInicio}" size="14" id="fechaInicio"  required="true" 
+                                        requiredMessage="Seleccione una fecha de inicio."
+                                        showOn="button"
+                                        navigator="true" yearRange="c-100:c" pattern="yyyy-MM-dd" 
+                                        placeholder="aaaa-mm-dd"
+                                        >
+                                <f:validator validatorId="ValidarCampoFecha"/>
+                            </p:calendar>
+                        </p:column>
+                        <p:column>
+                            <p:message for="fechaInicio" />
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{clienteController.rangoFechaCambiado3}">
+                        <p:column >
+                            <h:outputText value="Fecha de fin"/>
+                        </p:column>
+                        <p:column >
+                            <p:calendar value="#{clienteController.fechaFin}" size="14" id="fechaFin"  required="true" 
+                                        requiredMessage="Seleccione una fecha de fin." 
+                                        showOn="button" navigator="true" yearRange="c-100:c" pattern="yyyy-MM-dd" 
+                                        placeholder="aaaa-mm-dd"
+                                        >
+                                <f:validator validatorId="ValidarCampoFecha"/>                               
+                            </p:calendar>
+                        </p:column>
+                        <p:column>
+                            <p:message for="fechaFin" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="2" style="text-align: right;">
+                            <p:commandButton 
+                                value="Aceptar"  
+                                ajax="true" 
+                                update="panel"
+                                actionListener="#{clienteController.procesarConsulta()}"
+
+                                oncomplete="#{clienteController.cambiarEstadoSeleccion()}"
+                                />
+                        
+                            <p:commandButton 
+                                value="Cancelar"  
+                                onclick="PF('seleccionarFecha').hide()"
+                                actionListener="#{clienteController.cancelarProceso()}"
+
+
+                                />
+                        </p:column>
+                    </p:row>                   
+                </p:panelGrid>
+
+            </h:form>
+
+        </p:dialog>
+    </h:body>    
+</html>

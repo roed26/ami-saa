@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../templates/_usuariotmp.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                
+                >
+    <h:outputStylesheet name="./css/style.css"/>
+    <h:outputStylesheet name="./css/menu.css"/>        
+    <ui:define name="top">
+        top
+    </ui:define>
+    <ui:define name="left">
+        <div>
+            <p:outputPanel id="menuPanel">
+                <ui:include src='./menu.xhtml'/>
+            </p:outputPanel>
+        </div>
+    </ui:define>
+    <ui:define name="content">
+        <p:outputPanel id="mainContentPanel">
+            <ui:include src="./content.xhtml"/>
+        </p:outputPanel>
+    </ui:define>
+    <ui:define name="bottom">
+        <div id="footer">
+            <p:outputPanel id="buttomPanel">
+                <ui:include src="./footer.xhtml"/>
+            </p:outputPanel>
+        </div>
+
+    </ui:define>
+
+</ui:composition>
+
+
+
+
+
+
+
+
+
+
+
+
+

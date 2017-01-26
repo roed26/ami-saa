@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="EventosConsumoMcCreateDlg" widgetVar="EventosConsumoMcCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateEventosConsumoMcTitle}">
+            <h:form id="EventosConsumoMcCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{eventosConsumoMcController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateEventosConsumoMcLabel_idConsumo}" for="idConsumo" />
+                        <p:inputText id="idConsumo" value="#{eventosConsumoMcController.selected.idConsumo}" title="#{bundle.CreateEventosConsumoMcTitle_idConsumo}" required="true" requiredMessage="#{bundle.CreateEventosConsumoMcRequiredMessage_idConsumo}"/>
+                        <p:outputLabel value="#{bundle.CreateEventosConsumoMcLabel_energia}" for="energia" />
+                        <p:inputText id="energia" value="#{eventosConsumoMcController.selected.energia}" title="#{bundle.CreateEventosConsumoMcTitle_energia}" required="true" requiredMessage="#{bundle.CreateEventosConsumoMcRequiredMessage_energia}"/>
+                        <p:outputLabel value="#{bundle.CreateEventosConsumoMcLabel_potencia}" for="potencia" />
+                        <p:inputText id="potencia" value="#{eventosConsumoMcController.selected.potencia}" title="#{bundle.CreateEventosConsumoMcTitle_potencia}" required="true" requiredMessage="#{bundle.CreateEventosConsumoMcRequiredMessage_potencia}"/>
+                        <p:outputLabel value="#{bundle.CreateEventosConsumoMcLabel_voltaje}" for="voltaje" />
+                        <p:inputText id="voltaje" value="#{eventosConsumoMcController.selected.voltaje}" title="#{bundle.CreateEventosConsumoMcTitle_voltaje}" required="true" requiredMessage="#{bundle.CreateEventosConsumoMcRequiredMessage_voltaje}"/>
+                        <p:outputLabel value="#{bundle.CreateEventosConsumoMcLabel_corriente}" for="corriente" />
+                        <p:inputText id="corriente" value="#{eventosConsumoMcController.selected.corriente}" title="#{bundle.CreateEventosConsumoMcTitle_corriente}" required="true" requiredMessage="#{bundle.CreateEventosConsumoMcRequiredMessage_corriente}"/>
+                        <p:outputLabel value="#{bundle.CreateEventosConsumoMcLabel_fechaHora}" for="fechaHora" />
+                        <p:calendar id="fechaHora" pattern="MM/dd/yyyy" value="#{eventosConsumoMcController.selected.fechaHora}" title="#{bundle.EditEventosConsumoMcTitle_fechaHora}" required="true" requiredMessage="#{bundle.EditEventosConsumoMcRequiredMessage_fechaHora}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateEventosConsumoMcLabel_idMedidor}" for="idMedidor" />
+                        <p:selectOneMenu id="idMedidor" value="#{eventosConsumoMcController.selected.idMedidor}" >
+                            <f:selectItems value="#{medidorController.itemsAvailableSelectOne}"
+                                           var="idMedidorItem"
+                                           itemValue="#{idMedidorItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateEventosConsumoMcLabel_macPlcMc}" for="macPlcMc" />
+                        <p:selectOneMenu id="macPlcMc" value="#{eventosConsumoMcController.selected.macPlcMc}" >
+                            <f:selectItems value="#{plcMcController.itemsAvailableSelectOne}"
+                                           var="macPlcMcItem"
+                                           itemValue="#{macPlcMcItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateEventosConsumoMcLabel_macPlcMms}" for="macPlcMms" />
+                        <p:selectOneMenu id="macPlcMms" value="#{eventosConsumoMcController.selected.macPlcMms}" required="true" requiredMessage="#{bundle.EditEventosConsumoMcRequiredMessage_macPlcMms}">
+                            <f:selectItems value="#{plcMmsController.itemsAvailableSelectOne}"
+                                           var="macPlcMmsItem"
+                                           itemValue="#{macPlcMmsItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{eventosConsumoMcController.create}" value="#{bundle.Save}" update="display,:EventosConsumoMcListForm:datalist,:growl" oncomplete="handleSubmit(args,'EventosConsumoMcCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="EventosConsumoMcCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

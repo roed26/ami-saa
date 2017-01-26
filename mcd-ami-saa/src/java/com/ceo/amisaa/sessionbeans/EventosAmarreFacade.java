@@ -50,4 +50,12 @@ public class EventosAmarreFacade extends AbstractFacade<EventosAmarre> {
         List<EventosAmarre> resultList = query.getResultList();
         return resultList;
     }
+    
+    public List<EventosAmarre> listaEventosPorDia(PlcMms plcMms,Date fechaHoraDia) {
+        Query query = getEntityManager().createNamedQuery("EventosAmarre.findBylistaEventosPorDia");
+        query.setParameter("plcMms", plcMms);
+        query.setParameter("fechaHoraDia", fechaHoraDia);
+        List<EventosAmarre> resultList = query.getResultList();
+        return resultList;
+    }
 }

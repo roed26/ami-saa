@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+
+      >
+
+    <body>
+        <h:form id="datosIngreso">
+            <h:panelGrid columns="2"> 
+                <p:commandButton style="left: 830px" value="Seleccionar un nuevo trafo"
+                                 onclick="PF('seleccionarTrafo').show()" />
+            </h:panelGrid>
+        </h:form>
+        <p:growl id="messages" showDetail="true" />
+        
+        <f:view contentType="text/html">
+            <p:gmap id="gmap" center="2.440834, -76.606994" zoom="15" type="HYBRID" style="width:100%;height:600px"
+                    model="#{marcadoresController.emptyModel}"  widgetVar="map" />
+        </f:view>
+        <p:dialog widgetVar="dlg" showEffect="fade">
+            <h:form prependId="false">
+                <h:panelGrid columns="2">
+                    <h:outputLabel for="title" value="Title:" />
+                    <p:inputText id="title" value="#{marcadoresController.title}" />
+
+                    <f:facet name="footer">
+                        <p:commandButton value="Add" actionListener="#{marcadoresController.addMarker}" update=":messages" oncomplete="markerAddComplete()" />
+                        <p:commandButton value="Cancel" onclick="return cancel()" />
+                    </f:facet>
+                </h:panelGrid>
+
+                <h:inputHidden id="lat" value="#{marcadoresController.lat}" />
+                <h:inputHidden id="lng" value="#{marcadoresController.lng}" />
+            </h:form>
+        </p:dialog>
+        
+        <p:dialog closable="false" header="Seleccionar Trafo" visible="#{!marcadoresController.trafoSeleccionado}" resizable="false" width="450" position="center" modal="true"  widgetVar="seleccionarTrafo">
+            <p:outputLabel value="Busque y seleccione el trafo " style="background: #c2dfef; color: black;font-weight: bold; font-size: 16px;" />                    
+            <h:form id="trafoListForm">
+                <br/>
+                <h:panelGrid columns="2">
+                    <p:outputLabel value="Buscar trafo " />
+                    <p:inputText  placeholder="Digite el identificador del trafo" style="width: 240px;"  value="#{trafoController.idTrafo}" >
+                        <p:ajax event="keyup" update="tablaTrafos" listener="#{trafoController.buscarPorId()}" />                                
+                    </p:inputText>                          
+                </h:panelGrid>
+                <br/>
+                <p:panel id="tablaTrafos">
+                    <p:dataTable id="datalist" value="#{trafoController.listaTrafos}" var="item"
+                                 paginator="true"
+                                 rowKey="#{item.idTrafo}"
+                                 rows="10"
+                                 rowsPerPageTemplate="5,10"
+                                 >
+                        <p:column style="width:auto;">
+                            <f:facet name="header">
+                                <h:outputText value="Identificador de Trafo"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idTrafo}"/>
+                        </p:column>
+                        <p:column style="width:120px; text-align:center; background: #EBEDEB;">
+                            <f:facet name="header">
+                                <h:outputText value="Accion"/>
+                            </f:facet>
+                            <p:commandButton id="viewButton"  
+                                             actionListener="#{marcadoresController.seleccionarTrafo(item)}" 
+                                             icon="ui-icon-plus" 
+                                             value="Seleccionar"  
+                                             ajax="false"
+                                             update="@all"
+                                             />
+                        </p:column>
+
+                    </p:dataTable>
+                </p:panel>
+                <h:panelGrid columns="2" >
+                    <p:commandButton id="viewButton"  
+                                     value="Cancelar"  
+                                     ajax="true"
+                                     action="#{trafoController.reiniciarVariables()}"
+                                     />
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXroWbv5-OtudGXwL0NgbV9TrlfLwafPA"
+        type="text/javascript"></script>
+        <script type="text/javascript">
+                            var currentMarker = null;
+
+                            function handlePointClick(event) {
+                                if (currentMarker === null) {
+                                    document.getElementById('lat').value = event.latLng.lat();
+                                    document.getElementById('lng').value = event.latLng.lng();
+
+                                    currentMarker = new google.maps.Marker({
+                                        position: new google.maps.LatLng(event.latLng.lat(), event.latLng.lng())
+                                    });
+
+                                    PF('map').addOverlay(currentMarker);
+
+                                    PF('dlg').show();
+                                }
+                            }
+
+                            function markerAddComplete() {
+                                var title = document.getElementById('title');
+                                currentMarker.setTitle(title.value);
+                                title.value = "";
+
+                                currentMarker = null;
+                                PF('dlg').hide();
+                            }
+
+                            function cancel() {
+                                PF('dlg').hide();
+                                currentMarker.setMap(null);
+                                currentMarker = null;
+
+                                return false;
+                            }
+        </script>
+    </body>
+</html>

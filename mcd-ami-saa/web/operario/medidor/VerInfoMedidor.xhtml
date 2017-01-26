@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="MedidorViewDlg" closable="false" widgetVar="MedidorViewDialog" modal="true" resizable="false" appendTo="@(body)" header="Información del medidor">
+            <h:form id="MedidorViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid >
+                        <p:row>
+                            <p:column style="background: #f2f5f9; font-weight: bold;">
+                                <h:outputText value="Identificador"/>
+
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{medidorController.selected.idMedidor}" title="Identificador del medidor"/>        
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column style="background: #f2f5f9; font-weight: bold;">
+                                <h:outputText value="Estado"/>
+                            </p:column>
+                            <p:column>
+                                <h:outputText rendered="#{medidorController.selected.estado.equalsIgnoreCase('fa')}" value="Físicamente activo" title="Estado"/>
+                                <h:outputText rendered="#{medidorController.selected.estado.equalsIgnoreCase('sa')}" value="Servicio activado" title="Estado"/>
+                                <h:outputText rendered="#{medidorController.selected.estado.equalsIgnoreCase('sd')}" value="Servicio desactivado" title="Estado"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column style="background: #f2f5f9; font-weight: bold;">
+                                <h:outputText value="Tipo"/>
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{medidorController.selected.tipo}" title="Tipo"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column style="background: #f2f5f9; font-weight: bold;">
+                                <h:outputText value="Marca"/>
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{medidorController.selected.marca}" title="Marca"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column style="background: #f2f5f9; font-weight: bold;">
+                                <h:outputText value="Modelo"/>
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{medidorController.selected.modelo}" title="Modelo"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column style="background: #f2f5f9; font-weight: bold;">
+                                <h:outputText value="Clase"/>
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{medidorController.selected.clase}" title="Clase"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column style="background: #f2f5f9; font-weight: bold;">
+                                <h:outputText value="Vinculado al producto"/>
+                            </p:column>
+                            <p:column>
+                                <h:outputText rendered="#{medidorController.selected.idProducto==null}" value="Sin vinculo" title="Producto al cual esta vinculado"/>
+                                <h:outputText rendered="#{medidorController.selected.idProducto!=null}" value="#{medidorController.selected.idProducto}" title="Producto al cual esta vinculado"/>
+                            </p:column>
+                        </p:row>
+
+                    </p:panelGrid>
+                    <p:commandButton value="Cerrar" action="#{medidorController.reiniciarObj()}" onclick="MedidorViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

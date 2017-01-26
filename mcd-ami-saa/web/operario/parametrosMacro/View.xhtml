@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ParametrosMacroViewDlg" widgetVar="ParametrosMacroViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewParametrosMacroTitle}">
+            <h:form id="ParametrosMacroViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{parametrosMacroController.selected != null}">
+                        <h:outputText value="#{bundle.ViewParametrosMacroLabel_idParametro}"/>
+                        <h:outputText value="#{parametrosMacroController.selected.idParametro}" title="#{bundle.ViewParametrosMacroTitle_idParametro}"/>
+                        <h:outputText value="#{bundle.ViewParametrosMacroLabel_cmR}"/>
+                        <h:outputText value="#{parametrosMacroController.selected.cmR}" title="#{bundle.ViewParametrosMacroTitle_cmR}"/>
+                        <h:outputText value="#{bundle.ViewParametrosMacroLabel_cmS}"/>
+                        <h:outputText value="#{parametrosMacroController.selected.cmS}" title="#{bundle.ViewParametrosMacroTitle_cmS}"/>
+                        <h:outputText value="#{bundle.ViewParametrosMacroLabel_cmT}"/>
+                        <h:outputText value="#{parametrosMacroController.selected.cmT}" title="#{bundle.ViewParametrosMacroTitle_cmT}"/>
+                        <h:outputText value="#{bundle.ViewParametrosMacroLabel_potAc}"/>
+                        <h:outputText value="#{parametrosMacroController.selected.potAc}" title="#{bundle.ViewParametrosMacroTitle_potAc}"/>
+                        <h:outputText value="#{bundle.ViewParametrosMacroLabel_potRe}"/>
+                        <h:outputText value="#{parametrosMacroController.selected.potRe}" title="#{bundle.ViewParametrosMacroTitle_potRe}"/>
+                        <h:outputText value="#{bundle.ViewParametrosMacroLabel_potAp}"/>
+                        <h:outputText value="#{parametrosMacroController.selected.potAp}" title="#{bundle.ViewParametrosMacroTitle_potAp}"/>
+                        <h:outputText value="#{bundle.ViewParametrosMacroLabel_idMacro}"/>
+                        <h:outputText value="#{parametrosMacroController.selected.idMacro}" title="#{bundle.ViewParametrosMacroTitle_idMacro}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="ParametrosMacroViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>
