@@ -57,12 +57,12 @@ public class WebService {
      * rutas de los directorios, el directorio ftp donde llegan los archivos
      * y el directorio donde finalmente son movidos los archivos
      */
-    private  final String  RUTAFTPDIR = "/Users/aranda/Documents/ftp";
-    private  final String  RUTAFTPDIRMMAESTROS = "/Users/aranda/Documents/archivos/maestros/";
-    private  final String  RUTAFTPDIRPENDIENTES = "/Users/aranda/Documents/archivos/pendientes";
-    //private  final String  RUTAFTPDIR = "/home/usuarioftp/amisaaftp/ftp";
-    //private  final String  RUTAFTPDIRMMAESTROS = "/home/usuarioftp/amisaaftp/archivos/maestros/";
-    //private  final String  RUTAFTPDIRPENDIENTES = "/home/usuarioftp/amisaaftp/archivos/pendientes";
+    //private  final String  RUTAFTPDIR = "/Users/aranda/Documents/ftp";
+    //private  final String  RUTAFTPDIRMMAESTROS = "/Users/aranda/Documents/archivos/maestros/";
+    //private  final String  RUTAFTPDIRPENDIENTES = "/Users/aranda/Documents/archivos/pendientes";
+    private  final String  RUTAFTPDIR = "/home/usuarioftp/amisaaftp/ftp";
+    private  final String  RUTAFTPDIRMMAESTROS = "/home/usuarioftp/amisaaftp/archivos/maestros/";
+    private  final String  RUTAFTPDIRPENDIENTES = "/home/usuarioftp/amisaaftp/archivos/pendientes";
     @Context
     private UriInfo context;  
     
