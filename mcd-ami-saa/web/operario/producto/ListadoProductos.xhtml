@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:body>
+        <h:form id="ProductoListForm">
+            <h:panelGrid columns="2">
+                <p:outputLabel value="Buscar por:" />
+                <p:inputText  placeholder="Digite el identificador del producto" style="width: 340px;"  value="#{productoController.idProducto}" >
+                    <p:ajax event="keyup" update="tablaProductos" listener="#{productoController.buscarPorId()}" oncomplete="#{productoController.reiniciarCampoBusqueda()}" />                                
+                </p:inputText>                          
+            </h:panelGrid>
+            <br/>
+            <p:dataTable id="tablaProductos" value="#{productoController.items}" var="item"
+                         paginator="true"
+                         rowKey="#{item.idProducto}"
+                         rows="10"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         emptyMessage="No se encontraron productos"
+                         >
+                <f:facet name="header" >
+                    <h:outputLabel value="Listado de productos registrados en el sistema" style="font-size: 17px; font-weight: bold;"/>
+                </f:facet>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Identificador producto"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idProducto}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Latitud"/>
+                    </f:facet>
+                    <h:outputText value="#{item.latitud}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Longitud"/>
+                    </f:facet>
+                    <h:outputText value="#{item.longitud}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Estado"/>
+                    </f:facet>
+                    <h:outputText rendered="#{item.estado.equalsIgnoreCase('A')}" value="Activo"/>
+                    <h:outputText rendered="#{item.estado.equalsIgnoreCase('D')}" value="Inactivo"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Vinculado al cliente"/>
+                    </f:facet>
+                    <h:outputText rendered="#{item.cedula!=null}" value="#{item.cedula}"/>
+                    <h:outputText rendered="#{item.cedula==null}" value="No vinculado"/>
+                </p:column>
+                <p:column style="width: 70px">
+                    <f:facet name="header">
+                        <h:outputText value="Acciones"/>
+                    </f:facet>
+                    <!--<p:commandButton id="viewButton" action="#{productoController.setSelected(item)}"  icon="ui-icon-search"  update=":ProductoViewForm" oncomplete="PF('ProductoViewDialog').show()" />-->
+                    <p:commandButton id="editButton" action="#{productoController.setSelected(item)}"  icon="ui-icon-pencil"  update=":ProductoEditForm" oncomplete="PF('ProductoEditDialog').show()" />
+                    <p:commandButton id="deleteButton" action="#{productoController.ventanaEliminar(item)}" icon="ui-icon-trash"   update="tablaProductos" />                    
+                </p:column>
+            </p:dataTable>
+        </h:form>
+       
+        <ui:include src="VerInfoProducto.xhtml"/>
+        <p:dialog modal="true" header="Información" resizable="false" widgetVar="edicionCorrecta" closable="false">
+            <h:form>
+                <p:panelGrid style="text-align:left;" styleClass="panelgrid">
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="color: blue;" value="La información del producto edito con exito."/>
+                        </p:column>                                
+                    </p:row>
+                    <p:row>
+                        <p:column width="200px;">
+                            <p:commandButton style="font-style: italic;margin-left: 60px;font-weight: normal;" 
+                                             value="Aceptar" onclick="PF('edicionCorrecta').hide()"/>                                    
+                        </p:column>
+
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+        <p:dialog modal="true" resizable="false" header="Confirmar" widgetVar="eliminarProducto" closable="false" position="center">
+            <h:form>
+                <p:panelGrid style="text-align:left;" styleClass="panelgrid">
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="color: red;" value="¿Está seguro de eliminar la información este producto?"/><br/>
+                        </p:column>                                
+                    </p:row>
+                    <p:row>
+                        <p:column width="200px;">
+                            <p:commandButton style="font-style: italic;margin-left: 170px;font-weight: normal; color: black;" 
+                                             value="Si" action="#{productoController.eliminarProducto()}"/>
+                            <p:commandButton style="font-style: italic; margin-left: 10px;font-weight: normal; color: black;" value="No" onclick="PF('eliminarProducto').hide()" action="#{productoController.reiniciarObj()}"/>
+                        </p:column>
+
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+        <p:dialog modal="true" resizable="false" header="Error" widgetVar="noSePuedeEliminar" closable="false">
+            <h:form>
+                <p:panelGrid style="text-align:left;" styleClass="panelgrid">
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="color: red;" value="No es posible eliminar la información del producto."/>
+                        </p:column>                                
+                    </p:row>
+                    <p:row>
+                        <p:column width="200px;">
+                            <p:commandButton style="font-style: italic;margin-left: 100px;font-weight: normal;" 
+                                             value="Aceptar" onclick="PF('noSePuedeEliminar').hide()"/>                                    
+                        </p:column>
+
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+        <p:dialog modal="true" header="Información" resizable="false" widgetVar="eliminacionCorrecta" closable="false">
+            <h:form>
+                <p:panelGrid style="text-align:left;" styleClass="panelgrid">
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="color: blue;" value="La información del producto se elimino con exito."/>
+                        </p:column>                                
+                    </p:row>
+                    <p:row>
+                        <p:column width="200px;">
+                            <p:commandButton style="font-style: italic;margin-left: 60px;font-weight: normal;" 
+                                             value="Aceptar" onclick="PF('eliminacionCorrecta').hide()"/>                                    
+                        </p:column>
+
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+    </h:body>
+
+
+</html>

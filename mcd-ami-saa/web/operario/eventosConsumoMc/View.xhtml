@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="EventosConsumoMcViewDlg" widgetVar="EventosConsumoMcViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewEventosConsumoMcTitle}">
+            <h:form id="EventosConsumoMcViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{eventosConsumoMcController.selected != null}">
+                        <h:outputText value="#{bundle.ViewEventosConsumoMcLabel_idConsumo}"/>
+                        <h:outputText value="#{eventosConsumoMcController.selected.idConsumo}" title="#{bundle.ViewEventosConsumoMcTitle_idConsumo}"/>
+                        <h:outputText value="#{bundle.ViewEventosConsumoMcLabel_energia}"/>
+                        <h:outputText value="#{eventosConsumoMcController.selected.energia}" title="#{bundle.ViewEventosConsumoMcTitle_energia}"/>
+                        <h:outputText value="#{bundle.ViewEventosConsumoMcLabel_potencia}"/>
+                        <h:outputText value="#{eventosConsumoMcController.selected.potencia}" title="#{bundle.ViewEventosConsumoMcTitle_potencia}"/>
+                        <h:outputText value="#{bundle.ViewEventosConsumoMcLabel_voltaje}"/>
+                        <h:outputText value="#{eventosConsumoMcController.selected.voltaje}" title="#{bundle.ViewEventosConsumoMcTitle_voltaje}"/>
+                        <h:outputText value="#{bundle.ViewEventosConsumoMcLabel_corriente}"/>
+                        <h:outputText value="#{eventosConsumoMcController.selected.corriente}" title="#{bundle.ViewEventosConsumoMcTitle_corriente}"/>
+                        <h:outputText value="#{bundle.ViewEventosConsumoMcLabel_fechaHora}"/>
+                        <h:outputText value="#{eventosConsumoMcController.selected.fechaHora}" title="#{bundle.ViewEventosConsumoMcTitle_fechaHora}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewEventosConsumoMcLabel_idMedidor}"/>
+                        <h:outputText value="#{eventosConsumoMcController.selected.idMedidor}" title="#{bundle.ViewEventosConsumoMcTitle_idMedidor}"/>
+                        <h:outputText value="#{bundle.ViewEventosConsumoMcLabel_macPlcMc}"/>
+                        <h:outputText value="#{eventosConsumoMcController.selected.macPlcMc}" title="#{bundle.ViewEventosConsumoMcTitle_macPlcMc}"/>
+                        <h:outputText value="#{bundle.ViewEventosConsumoMcLabel_macPlcMms}"/>
+                        <h:outputText value="#{eventosConsumoMcController.selected.macPlcMms}" title="#{bundle.ViewEventosConsumoMcTitle_macPlcMms}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="EventosConsumoMcViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

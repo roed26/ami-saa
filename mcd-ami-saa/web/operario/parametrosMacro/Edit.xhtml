@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ParametrosMacroEditDlg" widgetVar="ParametrosMacroEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditParametrosMacroTitle}">
+            <h:form id="ParametrosMacroEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{parametrosMacroController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditParametrosMacroLabel_idParametro}" for="idParametro" />
+                        <p:inputText id="idParametro" value="#{parametrosMacroController.selected.idParametro}" title="#{bundle.EditParametrosMacroTitle_idParametro}" required="true" requiredMessage="#{bundle.EditParametrosMacroRequiredMessage_idParametro}"/>
+                        <p:outputLabel value="#{bundle.EditParametrosMacroLabel_cmR}" for="cmR" />
+                        <p:inputText id="cmR" value="#{parametrosMacroController.selected.cmR}" title="#{bundle.EditParametrosMacroTitle_cmR}" />
+                        <p:outputLabel value="#{bundle.EditParametrosMacroLabel_cmS}" for="cmS" />
+                        <p:inputText id="cmS" value="#{parametrosMacroController.selected.cmS}" title="#{bundle.EditParametrosMacroTitle_cmS}" />
+                        <p:outputLabel value="#{bundle.EditParametrosMacroLabel_cmT}" for="cmT" />
+                        <p:inputText id="cmT" value="#{parametrosMacroController.selected.cmT}" title="#{bundle.EditParametrosMacroTitle_cmT}" />
+                        <p:outputLabel value="#{bundle.EditParametrosMacroLabel_potAc}" for="potAc" />
+                        <p:inputText id="potAc" value="#{parametrosMacroController.selected.potAc}" title="#{bundle.EditParametrosMacroTitle_potAc}" />
+                        <p:outputLabel value="#{bundle.EditParametrosMacroLabel_potRe}" for="potRe" />
+                        <p:inputText id="potRe" value="#{parametrosMacroController.selected.potRe}" title="#{bundle.EditParametrosMacroTitle_potRe}" />
+                        <p:outputLabel value="#{bundle.EditParametrosMacroLabel_potAp}" for="potAp" />
+                        <p:inputText id="potAp" value="#{parametrosMacroController.selected.potAp}" title="#{bundle.EditParametrosMacroTitle_potAp}" />
+                        <p:outputLabel value="#{bundle.EditParametrosMacroLabel_idMacro}" for="idMacro" />
+                        <p:selectOneMenu id="idMacro" value="#{parametrosMacroController.selected.idMacro}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{macroController.itemsAvailableSelectOne}"
+                                           var="idMacroItem"
+                                           itemValue="#{idMacroItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{parametrosMacroController.update}" value="#{bundle.Save}" update="display,:ParametrosMacroListForm:datalist,:growl" oncomplete="handleSubmit(args, 'ParametrosMacroEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="ParametrosMacroEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

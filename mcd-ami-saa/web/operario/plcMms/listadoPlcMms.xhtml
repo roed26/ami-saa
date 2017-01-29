@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </h:head>
+    <h:body>
+        <h:form id="PlcMmsListForm">
+            <h:panelGrid style="margin-bottom: 10px;" columns="3">                      
+                <h:outputLabel style="font-size: 14px; font-weight: bold;" value="Buscar PLC_MMS" />
+                <p:inputText style="width: 500px;" value="#{plcMmsController.dato}"  
+                             placeholder="Digite el identificador o la MAC del PLC_MMS">
+                    <p:ajax event="keyup" update="datalist" listener="#{plcMmsController.buscarDato()}" oncomplete="#{plcMmsController.reiniciarCampo()}"/>                                
+                </p:inputText>  
+            </h:panelGrid>
+            <p:dataTable id="datalist" value="#{plcMmsController.items}" var="item"
+                         paginator="true"
+                         rowKey="#{item.idPlcMms}"
+                         rows="10"
+                         style="text-align: center;"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+                         emptyMessage="No se encontraron dispositivos PLC_MMS"
+                         >
+                
+                <f:facet name="header" >
+                    <h:outputLabel value="Listado de dispositivos PLC_MMS registrados en el sistema" style="font-size: 17px; font-weight: bold;"/>
+                </f:facet>
+                
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Identificador PLC_MMS"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idPlcMms}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Dirección MAC PLC_MMS"/>
+                    </f:facet>
+                    <h:outputText value="#{item.macPlcMms}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Versión firmware"/>
+                    </f:facet>
+                    <h:outputText value="#{item.versionFw}"/>
+                </p:column>
+                
+
+                <p:column style="width: 120px; background: #EBEDEB;">
+                    <f:facet name="header">
+                        <h:outputText value="Acciones"/>
+                    </f:facet>
+                    <p:commandButton id="viewButton"   icon="ver-icon" action="#{plcMmsController.setSelected(item)}" update=":PlcMmsViewForm" oncomplete="PF('PlcMmsViewDialog').show()" />
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+        <ui:include src="verInfoPlcMms.xhtml"/>
+        <p:dialog modal="true" resizable="false" header="Confirmar" widgetVar="eliminarPlcMms" closable="false" position="center">
+            <h:form>
+                <p:panelGrid style="text-align:left;" styleClass="panelgrid">
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="color: red;" value="¿Está seguro que desea eliminar este PLC_MMS?"/><br/>
+                        </p:column>                                
+                    </p:row>
+                    <p:row>
+                        <p:column width="200px;">
+                            <p:commandButton style="font-style: italic;margin-left: 170px;font-weight: normal; color: black;" 
+                                             value="Si" action="#{plcMmsController.eliminarPlcMms}"/>
+                            <p:commandButton style="font-style: italic; margin-left: 10px;font-weight: normal; color: black;" value="No" onclick="PF('eliminarPlcMms').hide()" action="#{plcMmsController.newObj()}"/>
+                        </p:column>
+
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+        <p:dialog modal="true" resizable="false" header="Error" widgetVar="noSePuedeEliminar" closable="false">
+            <h:form>
+                <p:panelGrid style="text-align:left;" styleClass="panelgrid">
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="color: red;" value="No es posible eliminar el PLC_MMS, esta vinculado a un trafo."/>
+                        </p:column>                                
+                    </p:row>
+                    <p:row>
+                        <p:column width="200px;">
+                            <p:commandButton style="font-style: italic;margin-left: 100px;font-weight: normal;" 
+                                             value="Aceptar" onclick="PF('noSePuedeEliminar').hide()"/>                                    
+                        </p:column>
+
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+        <p:dialog modal="true" header="Información" resizable="false" widgetVar="eliminacionCorrecta" closable="false">
+            <h:form>
+                <p:panelGrid style="text-align:left;" styleClass="panelgrid">
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="color: blue;" value="El PLC_MMS se elimino con exito."/>
+                        </p:column>                                
+                    </p:row>
+                    <p:row>
+                        <p:column width="200px;">
+                            <p:commandButton style="font-style: italic;margin-left: 60px;font-weight: normal;" 
+                                             value="Aceptar" onclick="PF('eliminacionCorrecta').hide()"/>                                    
+                        </p:column>
+
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+        <p:dialog modal="true" header="Información" resizable="false" widgetVar="edicionCorrecta" closable="false">
+            <h:form>
+                <p:panelGrid style="text-align:left;" styleClass="panelgrid">
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="color: blue;" value="El PLC_MMS se edito con exito."/>
+                        </p:column>                                
+                    </p:row>
+                    <p:row>
+                        <p:column width="200px;">
+                            <p:commandButton style="font-style: italic;margin-left: 60px;font-weight: normal;" 
+                                             value="Aceptar" onclick="PF('edicionCorrecta').hide()"/>                                    
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+    </h:body>
+</html>

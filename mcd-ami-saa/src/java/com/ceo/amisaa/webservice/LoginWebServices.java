@@ -64,14 +64,14 @@ public class LoginWebServices extends AbstractFacade<Usuario> {
             if (usuario != null) {
 
                 if (usuario.getContrasena().equals(Cifrar.sha256(contrasenia))) {
-                    jsonObj = new JSONObject("{\"respuesta\":\"true\"}");
+                    jsonObj = new JSONObject("{\"respuesta\":true}");
                     return jsonObj.toString();
                 } else {
-                    jsonObj = new JSONObject("{\"respuesta\":\"false\"}");
+                    jsonObj = new JSONObject("{\"respuesta\":false}");
                     return jsonObj.toString();
                 }
             } else {
-                jsonObj = new JSONObject("{\"respuesta\":\"false\"}");
+                jsonObj = new JSONObject("{\"respuesta\":false}");
                 return jsonObj.toString();
             }
         } catch (JSONException ex) {

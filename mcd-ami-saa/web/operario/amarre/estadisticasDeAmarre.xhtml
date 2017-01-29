@@ -47,15 +47,6 @@
 
         </h:form>-->
         <p:separator/>
-        <h:form id="tiposResultado">
-            <p:selectOneRadio  id="tipoResultado" value="No"
-                               >
-                <f:selectItem itemLabel="Resultados generales" itemValue="Si" />
-                <f:selectItem itemLabel="Resultados individual" itemValue="No" />    
-                <!--<f:ajax   execute="acompaniante" render="panel" /> -->
-            </p:selectOneRadio>
-        </h:form>
-        <p:separator/>
         <h:form id="estadisticas">
             <p:panelGrid>
                 <p:row>
@@ -72,7 +63,7 @@
                 <p:row>
                     <p:column colspan="2" rendered="#{amarreController.trafoSeleccionado}">
                         <p:barChart value="#{amarreController.porcentajeAmarre}" legendPosition="ne" 
-                                    style="height:400px; width: 850px; color: black; text-align: center;"
+                                     style="height:400px; width: 850px; color: black; text-align: center;"
                                     xaxisLabel="dias" yaxisLabel="% Respuesta" max="100" 
                                     xaxisAngle="30"
                                     />
@@ -95,7 +86,7 @@
                         <p:outputLabel value="Mejor PLC_TU"/>
                     </p:column>
                 </p:row>
-
+                
             </p:panelGrid>
 
 
@@ -118,7 +109,6 @@
                                 <f:selectItem itemValue="1" itemLabel=" Última semana " />
                                 <f:selectItem itemValue="2" itemLabel=" Último mes " />
                                 <f:selectItem itemValue="3" itemLabel="Seleccionar rango de fecha " />
-                                <f:selectItem itemValue="4" itemLabel="Seleccionar día " />
                                 <f:ajax  execute="ocupacion"  render="panel"/>
                             </p:selectOneRadio>
                         </p:column>
@@ -196,23 +186,6 @@
                         </p:column>
                         <p:column>
                             <p:message for="fechaFin" />
-                        </p:column>
-                    </p:row>
-                    <p:row rendered="#{amarreController.rangoFechaCambiado4}">
-                        <p:column >
-                            <h:outputText value="Día"/>
-                        </p:column>
-                        <p:column >
-                            <p:calendar value="#{amarreController.fechaDia}" size="14" id="fechaDia"  required="true" 
-                                        requiredMessage="Seleccione una fecha." 
-                                        showOn="button" navigator="true" yearRange="c-100:c" pattern="yyyy-MM-dd" 
-                                        placeholder="aaaa-mm-dd"
-                                        >
-                                <f:validator validatorId="ValidarCampoFecha"/>                               
-                            </p:calendar>
-                        </p:column>
-                        <p:column>
-                            <p:message for="fechaDia" />
                         </p:column>
                     </p:row>
                     <p:row>

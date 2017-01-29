@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:body>
+        <h:form id="ClienteListForm">
+            <h:panelGrid columns="2">
+                <p:outputLabel value="Buscar por:" />
+                <p:inputText  placeholder="Cédula, nombres o apellidos " style="width: 340px;"  value="#{clienteController.nombreOApellidos}" >
+                    <p:ajax event="keyup" update="datalist" listener="#{clienteController.buscarPorNombresOApellidos()}" oncomplete="#{clienteController.reiniciarCampoBusqueda()}" />                                
+                </p:inputText>                          
+            </h:panelGrid>
+            <p:dataTable id="datalist" value="#{clienteController.items}" var="item"
+                         paginator="true"
+                         rowKey="#{item.cedula}"
+                         rows="10"
+                         rowsPerPageTemplate="10,20,30,40,50,100"
+                         emptyMessage="No se encontraron clientes"
+                         >
+                <f:facet name="header" >
+                    <h:outputLabel value="Listado de clientes registrados en el sistema" style="font-size: 17px; font-weight: bold;"/>
+                </f:facet>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Cédula"/>
+                    </f:facet>
+                    <h:outputText value="#{item.cedula}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Nombres"/>
+                    </f:facet>
+                    <h:outputText value="#{item.nombres}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Apellidos"/>
+                    </f:facet>
+                    <h:outputText value="#{item.apellidos}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Dirección"/>
+                    </f:facet>
+                    <h:outputText value="#{item.direccion}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Número de celular"/>
+                    </f:facet>
+                    <h:outputText value="#{item.celular}"/>
+                </p:column>
+                <p:column style="width: 120px; background: #EBEDEB;">
+                    <f:facet name="header">
+                        <p:outputLabel value="Acciones"/>
+                    </f:facet>
+                    <p:commandButton id="viewButton" action="#{clienteController.setSelected(item)}" value="Ver info" icon="ver-icon"  update=":ClienteViewForm" oncomplete="PF('ClienteViewDialog').show()" />
+                </p:column>
+            </p:dataTable>
+        </h:form>
+        
+        <ui:include src="VerInfoCliente.xhtml"/>
+        <p:dialog modal="true" header="Información" resizable="false" widgetVar="edicionCorrecta" closable="false">
+            <h:form>
+                <p:panelGrid style="text-align:left;" styleClass="panelgrid">
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="color: blue;" value="La información del cliente edito con exito."/>
+                        </p:column>                                
+                    </p:row>
+                    <p:row>
+                        <p:column width="200px;">
+                            <p:commandButton style="font-style: italic;margin-left: 60px;font-weight: normal;" 
+                                             value="Aceptar" onclick="PF('edicionCorrecta').hide()"/>                                    
+                        </p:column>
+
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+        <p:dialog modal="true" resizable="false" header="Confirmar" widgetVar="eliminarCliente" closable="false" position="center">
+            <h:form>
+                <p:panelGrid style="text-align:left;" styleClass="panelgrid">
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="color: red;" value="¿Está seguro de eliminar la información este cliente?"/><br/>
+                        </p:column>                                
+                    </p:row>
+                    <p:row>
+                        <p:column width="200px;">
+                            <p:commandButton style="font-style: italic;margin-left: 170px;font-weight: normal; color: black;" 
+                                             value="Si" action="#{clienteController.eliminarCliente()}"/>
+                            <p:commandButton style="font-style: italic; margin-left: 10px;font-weight: normal; color: black;" value="No" onclick="PF('eliminarCliente').hide()" action="#{clienteController.reiniciarObj()}"/>
+                        </p:column>
+
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+        <p:dialog modal="true" resizable="false" header="Error" widgetVar="noSePuedeEliminar" closable="false">
+            <h:form>
+                <p:panelGrid style="text-align:left;" styleClass="panelgrid">
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="color: red;" value="No es posible eliminar la información del cliente."/>
+                        </p:column>                                
+                    </p:row>
+                    <p:row>
+                        <p:column width="200px;">
+                            <p:commandButton style="font-style: italic;margin-left: 100px;font-weight: normal;" 
+                                             value="Aceptar" onclick="PF('noSePuedeEliminar').hide()"/>                                    
+                        </p:column>
+
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+        <p:dialog modal="true" header="Información" resizable="false" widgetVar="eliminacionCorrecta" closable="false">
+            <h:form>
+                <p:panelGrid style="text-align:left;" styleClass="panelgrid">
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="color: blue;" value="La información del cliente se elimino con exito."/>
+                        </p:column>                                
+                    </p:row>
+                    <p:row>
+                        <p:column width="200px;">
+                            <p:commandButton style="font-style: italic;margin-left: 60px;font-weight: normal;" 
+                                             value="Aceptar" onclick="PF('eliminacionCorrecta').hide()"/>                                    
+                        </p:column>
+
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+    </h:body>
+
+</html>

@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+
+    <div style="border-radius:15px; height: 25px; background: #C8CDD6; text-align: center; font-size: 18px; color: black; ">
+                        Datos personales
+                    </div>
+    <h:form id="formularioPerfilDatosPersonales" >
+            
+            <p:panelGrid styleClass="panelgrid" id="panelPerfilDatosPersonales">
+                
+                <p:row>
+                    <p:column >
+                        <p:outputLabel style="font-size: 15px; font-style: italic" value="Número de cédula: "/>
+                    </p:column>
+                    <p:column >
+                        <p:outputLabel value="#{perfilUsuarioController.usuario.cedula}"/>
+                    </p:column>
+
+                </p:row>
+                
+                <p:row>
+                    <p:column>
+                        <p:outputLabel style="font-size: 15px; font-style: italic" value="Nombre(s): "/>
+                    </p:column>
+                    <p:column style="background: #eff5fa">
+                        <p:outputLabel  value="#{perfilUsuarioController.usuario.nombres}"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel style="font-size: 15px; font-style: italic" value="Apellido(s): "/>
+                    </p:column>
+                    <p:column>
+                        <p:outputLabel value="#{perfilUsuarioController.usuario.apellidos} "/>
+                    </p:column>
+                </p:row>
+                
+
+                <p:row>
+                    <p:column>
+                        <p:outputLabel style="font-size: 15px; font-style: italic" value="Celular "/>
+                    </p:column>
+                    <p:column style="background: #eff5fa" rendered="#{perfilUsuarioController.mostrarCelular}">
+                        <p:outputLabel value="#{perfilUsuarioController.usuario.celular}"/>
+                    </p:column>
+                    <p:column  rendered="#{perfilUsuarioController.mostrarCelular}">
+                        <p:commandLink style="color: blue;" value="Modificar" action="#{perfilUsuarioController.mostrarModificarCelular()}"/>
+                    </p:column>
+                    <p:column style="background: #eff5fa" rendered="#{!perfilUsuarioController.mostrarCelular}">
+                        <p:inputText value="#{perfilUsuarioController.celular}"/>  
+                    </p:column>
+                    <p:column rendered="#{!perfilUsuarioController.mostrarCelular}">
+                        <p:commandLink style="color: blue;" value="Aceptar" action="#{perfilUsuarioController.actualizarCelular()}"
+                                       />
+                        <p:commandLink style="margin-left: 10px;color: blue;" value="Cancelar" 
+                                       action="#{perfilUsuarioController.cancelarActualizarCelular()}"
+                                       />
+                    </p:column>
+                </p:row>
+                
+               
+               <p:row>
+                    <p:column style="width: 250px;">
+                        <p:outputLabel style="font-size: 15px; font-style: italic" value="Nombre de Usuario: "/>
+                    </p:column>
+                    <p:column >
+                        <p:outputLabel value="#{perfilUsuarioController.usuario.nombreUsuario}"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column  rendered="#{perfilUsuarioController.mostrarContrasena}">
+                        <p:outputLabel style="font-size: 15px; font-style: italic" value="Contraseña: "/>
+                    </p:column>
+                    <p:column  rendered="#{!perfilUsuarioController.mostrarContrasena}">
+                        <p:outputLabel style="font-size: 15px; font-style: italic" value="Contraseña:"/>
+                        <p:outputLabel style="font-size: 15px; font-style: italic;color:red;" value="* "/>
+                    </p:column>
+                    <p:column style="background: #eff5fa" rendered="#{perfilUsuarioController.mostrarContrasena}">
+                        <p:outputLabel  value="******************"/>
+                    </p:column>
+                    <p:column  rendered="#{perfilUsuarioController.mostrarContrasena}">
+                        <p:commandLink style="color: blue;" value="Cambiar" action="#{perfilUsuarioController.mostrarModificarContrasena()}"/>
+                    </p:column>
+                    <p:column style="background: #eff5fa" rendered="#{!perfilUsuarioController.mostrarContrasena}">
+                        <p:password style="width: 120px;" value="#{perfilUsuarioController.contrasena}"/>  
+                    </p:column>
+                    <p:column rendered="#{!perfilUsuarioController.mostrarContrasena}">
+                        <p:commandLink style="color: blue;" value="Aceptar" action="#{perfilUsuarioController.cambiarContrasena()}" />
+                                       
+                        <p:commandLink style="margin-left: 10px;color: blue;" value="Cancelar" 
+                                       action="#{perfilUsuarioController.cancelarActualizarContrasena()}"/>
+                                       
+                    </p:column>
+                </p:row>
+               
+            </p:panelGrid>
+        </h:form>
+</html>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="EventosAmarreViewDlg" widgetVar="EventosAmarreViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewEventosAmarreTitle}">
+            <h:form id="EventosAmarreViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{eventosAmarreController.selected != null}">
+                        <h:outputText value="#{bundle.ViewEventosAmarreLabel_idAmarre}"/>
+                        <h:outputText value="#{eventosAmarreController.selected.idAmarre}" title="#{bundle.ViewEventosAmarreTitle_idAmarre}"/>
+                        <h:outputText value="#{bundle.ViewEventosAmarreLabel_estado}"/>
+                        <h:outputText value="#{eventosAmarreController.selected.estado}" title="#{bundle.ViewEventosAmarreTitle_estado}"/>
+                        <h:outputText value="#{bundle.ViewEventosAmarreLabel_fechaHora}"/>
+                        <h:outputText value="#{eventosAmarreController.selected.fechaHora}" title="#{bundle.ViewEventosAmarreTitle_fechaHora}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewEventosAmarreLabel_idPlcMc}"/>
+                        <h:outputText value="#{eventosAmarreController.selected.idPlcMc}" title="#{bundle.ViewEventosAmarreTitle_idPlcMc}"/>
+                        <h:outputText value="#{bundle.ViewEventosAmarreLabel_idPlcMms}"/>
+                        <h:outputText value="#{eventosAmarreController.selected.idPlcMms}" title="#{bundle.ViewEventosAmarreTitle_idPlcMms}"/>
+                        <h:outputText value="#{bundle.ViewEventosAmarreLabel_idPlcTu}"/>
+                        <h:outputText value="#{eventosAmarreController.selected.idPlcTu}" title="#{bundle.ViewEventosAmarreTitle_idPlcTu}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="EventosAmarreViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

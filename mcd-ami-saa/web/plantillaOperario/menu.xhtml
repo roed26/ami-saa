@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+
+    </h:head>
+    <h:body>
+
+        <div id="contenidoMenu">
+            <h:form id="formMenu" >
+                <p:tieredMenu>
+                    <p:menuitem value="Inicio"/>
+                    <p:submenu label="Gestión de dispositivos">
+                        <p:submenu label="Dispositivos PLC_TU">
+                            <p:menuitem value="Gestionar información de PLC_TU"  action="#{routingControllerOperario.irGestionPlcTu()}" actionListener="#{addNavegacionController.addGestionarPlcTu()}" ajax="false"/>
+                        </p:submenu>
+                        <p:submenu label="Dispositivos PLC_MC">
+                            <p:menuitem value="Gestionar información de PLC_MC"  action="#{routingControllerOperario.irGestionPlcMc()}" actionListener="#{addNavegacionController.addGestionarPlcMc()}" ajax="false"/>
+                        </p:submenu>                        
+                        <p:submenu label="Dispositivos PLC_MMS">
+                            <p:menuitem value="Gestionar información de PLC_MMS"  action="#{routingControllerOperario.irGestionPlcMms()}" actionListener="#{addNavegacionController.addGestionarPlcMms()}" ajax="false"/>
+                        </p:submenu>
+                    </p:submenu>
+                    <p:submenu label="Gestión de amarres">
+                        <p:menuitem value="Amarre por cliente" action="#{routingControllerOperario.irEstadoAmarre()}" actionListener="#{addNavegacionController.addGestionAmarreCliente()}" ajax="false"/>
+                        <p:menuitem value="Amarre por trafo" action="#{routingControllerOperario.irListaClientes()}" actionListener="#{addNavegacionController.addGestionAmarreTrafo()}" ajax="false"/>
+                        <p:menuitem value="Estadísticas de amarre" action="#{routingControllerOperario.irEstadisticasAmarre()}"  ajax="false"/>
+                    </p:submenu>
+                    <p:submenu label="Gestión consumo">
+                        <p:menuitem value="Consumo por cliente" action="#{routingControllerOperario.irConsumoCliente()}" actionListener="#{addNavegacionController.addGestionConsumoCliente()}" ajax="false"/>
+                        <p:menuitem value="Consumo por macromedidor"  action="#{routingControllerOperario.irConsumoTrafo()}" actionListener="#{addNavegacionController.addGestionConsumoMacro()}" ajax="false"/>
+                    </p:submenu>
+                    <p:submenu label="Gestión solicitudes">
+                        <p:menuitem value="Solicitud de estado de amarre de clientes en un trafo" action="#{routingControllerOperario.irSolicitudTiempoReal()}" actionListener="#{addNavegacionController.addGestionSolicitudEstadoClientes()}" ajax="false"/>
+                        <p:menuitem value="Solicitud de estado de amarre y consumo de un cliente" action="#{routingControllerOperario.irSolicitudTiempoRealCliente()}" actionListener="#{addNavegacionController.addGestionSolicitudEstadoCliente}" ajax="false"/>
+                        <p:menuitem value="Solicitud de suspención de servicio"  action="#{routingControllerOperario.irSolicitudSuspensionCliente()}" actionListener="#{addNavegacionController.addGestionSolicitudSupension()}" ajax="false"/>
+                        <p:menuitem value="Solicitud de reconexión de servicio"  action="#{routingControllerOperario.irSolicitudReconexionCliente()}" actionListener="#{addNavegacionController.addGestionSolicitudReconexion()}" ajax="false"/>
+                        <!--<p:menuitem value="Solicitud de configuración paramatros PLC_MMS"  action="#{routingControllerOperario.irSolicitudConfiguracion()}" actionListener="#{addNavegacionController.addGestionSolicitudConfiguracion()}" ajax="false"/>-->
+                    </p:submenu>
+                    <p:submenu label="Ubicación trafos y clientes">
+                        <p:menuitem value="Trafos y clientes" action="#{routingControllerOperario.irTrafoClientes()}" actionListener="#{addNavegacionController.addGestionUbicacion()}"  ajax="false"/>
+                        <p:menuitem value="Geoamarre" action="#{routingControllerOperario.irGeomarre()}" actionListener="#{addNavegacionController.addGestionGeomarre()}"  ajax="false"/>
+                    </p:submenu>
+                    <p:submenu  label="Gestión de clientes">
+                        <p:menuitem  value="Gestionar información de cliente" action="#{routingControllerOperario.irGestionarCliente()}"  ajax="false"/>
+                    </p:submenu>
+                    <p:submenu  label="Gestión de productos">
+                       <p:menuitem  value="Gestionar información de productos" action="#{routingControllerOperario.irGestionarProducto()}"  ajax="false"/>
+                    </p:submenu>
+                    <p:submenu  label="Gestión de trafos">
+                        <p:menuitem  value="Gestionar información de trafos" action="#{routingControllerOperario.irGestionarTrafo()}"  ajax="false"/>
+                    </p:submenu>
+                    <p:submenu  label="Gestión de medidores">
+                        <p:menuitem  value="Gestionar información de medidores" action="#{routingControllerOperario.irGestionarMedidores()}"   ajax="false"/>
+                    </p:submenu>
+                    <p:submenu  label="Gestión de macromedidor">
+                        <p:menuitem  value="Gestionar información de macromedidores" action="#{routingControllerOperario.irGestionarMacromedidores()}"   ajax="false"/>
+                    </p:submenu>
+                </p:tieredMenu>
+            </h:form>
+        </div>
+
+    </h:body>
+</html>

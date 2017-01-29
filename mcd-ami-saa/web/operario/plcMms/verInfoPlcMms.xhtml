@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+
+    <p:dialog id="PlcMmsViewDlg" widgetVar="PlcMmsViewDialog" closable="false" modal="true" resizable="false" header="Informacion plc_mms">
+        <h:form id="PlcMmsViewForm">
+            <h:panelGroup id="display">
+                <p:panelGrid styleClass="panelgrid" rendered="#{plcMmsController.selected != null}">
+                    <p:row>
+                        <p:column style="background: #F2F5F9;">
+                            <h:outputText value="Identificador PLC_MMS"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{plcMmsController.selected.idPlcMms}" />
+
+                        </p:column>
+                        <p:column style="background: #F2F5F9;">
+                            <h:outputText value="Dirección MAC plc_mms"/>
+
+                        </p:column>
+                        <p:column >
+                            <h:outputText value="#{plcMmsController.selected.macPlcMms}" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column style="background: #F2F5F9;">
+                            <h:outputText value="Versión de firmware"/>
+
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{plcMmsController.selected.versionFw}" />
+
+                        </p:column>
+                        <p:column style="background: #F2F5F9;">
+                            <h:outputText value="Estado"/>
+
+                        </p:column>
+                        <p:column >
+                            <h:outputText rendered="#{plcMmsController.selected.estado.equalsIgnoreCase('A')}" value="Activo"/>
+                            <h:outputText rendered="#{plcMmsController.selected.estado.equalsIgnoreCase('D')}" value="Desactivo"/>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column style="background: #F2F5F9;">
+                            <h:outputText value="Ganancia de transmisión (V)"/>
+
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{plcMmsController.selected.gtx}" />
+
+                        </p:column>
+                        <p:column style="background: #F2F5F9;">
+                            <h:outputText value="Ganancia de recepción (mV)"/>
+
+                        </p:column>
+                        <p:column >
+                            <h:outputText value="#{plcMmsController.selected.grx}" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column style="background: #F2F5F9;">
+                            <h:outputText value="Tasa de transmisión (bps)"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{plcMmsController.selected.bps}" />
+                        </p:column>
+                        <p:column style="background: #F2F5F9;">
+                            <h:outputText value="Retardo de transmisión (ms)"/>
+                        </p:column>
+                        <p:column >
+                            <h:outputText value="#{plcMmsController.selected.rtx}" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column style="background: #F2F5F9;" rendered="#{plcMmsController.selected.idTrafo!=null}">
+                            <h:outputText value="Vinculado al trafo "/>
+                        </p:column>
+                        <p:column rendered="#{plcMmsController.selected.idTrafo!=null}">
+                            <h:outputText  value="#{plcMmsController.selected.idTrafo}" />
+                        </p:column>
+                        <p:column style="background: #F2F5F9;" rendered="#{plcMmsController.selected.numeroCelular!=null}">
+                            <h:outputText value="Número de celular"/>
+                        </p:column>
+                        <p:column rendered="#{plcMmsController.selected.numeroCelular!=null}">
+                            <h:outputText value="#{plcMmsController.selected.numeroCelular}" />
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+                <p:commandButton value="Cerrar" onclick="PlcMmsViewDialog.hide()" action="#{plcMmsController.newObj()}"/>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+
+
+</html>

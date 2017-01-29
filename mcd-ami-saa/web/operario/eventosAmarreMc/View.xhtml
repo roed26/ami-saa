@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="EventosAmarreMcViewDlg" widgetVar="EventosAmarreMcViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewEventosAmarreMcTitle}">
+            <h:form id="EventosAmarreMcViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{eventosAmarreMcController.selected != null}">
+                        <h:outputText value="#{bundle.ViewEventosAmarreMcLabel_idAmarreMc}"/>
+                        <h:outputText value="#{eventosAmarreMcController.selected.idAmarreMc}" title="#{bundle.ViewEventosAmarreMcTitle_idAmarreMc}"/>
+                        <h:outputText value="#{bundle.ViewEventosAmarreMcLabel_estadoAmarre}"/>
+                        <h:outputText value="#{eventosAmarreMcController.selected.estadoAmarre}" title="#{bundle.ViewEventosAmarreMcTitle_estadoAmarre}"/>
+                        <h:outputText value="#{bundle.ViewEventosAmarreMcLabel_fechaHora}"/>
+                        <h:outputText value="#{eventosAmarreMcController.selected.fechaHora}" title="#{bundle.ViewEventosAmarreMcTitle_fechaHora}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewEventosAmarreMcLabel_idMedidor}"/>
+                        <h:outputText value="#{eventosAmarreMcController.selected.idMedidor}" title="#{bundle.ViewEventosAmarreMcTitle_idMedidor}"/>
+                        <h:outputText value="#{bundle.ViewEventosAmarreMcLabel_macPlcMc}"/>
+                        <h:outputText value="#{eventosAmarreMcController.selected.macPlcMc}" title="#{bundle.ViewEventosAmarreMcTitle_macPlcMc}"/>
+                        <h:outputText value="#{bundle.ViewEventosAmarreMcLabel_macPlcMms}"/>
+                        <h:outputText value="#{eventosAmarreMcController.selected.macPlcMms}" title="#{bundle.ViewEventosAmarreMcTitle_macPlcMms}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="EventosAmarreMcViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

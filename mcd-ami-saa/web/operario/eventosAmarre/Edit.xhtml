@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="EventosAmarreEditDlg" widgetVar="EventosAmarreEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditEventosAmarreTitle}">
+            <h:form id="EventosAmarreEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{eventosAmarreController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditEventosAmarreLabel_idAmarre}" for="idAmarre" />
+                        <p:inputText id="idAmarre" value="#{eventosAmarreController.selected.idAmarre}" title="#{bundle.EditEventosAmarreTitle_idAmarre}" required="true" requiredMessage="#{bundle.EditEventosAmarreRequiredMessage_idAmarre}"/>
+                        <p:outputLabel value="#{bundle.EditEventosAmarreLabel_estado}" for="estado" />
+                        <p:inputText id="estado" value="#{eventosAmarreController.selected.estado}" title="#{bundle.EditEventosAmarreTitle_estado}" />
+                        <p:outputLabel value="#{bundle.EditEventosAmarreLabel_fechaHora}" for="fechaHora" />
+                        <p:calendar id="fechaHora" pattern="MM/dd/yyyy" value="#{eventosAmarreController.selected.fechaHora}" title="#{bundle.EditEventosAmarreTitle_fechaHora}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditEventosAmarreLabel_idPlcMc}" for="idPlcMc" />
+                        <p:selectOneMenu id="idPlcMc" value="#{eventosAmarreController.selected.idPlcMc}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{plcMcController.itemsAvailableSelectOne}"
+                                           var="idPlcMcItem"
+                                           itemValue="#{idPlcMcItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditEventosAmarreLabel_idPlcMms}" for="idPlcMms" />
+                        <p:selectOneMenu id="idPlcMms" value="#{eventosAmarreController.selected.idPlcMms}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{plcMmsController.itemsAvailableSelectOne}"
+                                           var="idPlcMmsItem"
+                                           itemValue="#{idPlcMmsItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditEventosAmarreLabel_idPlcTu}" for="idPlcTu" />
+                        <p:selectOneMenu id="idPlcTu" value="#{eventosAmarreController.selected.idPlcTu}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{plcTuController.itemsAvailableSelectOne}"
+                                           var="idPlcTuItem"
+                                           itemValue="#{idPlcTuItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{eventosAmarreController.update}" value="#{bundle.Save}" update="display,:EventosAmarreListForm:datalist,:growl" oncomplete="handleSubmit(args, 'EventosAmarreEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="EventosAmarreEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

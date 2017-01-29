@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:body>
+        <h:form id="MacroListForm">
+            <h:panelGrid style="margin-bottom: 5px;" columns="3">                      
+                <h:outputLabel style="font-size: 14px; font-weight: bold;" value="Buscar usuario " />
+                <p:inputText style="width: 500px;" value="#{macroController.datoBusqueda}"  
+                             placeholder="Digite el identificador del macromedidor">
+                    <p:ajax event="keyup" update="datalist" listener="#{macroController.buscarMacro()}" oncomplete="#{macroController.reiniciarCampo()}" />                                
+                </p:inputText>                 
+            </h:panelGrid>     
+            <p:dataTable id="datalist" value="#{macroController.items}" var="item"
+                         paginator="true"
+                         rowKey="#{item.idMacro}"
+                         rows="10"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         >
+                <f:facet name="header" >
+                    <h:outputLabel value="Listado de macromedidores registrados en el sistema" style="font-size: 17px; font-weight: bold;"/>
+                </f:facet>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Identificador"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idMacro}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Tipo"/>
+                    </f:facet>
+                    <h:outputText rendered="#{item.tipo.equalsIgnoreCase('m')}" value="Monofásico"/>
+                    <h:outputText rendered="#{item.tipo.equalsIgnoreCase('b')}" value="Bifásico "/>
+                    <h:outputText rendered="#{item.tipo.equalsIgnoreCase('t')}" value="Trifásico"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Estado"/>
+                    </f:facet>
+                    <h:outputText rendered="#{item.estado.equalsIgnoreCase('A')}" value="Activo"/>
+                    <h:outputText rendered="#{item.estado.equalsIgnoreCase('D')}" value="Desactivo"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Vinculado al trafo"/>
+                    </f:facet>
+                    <h:outputText rendered="#{item.idTrafo==null}" value="Sin vinculo"/>
+                    <h:outputText rendered="#{item.idTrafo!=null}" value="#{item.idTrafo}"/>
+                </p:column>
+                <p:column style="width: 120px; background: #EBEDEB;">
+                    <f:facet name="header">
+                        <h:outputText value="Acciones"/>
+                    </f:facet>
+                    <p:commandButton id="viewButton"   icon="ui-icon-search" action="#{macroController.setMacro(item)}" update=":MacroViewForm" oncomplete="PF('MacroViewDialog').show()" />
+
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+        <ui:include src="VerInfoMacro.xhtml"/>
+        <p:dialog modal="true" resizable="false" header="Confirmar" widgetVar="eliminarMacro" closable="false" position="center">
+            <h:form>
+                <p:panelGrid style="text-align:left;" styleClass="panelgrid">
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="color: red;" value="¿Está seguro que desea eliminar este macromedidor?"/><br/>
+                        </p:column>                                
+                    </p:row>
+                    <p:row>
+                        <p:column width="200px;">
+                            <p:commandButton style="font-style: italic;margin-left: 170px;font-weight: normal; color: black;" 
+                                             value="Si" action="#{macroController.eliminarMacro()}"/>
+                            <p:commandButton style="font-style: italic; margin-left: 10px;font-weight: normal; color: black;" value="No" onclick="PF('eliminarPlcTu').hide()" action="#{macroController.reiniciarObj()}"/>
+                        </p:column>
+
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+        <p:dialog modal="true" resizable="false" header="Error" widgetVar="noSePuedeEliminar" closable="false">
+            <h:form>
+                <p:panelGrid style="text-align:left;" styleClass="panelgrid">
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="color: red;" value="No es posible eliminar el macromedidor, esta vinculado a un trafo."/>
+                        </p:column>                                
+                    </p:row>
+                    <p:row>
+                        <p:column width="200px;">
+                            <p:commandButton style="font-style: italic;margin-left: 100px;font-weight: normal;" 
+                                             value="Aceptar" onclick="PF('noSePuedeEliminar').hide()"/>                                    
+                        </p:column>
+
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+        <p:dialog modal="true" header="Información" resizable="false" widgetVar="eliminacionCorrecta" closable="false">
+            <h:form>
+                <p:panelGrid style="text-align:left;" styleClass="panelgrid">
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="color: blue;" value="El macromedidor se elimino con exito."/>
+                        </p:column>                                
+                    </p:row>
+                    <p:row>
+                        <p:column width="200px;">
+                            <p:commandButton style="font-style: italic;margin-left: 60px;font-weight: normal;" 
+                                             value="Aceptar" onclick="PF('eliminacionCorrecta').hide()"/>                                    
+                        </p:column>
+
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+    </h:body>
+
+
+</html>

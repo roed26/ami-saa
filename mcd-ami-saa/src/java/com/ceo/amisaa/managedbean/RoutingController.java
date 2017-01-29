@@ -99,7 +99,7 @@ public class RoutingController implements Serializable {
     }
 
     public void irEstadoAmarre() {
-        this.ruta = "/admin/cliente/estadoAmarre.xhtml";
+        this.ruta = "/administrador/cliente/estadoAmarre.xhtml";
     }
 
     public void irEstadisticasAmarre() {
@@ -147,15 +147,15 @@ public class RoutingController implements Serializable {
     }
 
     public void irRegistrarUsuario() {
-        this.ruta = "/admin/usuario/RegistrarUsuario.xhtml";
+        this.ruta = "/administrador/usuario/RegistrarUsuario.xhtml";
     }
 
     public void irRegistrarCliente() {
-        this.ruta = "/admin/cliente/RegistrarCliente.xhtml";
+        this.ruta = "/administrador/cliente/RegistrarCliente.xhtml";
     }
 
     public void irGestionarCliente() {
-        this.ruta = "/admin/cliente/ListadoClientes.xhtml";
+        this.ruta = "/administrador/cliente/ListadoClientes.xhtml";
     }
 
     public void irRegistrarProducto() {
@@ -175,23 +175,23 @@ public class RoutingController implements Serializable {
     }
 
     public void irGestionarUsuario() {
-        this.ruta = "/admin/usuario/ListadoUsuarios.xhtml";
+        this.ruta = "/administrador/usuario/ListadoUsuarios.xhtml";
     }
 
     public void irRegistrarMedidor() {
-        this.ruta = "/admin/medidor/RegistrarMedidor.xhtml";
+        this.ruta = "/administrador/medidor/RegistrarMedidor.xhtml";
     }
 
     public void irGestionarMedidores() {
-        this.ruta = "/admin/medidor/ListadoMedidores.xhtml";
+        this.ruta = "/administrador/medidor/ListadoMedidores.xhtml";
     }
 
     public void irRegistrarMacromedidor() {
-        this.ruta = "/admin/macro/RegistrarMacro.xhtml";
+        this.ruta = "/administrador/macro/RegistrarMacro.xhtml";
     }
 
     public void irGestionarMacromedidores() {
-        this.ruta = "/admin/macro/ListadoMacros.xhtml";
+        this.ruta = "/administrador/macro/ListadoMacros.xhtml";
     }
 
     public void irPerfilDeUsuario() {
