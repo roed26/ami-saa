@@ -57,12 +57,12 @@ public class WebService {
      * rutas de los directorios, el directorio ftp donde llegan los archivos
      * y el directorio donde finalmente son movidos los archivos
      */
-    //private  final String  RUTAFTPDIR = "/Users/aranda/Documents/ftp";
-    //private  final String  RUTAFTPDIRMMAESTROS = "/Users/aranda/Documents/archivos/maestros/";
-    //private  final String  RUTAFTPDIRPENDIENTES = "/Users/aranda/Documents/archivos/pendientes";
-    private  final String  RUTAFTPDIR = "/home/usuarioftp/amisaaftp/ftp";
-    private  final String  RUTAFTPDIRMMAESTROS = "/home/usuarioftp/amisaaftp/archivos/maestros/";
-    private  final String  RUTAFTPDIRPENDIENTES = "/home/usuarioftp/amisaaftp/archivos/pendientes";
+    private  final String  RUTAFTPDIR = "/Users/aranda/Documents/ftp";
+    private  final String  RUTAFTPDIRMMAESTROS = "/Users/aranda/Documents/archivos/maestros/";
+    private  final String  RUTAFTPDIRPENDIENTES = "/Users/aranda/Documents/archivos/pendientes";
+    //private  final String  RUTAFTPDIR = "/home/usuarioftp/amisaaftp/ftp";
+    //private  final String  RUTAFTPDIRMMAESTROS = "/home/usuarioftp/amisaaftp/archivos/maestros/";
+    //private  final String  RUTAFTPDIRPENDIENTES = "/home/usuarioftp/amisaaftp/archivos/pendientes";
     @Context
     private UriInfo context;  
     
@@ -252,12 +252,8 @@ public class WebService {
                 int estadoAmarre =Integer.parseInt(intero);
                 String fecha_hora = fecha + " "+ hora;
                 SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");                
-                Date fechaHora = formatter.parse(fecha_hora);
+                Date fechaHora = formatter.parse(fecha_hora);                
                 
-                float energia = Float.parseFloat(lineaEvento[3].trim());
-                float potencia = Float.parseFloat(lineaEvento[4].trim());
-                float voltaje = Float.parseFloat(lineaEvento[5].trim());
-                float corriente = Float.parseFloat(lineaEvento[6].trim());
                 PlcTu macPlcTu = ejbPlcTuFacade.getPorMac(stringmacPlcTu);
                 
                 if (macPlcTu != null)
@@ -268,16 +264,22 @@ public class WebService {
                     eventoAmarre.setIdPlcMms(macPlcMms);
                     eventoAmarre.setMacPlcTu(macPlcTu);
                     eventoAmarre.setIdNotificacion(notificacion);
-
                     EventosConsumo eventoConsumo = new EventosConsumo();
                     eventoConsumo.setMacPlcMms(macPlcMms);
                     eventoConsumo.setIdNotificacion(notificacion);
                     eventoConsumo.setFechaHora(fechaHora);
-                    eventoConsumo.setMacPlcTu(macPlcTu);
-                    eventoConsumo.setEnergia(energia);
-                    eventoConsumo.setPotencia(potencia);
-                    eventoConsumo.setVoltaje(voltaje);
-                    eventoConsumo.setCorriente(corriente);
+                    eventoConsumo.setMacPlcTu(macPlcTu);                    
+                    if(estadoAmarre == 1)
+                    {
+                        Float energia = Float.parseFloat(lineaEvento[3].trim());
+                        Float potencia = Float.parseFloat(lineaEvento[4].trim());
+                        Float voltaje = Float.parseFloat(lineaEvento[5].trim());
+                        Float corriente = Float.parseFloat(lineaEvento[6].trim());
+                        eventoConsumo.setEnergia(energia);
+                        eventoConsumo.setPotencia(potencia);
+                        eventoConsumo.setVoltaje(voltaje);
+                        eventoConsumo.setCorriente(corriente);                        
+                    }                    
                     listaEventosAmarre.add(eventoAmarre);
                     listaEventosConsumo.add(eventoConsumo);
                 }
@@ -328,6 +330,7 @@ public class WebService {
                 motivo = "El archivo no contiene eventos de consumo y amarre";
                 createNotificacionArchivoConFalla_MoverPendientes(file, motivo);
             }
+            
             
          
         }
@@ -427,37 +430,35 @@ public class WebService {
                 int estadoAmarre =Integer.parseInt(intero);
                 String fecha_hora = fecha + " "+ hora;
                 SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");                
-                Date fechaHora = formatter.parse(fecha_hora);
-                
-                float energia = Float.parseFloat(lineaEvento[3].trim());
-                float potencia = Float.parseFloat(lineaEvento[4].trim());
-                float voltaje = Float.parseFloat(lineaEvento[5].trim());
-                float corriente = Float.parseFloat(lineaEvento[6].trim());
-                Medidor medidor = ejbMedidorFacade.buscarMedidorPorId(stringIdmedidor);
-                
+                Date fechaHora = formatter.parse(fecha_hora);                
+                Medidor medidor = ejbMedidorFacade.buscarMedidorPorId(stringIdmedidor);                
                 if (medidor != null)
-                {
-                
+                {                
                     EventosAmarreMc eventosAmarreMc = new EventosAmarreMc();
-                    eventosAmarreMc.setEstadoAmarre(estadoAmarre); 
-
-                    eventosAmarreMc.setEstadoAmarre(estadoAmarre);
+                    eventosAmarreMc.setEstadoAmarre(estadoAmarre);                    
                     eventosAmarreMc.setFechaHora(fechaHora);
                     eventosAmarreMc.setMacPlcMms(macPlcMms);
                     eventosAmarreMc.setMacPlcMc(plcMc);
                     eventosAmarreMc.setIdMedidor(medidor);
                     eventosAmarreMc.setIdNotificacion(notificacion);
-
                     EventosConsumoMc eventoConsumoMc = new EventosConsumoMc();
                     eventoConsumoMc.setMacPlcMms(macPlcMms);
                     eventoConsumoMc.setIdNotificacion(notificacion);
                     eventoConsumoMc.setFechaHora(fechaHora);
                     eventoConsumoMc.setIdMedidor(medidor);
-                    eventoConsumoMc.setMacPlcMc(plcMc);
-                    eventoConsumoMc.setEnergia(energia);
-                    eventoConsumoMc.setPotencia(potencia);
-                    eventoConsumoMc.setVoltaje(voltaje);
-                    eventoConsumoMc.setCorriente(corriente);
+                    eventoConsumoMc.setMacPlcMc(plcMc);                                      
+                    if(estadoAmarre == 1)
+                    {
+                        Float energia = Float.parseFloat(lineaEvento[3].trim());
+                        Float potencia = Float.parseFloat(lineaEvento[4].trim());
+                        Float voltaje = Float.parseFloat(lineaEvento[5].trim());
+                        Float corriente = Float.parseFloat(lineaEvento[6].trim());
+                        eventoConsumoMc.setEnergia(energia);
+                        eventoConsumoMc.setPotencia(potencia);
+                        eventoConsumoMc.setVoltaje(voltaje);
+                        eventoConsumoMc.setCorriente(corriente);
+                        
+                    }                    
                     listaEventosAmarreMc.add(eventosAmarreMc);
                     listaEventosConsumoMc.add(eventoConsumoMc);
                 }
@@ -503,7 +504,7 @@ public class WebService {
             }
             else
             {
-                motivo = "El archivo no contiene eventos de consumo y amarre";
+                motivo = "MC no respondio : El archivo no contiene eventos de consumo y amarre";
                 createNotificacionArchivoConFalla_MoverPendientes(file, motivo);
             }
             

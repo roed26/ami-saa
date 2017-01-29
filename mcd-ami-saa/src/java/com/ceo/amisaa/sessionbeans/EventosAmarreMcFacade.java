@@ -6,9 +6,11 @@
 package com.ceo.amisaa.sessionbeans;
 
 import com.ceo.amisaa.entidades.EventosAmarreMc;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -27,6 +29,14 @@ public class EventosAmarreMcFacade extends AbstractFacade<EventosAmarreMc> {
 
     public EventosAmarreMcFacade() {
         super(EventosAmarreMc.class);
+    }
+    
+    public List<EventosAmarreMc> findByIdNotificacion(Integer idNotificacion) {
+        Query query = getEntityManager().createNamedQuery("EventosAmarreMc.findByIdNotificacion");
+        query.setParameter("idNotificacion", idNotificacion);
+        
+        List<EventosAmarreMc> resultList = query.getResultList();
+        return resultList;
     }
     
 }

@@ -50,4 +50,12 @@ public class EventosAmarreFacade extends AbstractFacade<EventosAmarre> {
         List<EventosAmarre> resultList = query.getResultList();
         return resultList;
     }
+    
+    public List<EventosAmarre> findByIdNotificacion(Integer idNotificacion) {
+        Query query = getEntityManager().createNamedQuery("EventosAmarre.findByIdNotificacion");
+        query.setParameter("idNotificacion", idNotificacion);
+        
+        List<EventosAmarre> resultList = query.getResultList();
+        return resultList;
+    }
 }

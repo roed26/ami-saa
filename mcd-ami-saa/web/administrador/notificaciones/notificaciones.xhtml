@@ -18,7 +18,10 @@
                     <p:column headerText="Fecha">
                            #{notificacion.fechaNotificacion}
                     </p:column>
-                    <p:column headerText="Tipo de evento">
+                    <p:column headerText="Tipo de evento" rendered="#{notificacion.tipoEvento != -1}">
+                          #{notificacionesNuevasController.formatiarTipoEvento(notificacion)}
+                    </p:column>
+                    <p:column headerText="Tipo de evento" rendered="#{notificacion.tipoEvento == -1}" style="color: #FF0000">
                           #{notificacionesNuevasController.formatiarTipoEvento(notificacion)}
                     </p:column>
                     <p:column headerText="Acciones">

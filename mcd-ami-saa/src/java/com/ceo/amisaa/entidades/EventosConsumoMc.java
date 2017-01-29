@@ -37,7 +37,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EventosConsumoMc.findByPotencia", query = "SELECT e FROM EventosConsumoMc e WHERE e.potencia = :potencia"),
     @NamedQuery(name = "EventosConsumoMc.findByVoltaje", query = "SELECT e FROM EventosConsumoMc e WHERE e.voltaje = :voltaje"),
     @NamedQuery(name = "EventosConsumoMc.findByCorriente", query = "SELECT e FROM EventosConsumoMc e WHERE e.corriente = :corriente"),
-    @NamedQuery(name = "EventosConsumoMc.findByFechaHora", query = "SELECT e FROM EventosConsumoMc e WHERE e.fechaHora = :fechaHora")})
+    @NamedQuery(name = "EventosConsumoMc.findByFechaHora", query = "SELECT e FROM EventosConsumoMc e WHERE e.fechaHora = :fechaHora"),
+    @NamedQuery(name = "EventosConsumoMc.findByIdNotificacion", query = "SELECT e FROM EventosConsumoMc e WHERE e.idNotificacion.idNotificacion = :idNotificacion")})
 public class EventosConsumoMc implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,23 +46,15 @@ public class EventosConsumoMc implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id_consumo")
-    private Integer idConsumo;
-    @Basic(optional = false)
-    @NotNull
+    private Integer idConsumo;     
     @Column(name = "energia")
-    private float energia;
-    @Basic(optional = false)
-    @NotNull
+    private Float energia;     
     @Column(name = "potencia")
-    private float potencia;
-    @Basic(optional = false)
-    @NotNull
+    private Float potencia;    
     @Column(name = "voltaje")
-    private float voltaje;
-    @Basic(optional = false)
-    @NotNull
+    private Float voltaje;    
     @Column(name = "corriente")
-    private float corriente;
+    private Float corriente;
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha_hora")
@@ -104,35 +97,35 @@ public class EventosConsumoMc implements Serializable {
         this.idConsumo = idConsumo;
     }
 
-    public float getEnergia() {
+    public Float getEnergia() {
         return energia;
     }
 
-    public void setEnergia(float energia) {
+    public void setEnergia(Float energia) {
         this.energia = energia;
     }
 
-    public float getPotencia() {
+    public Float getPotencia() {
         return potencia;
     }
 
-    public void setPotencia(float potencia) {
+    public void setPotencia(Float potencia) {
         this.potencia = potencia;
     }
 
-    public float getVoltaje() {
+    public Float getVoltaje() {
         return voltaje;
     }
 
-    public void setVoltaje(float voltaje) {
+    public void setVoltaje(Float voltaje) {
         this.voltaje = voltaje;
     }
 
-    public float getCorriente() {
+    public Float getCorriente() {
         return corriente;
     }
 
-    public void setCorriente(float corriente) {
+    public void setCorriente(Float corriente) {
         this.corriente = corriente;
     }
 

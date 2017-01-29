@@ -6,9 +6,11 @@
 package com.ceo.amisaa.sessionbeans;
 
 import com.ceo.amisaa.entidades.EventosConsumoMc;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -27,6 +29,14 @@ public class EventosConsumoMcFacade extends AbstractFacade<EventosConsumoMc> {
 
     public EventosConsumoMcFacade() {
         super(EventosConsumoMc.class);
+    }
+    
+    public List<EventosConsumoMc> findByIdNotificacion(Integer idNotificacion) {
+        Query query = getEntityManager().createNamedQuery("EventosConsumoMc.findByIdNotificacion");
+        query.setParameter("idNotificacion", idNotificacion);
+        
+        List<EventosConsumoMc> resultList = query.getResultList();
+        return resultList;
     }
     
 }

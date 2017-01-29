@@ -15,6 +15,10 @@ import com.ceo.amisaa.entidades.Notificacion;
 import com.ceo.amisaa.entidades.PlcMc;
 import com.ceo.amisaa.entidades.PlcMms;
 import com.ceo.amisaa.entidades.PlcTu;
+import com.ceo.amisaa.sessionbeans.EventosAmarreFacade;
+import com.ceo.amisaa.sessionbeans.EventosAmarreMcFacade;
+import com.ceo.amisaa.sessionbeans.EventosConsumoFacade;
+import com.ceo.amisaa.sessionbeans.EventosConsumoMcFacade;
 import com.ceo.amisaa.sessionbeans.NotificacionFacade;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -35,6 +39,20 @@ public class NotificacionController implements Serializable {
     
     @EJB
     private NotificacionFacade ejbNotificacionFacade; 
+    
+    @EJB 
+    private EventosAmarreFacade ejbEventosAmarreFacade;
+    
+    @EJB
+    private EventosConsumoFacade ejbEventosConsumoFacade;
+    
+    @EJB 
+    private EventosAmarreMcFacade ejbEventosAmarreMcFacade;
+    
+    @EJB
+    private EventosConsumoMcFacade ejbEventosConsumoMcFacade;
+    
+    
     
     private String conteoNotificacionesNuevas;
 
@@ -246,16 +264,21 @@ public class NotificacionController implements Serializable {
         
         switch (notificacionSelected.getTipoEvento()) {
             case 1:
-                listaEventosAmareNotificacion =  new ArrayList(notificacionSelected.getEventosAmarreCollection());
-                listaEventosConsumoNotificacion = new ArrayList(notificacionSelected.getEventosConsumoCollection());
+                
+                listaEventosAmareNotificacion =  ejbEventosAmarreFacade.findByIdNotificacion(notificacionSelected.getIdNotificacion());
+                listaEventosConsumoNotificacion = ejbEventosConsumoFacade.findByIdNotificacion(notificacionSelected.getIdNotificacion());
+                //listaEventosAmareNotificacion =  new ArrayList(notificacionSelected.getEventosAmarreCollection());
+                //listaEventosConsumoNotificacion = new ArrayList(notificacionSelected.getEventosConsumoCollection());
                 plcMmsNotificacion = listaEventosAmareNotificacion.get(0).getIdPlcMms();
                 notificacionTipo1 = true;
                 notificacionTipo2 = false;
                 notificacionTipoError= false;
                 break;
             case 2:
-                listaEventosAmarreMcNotificacion =  new ArrayList(notificacionSelected.getEventosAmarreMcCollection());
-                listaEventosConsumoMcNotificacion = new ArrayList(notificacionSelected.getEventosConsumoMcCollection());
+                listaEventosAmarreMcNotificacion = ejbEventosAmarreMcFacade.findByIdNotificacion(notificacionSelected.getIdNotificacion());
+                listaEventosConsumoMcNotificacion =ejbEventosConsumoMcFacade.findByIdNotificacion(notificacion.getIdNotificacion());
+                //listaEventosAmarreMcNotificacion =  new ArrayList(notificacionSelected.getEventosAmarreMcCollection());
+                //listaEventosConsumoMcNotificacion = new ArrayList(notificacionSelected.getEventosConsumoMcCollection());
                 plcMmsNotificacion = listaEventosAmarreMcNotificacion.get(0).getMacPlcMms();
                 plcMcNotificacion = listaEventosAmarreMcNotificacion.get(0).getMacPlcMc();
                 notificacionTipo1 = false;

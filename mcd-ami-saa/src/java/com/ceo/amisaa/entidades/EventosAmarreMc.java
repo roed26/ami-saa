@@ -34,7 +34,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EventosAmarreMc.findAll", query = "SELECT e FROM EventosAmarreMc e"),
     @NamedQuery(name = "EventosAmarreMc.findByIdAmarreMc", query = "SELECT e FROM EventosAmarreMc e WHERE e.idAmarreMc = :idAmarreMc"),
     @NamedQuery(name = "EventosAmarreMc.findByEstadoAmarre", query = "SELECT e FROM EventosAmarreMc e WHERE e.estadoAmarre = :estadoAmarre"),
-    @NamedQuery(name = "EventosAmarreMc.findByFechaHora", query = "SELECT e FROM EventosAmarreMc e WHERE e.fechaHora = :fechaHora")})
+    @NamedQuery(name = "EventosAmarreMc.findByFechaHora", query = "SELECT e FROM EventosAmarreMc e WHERE e.fechaHora = :fechaHora"),
+    @NamedQuery(name = "EventosAmarreMc.findByIdNotificacion", query = "SELECT e FROM EventosAmarreMc e WHERE e.idNotificacion.idNotificacion = :idNotificacion")})
 public class EventosAmarreMc implements Serializable {
 
     private static final long serialVersionUID = 1L;
