@@ -23,6 +23,7 @@ public class NotificacionesNuevasController {
     @EJB
     private NotificacionFacade ejbNotificacionFacade; 
    private List<Notificacion> notificacionesnuevas = null;
+   private List<Notificacion> notificacionesRevisadas = null;
    
     public NotificacionesNuevasController() {
     }
@@ -39,6 +40,21 @@ public class NotificacionesNuevasController {
     public void setNotificacionesnuevas(List<Notificacion> notificacionesnuevas) {
         this.notificacionesnuevas = notificacionesnuevas;
     }
+
+    public List<Notificacion> getNotificacionesRevisadas() {
+        
+        if(notificacionesRevisadas == null)
+        {
+           notificacionesRevisadas = ejbNotificacionFacade.getNotificacionesRevisadas(); 
+        }
+        return notificacionesRevisadas;
+    }
+
+    public void setNotificacionesRevisadas(List<Notificacion> notificacionesRevisadas) {
+        this.notificacionesRevisadas = notificacionesRevisadas;
+    }
+    
+    
     
     public String formatiarTipoEvento(Notificacion n)
     {

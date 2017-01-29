@@ -266,9 +266,7 @@ public class NotificacionController implements Serializable {
             case 1:
                 
                 listaEventosAmareNotificacion =  ejbEventosAmarreFacade.findByIdNotificacion(notificacionSelected.getIdNotificacion());
-                listaEventosConsumoNotificacion = ejbEventosConsumoFacade.findByIdNotificacion(notificacionSelected.getIdNotificacion());
-                //listaEventosAmareNotificacion =  new ArrayList(notificacionSelected.getEventosAmarreCollection());
-                //listaEventosConsumoNotificacion = new ArrayList(notificacionSelected.getEventosConsumoCollection());
+                listaEventosConsumoNotificacion = ejbEventosConsumoFacade.findByIdNotificacion(notificacionSelected.getIdNotificacion());              
                 plcMmsNotificacion = listaEventosAmareNotificacion.get(0).getIdPlcMms();
                 notificacionTipo1 = true;
                 notificacionTipo2 = false;
@@ -276,9 +274,7 @@ public class NotificacionController implements Serializable {
                 break;
             case 2:
                 listaEventosAmarreMcNotificacion = ejbEventosAmarreMcFacade.findByIdNotificacion(notificacionSelected.getIdNotificacion());
-                listaEventosConsumoMcNotificacion =ejbEventosConsumoMcFacade.findByIdNotificacion(notificacion.getIdNotificacion());
-                //listaEventosAmarreMcNotificacion =  new ArrayList(notificacionSelected.getEventosAmarreMcCollection());
-                //listaEventosConsumoMcNotificacion = new ArrayList(notificacionSelected.getEventosConsumoMcCollection());
+                listaEventosConsumoMcNotificacion =ejbEventosConsumoMcFacade.findByIdNotificacion(notificacion.getIdNotificacion());                
                 plcMmsNotificacion = listaEventosAmarreMcNotificacion.get(0).getMacPlcMms();
                 plcMcNotificacion = listaEventosAmarreMcNotificacion.get(0).getMacPlcMc();
                 notificacionTipo1 = false;
@@ -292,10 +288,41 @@ public class NotificacionController implements Serializable {
                 break;
         }
         
-        //notificacionSelected.setRevisadoNotificacion(1);
+        notificacionSelected.setRevisadoNotificacion(1);        
+        ejbNotificacionFacade.edit(notificacionSelected);        
+        routingController.irNotificacion();
+    }
+    
+    public void seleccionarNotificacionRevisada(Notificacion notificacion,RoutingController routingController)
+    {
+        notificacionSelected = notificacion;
         
-        //ejbNotificacionFacade.edit(notificacionSelected);
-        
+        switch (notificacionSelected.getTipoEvento()) {
+            case 1:
+                
+                listaEventosAmareNotificacion =  ejbEventosAmarreFacade.findByIdNotificacion(notificacionSelected.getIdNotificacion());
+                listaEventosConsumoNotificacion = ejbEventosConsumoFacade.findByIdNotificacion(notificacionSelected.getIdNotificacion());              
+                plcMmsNotificacion = listaEventosAmareNotificacion.get(0).getIdPlcMms();
+                notificacionTipo1 = true;
+                notificacionTipo2 = false;
+                notificacionTipoError= false;
+                break;
+            case 2:
+                listaEventosAmarreMcNotificacion = ejbEventosAmarreMcFacade.findByIdNotificacion(notificacionSelected.getIdNotificacion());
+                listaEventosConsumoMcNotificacion =ejbEventosConsumoMcFacade.findByIdNotificacion(notificacion.getIdNotificacion());                
+                plcMmsNotificacion = listaEventosAmarreMcNotificacion.get(0).getMacPlcMms();
+                plcMcNotificacion = listaEventosAmarreMcNotificacion.get(0).getMacPlcMc();
+                notificacionTipo1 = false;
+                notificacionTipo2 = true;
+                notificacionTipoError = false;
+                break;
+            case -1:
+                notificacionTipo1 = false;
+                notificacionTipo2 = false;
+                notificacionTipoError = true;
+                break;
+        }        
+                
         routingController.irNotificacion();
     }
     

@@ -36,6 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Notificacion.findAll", query = "SELECT n FROM Notificacion n"),
     @NamedQuery(name = "Notificacion.newNotificaciones", query = "SELECT n FROM Notificacion n WHERE n.revisadoNotificacion = 0"),
+    @NamedQuery(name = "Notificacion.oldNotificaciones", query = "SELECT n FROM Notificacion n WHERE n.revisadoNotificacion = 1"),
     @NamedQuery(name = "Notificacion.findByIdNotificacion", query = "SELECT n FROM Notificacion n WHERE n.idNotificacion = :idNotificacion"),
     @NamedQuery(name = "Notificacion.findByFechaNotificacion", query = "SELECT n FROM Notificacion n WHERE n.fechaNotificacion = :fechaNotificacion"),
     @NamedQuery(name = "Notificacion.findByRutaarchivoNotificacion", query = "SELECT n FROM Notificacion n WHERE n.rutaarchivoNotificacion = :rutaarchivoNotificacion"),

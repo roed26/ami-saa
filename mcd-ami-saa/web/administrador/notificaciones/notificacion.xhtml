@@ -178,12 +178,18 @@
                         <p:column style="font-size: 20px; font-weight: bold;">
                             Energia: 
                         </p:column>
-                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo1}">
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo1 and notificacionController.eventosConsumoSelected.energia != null}">
                             #{notificacionController.eventosConsumoSelected.energia}
                         </p:column>
                         
-                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo2}">
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo2 and notificacionController.eventosConsumoMcSelected.energia != null}">
                             #{notificacionController.eventosConsumoMcSelected.energia}
+                        </p:column>
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo1 and notificacionController.eventosConsumoSelected.energia == null}">
+                            Sin medida
+                        </p:column>
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo2 and notificacionController.eventosConsumoMcSelected.energia == null}">
+                            Sin medida
                         </p:column>
                     </p:row>
                     
@@ -191,12 +197,20 @@
                         <p:column style="font-size: 20px; font-weight: bold;">
                             Potencia:  
                         </p:column>
-                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo1}">
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo1 and notificacionController.eventosConsumoSelected.potencia != null}">
                             #{notificacionController.eventosConsumoSelected.potencia}
                         </p:column>
                         
-                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo2}">
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo2 and notificacionController.eventosConsumoMcSelected.potencia != null}">
                             #{notificacionController.eventosConsumoMcSelected.potencia}
+                        </p:column>
+                        
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo1 and notificacionController.eventosConsumoSelected.potencia == null}">
+                            Sin medida
+                        </p:column>
+                        
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo2 and notificacionController.eventosConsumoMcSelected.potencia == null}">
+                            Sin medida
                         </p:column>
                     </p:row>
                     
@@ -204,11 +218,17 @@
                         <p:column style="font-size: 20px; font-weight: bold;">
                             Voltaje: 
                         </p:column>
-                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo1}">
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo1 and notificacionController.eventosConsumoSelected.voltaje != null}">
                             #{notificacionController.eventosConsumoSelected.voltaje}
                         </p:column>
-                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo2}">
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo2 and notificacionController.eventosConsumoMcSelected.voltaje != null}">
                             #{notificacionController.eventosConsumoMcSelected.voltaje}
+                        </p:column>
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo1 and notificacionController.eventosConsumoSelected.voltaje == null}">
+                            Sin medida
+                        </p:column>
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo2 and notificacionController.eventosConsumoMcSelected.voltaje == null}">
+                            Sin medida
                         </p:column>
                     </p:row>
                     
@@ -216,12 +236,18 @@
                         <p:column style="font-size: 20px; font-weight: bold;" >
                             Corriente: 
                         </p:column>
-                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo1}">
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo1 and notificacionController.eventosConsumoSelected.corriente !=null}">
                             #{notificacionController.eventosConsumoSelected.corriente}
+                        </p:column>                        
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo2 and notificacionController.eventosConsumoMcSelected.corriente !=null}">
+                            #{notificacionController.eventosConsumoMcSelected.corriente}
                         </p:column>
                         
-                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo2}">
-                            #{notificacionController.eventosConsumoMcSelected.corriente}
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo1 and notificacionController.eventosConsumoSelected.corriente ==null}">
+                            Sin medida
+                        </p:column>                        
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo2 and notificacionController.eventosConsumoMcSelected.corriente ==null}">
+                            Sin medida
                         </p:column>
                     </p:row>
                 </p:panelGrid>

@@ -38,5 +38,12 @@ public class NotificacionFacade extends AbstractFacade<Notificacion> {
         List<Notificacion> resultList = query.getResultList();
         return resultList;
     }
+    
+    public List<Notificacion> getNotificacionesRevisadas()
+    {
+        Query query = getEntityManager().createNamedQuery("Notificacion.oldNotificaciones");        
+        List<Notificacion> resultList = query.getResultList();
+        return resultList;
+    }
    
 }

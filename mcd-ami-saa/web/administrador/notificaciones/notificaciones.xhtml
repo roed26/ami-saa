@@ -12,7 +12,7 @@
         
         <p:dataTable style="margin-right: 20px;margin-left: 20px;margin-bottom: 20px;" value="#{notificacionesNuevasController.notificacionesnuevas}" var="notificacion" 
                              paginator="true"
-                             rows="10"
+                             rows="20"
                              >
                         
                     <p:column headerText="Fecha">
@@ -24,9 +24,37 @@
                     <p:column headerText="Tipo de evento" rendered="#{notificacion.tipoEvento == -1}" style="color: #FF0000">
                           #{notificacionesNuevasController.formatiarTipoEvento(notificacion)}
                     </p:column>
-                    <p:column headerText="Acciones">
+            <p:column headerText="Acciones" style="text-align: center;">
                         <h:form>
-                            <p:commandLink value="ver" action="#{notificacionController.seleccionarNotificacion(notificacion, routingController)}" 
+                            <p:commandLink value="Ver detalles" action="#{notificacionController.seleccionarNotificacion(notificacion, routingController)}" 
+                                           actionListener="#{addNavegacionController.addNotificacion()}"
+                                           ajax="false"/>
+                        </h:form> 
+                    </p:column>    
+               </p:dataTable>
+        <br/>
+        <p:separator />
+        <br/>
+        
+        <div id="tituloContenido">Notificaciones revisadas</div>
+        
+        <p:dataTable style="margin-right: 20px;margin-left: 20px;margin-bottom: 20px;" value="#{notificacionesNuevasController.notificacionesRevisadas}" var="notificacion" 
+                             paginator="true"
+                             rows="20"
+                             >
+                        
+                    <p:column headerText="Fecha">
+                           #{notificacion.fechaNotificacion}
+                    </p:column>
+                    <p:column headerText="Tipo de evento" rendered="#{notificacion.tipoEvento != -1}">
+                          #{notificacionesNuevasController.formatiarTipoEvento(notificacion)}
+                    </p:column>
+                    <p:column headerText="Tipo de evento" rendered="#{notificacion.tipoEvento == -1}" style="color: #FF0000">
+                          #{notificacionesNuevasController.formatiarTipoEvento(notificacion)}
+                    </p:column>
+                     <p:column headerText="Acciones" style="text-align: center">
+                        <h:form>
+                            <p:commandLink value="Ver detalles" action="#{notificacionController.seleccionarNotificacionRevisada(notificacion, routingController)}" 
                                            actionListener="#{addNavegacionController.addNotificacion()}"
                                            ajax="false"/>
                         </h:form> 
