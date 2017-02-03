@@ -229,6 +229,7 @@ public class WebService {
          fr = new FileReader (file);
          br = new BufferedReader(fr);
          String linea;
+         int numero_eventos = 0;
          
          String fecha="";
          while(!(linea=br.readLine()).equals(" @;;;;;;") && contadorlinea >=0)//con convencion el @ indica el final del archivo
@@ -240,6 +241,11 @@ public class WebService {
                fecha =fecha.replace("/", "-");
                System.out.println(fecha);
                
+            }
+            else if(contadorlinea == 1)
+            {
+                String event_number = linea.split(";")[1].trim();
+                numero_eventos = Integer.parseInt(event_number);
             }
             else if(contadorlinea > 2)
             {
@@ -308,21 +314,28 @@ public class WebService {
             {
                 //movemos el archivo ya procesado a la ruta destino correspondiente
                 
-                File fil = new File(directorioamover+"/"+file.getName());
-                if(fil.exists())
-                {
-                    Files.delete(Paths.get(file.getPath()));
+                if (listaEventosAmarre.size() == numero_eventos) {
+                    File fil = new File(directorioamover + "/" + file.getName());
+                    if (fil.exists()) {
+                        Files.delete(Paths.get(file.getPath()));
+                    } else {
+                        ejbNotificacionFacade.create(notificacion);
+                        for (int i = 0; i < listaEventosAmarre.size(); i++) {
+                            ejbEventosAmarreFacade.create(listaEventosAmarre.get(i));
+                            ejbEventosConsumoFacade.create(listaEventosConsumo.get(i));
+                        }
+
+                        Files.move(Paths.get(file.getPath()), Paths.get(directorioamover + "/" + file.getName()));
+                    }
+
                 }
                 else
-                {   ejbNotificacionFacade.create(notificacion);                 
-                    for(int i = 0; i< listaEventosAmarre.size(); i++)
-                    {
-                        ejbEventosAmarreFacade.create(listaEventosAmarre.get(i));
-                        ejbEventosConsumoFacade.create(listaEventosConsumo.get(i));
-                    }
-                    
-                    Files.move(Paths.get(file.getPath()),Paths.get(directorioamover+"/"+file.getName()) );
+                {
+                    motivo = "El número de eventos esperado en el archivo es: "+numero_eventos+" y el número de eventos que contiene el archivo es : "+ listaEventosAmarre.size();
+                    createNotificacionArchivoConFalla_MoverPendientes(file, motivo);
                 }
+                
+                
                 
             }
             else
@@ -396,6 +409,7 @@ public class WebService {
          br = new BufferedReader(fr);
          String linea;         
          String fecha="";
+         int numero_eventos =0;
          PlcMc plcMc = null;
          while(!(linea=br.readLine()).equals(" @;;;;;;") && contadorlinea >=0)//con convencion el @ indica el final del archivo
          {             
@@ -406,6 +420,11 @@ public class WebService {
                fecha =fecha.replace("/", "-");
                System.out.println(fecha);
                
+            }
+            else if(contadorlinea == 1)
+            {
+                String event_number = linea.split(";")[1].trim();
+                numero_eventos = Integer.parseInt(event_number);
             }
             else if(contadorlinea == 2)
             {
@@ -485,21 +504,28 @@ public class WebService {
             {
                 //movemos el archivo ya procesado a la ruta destino correspondiente
                 
-                File fil = new File(directorioamover+"/"+file.getName());
-                if(fil.exists())
-                {
-                    Files.delete(Paths.get(file.getPath()));
+                if (listaEventosAmarreMc.size() == numero_eventos) {
+                    File fil = new File(directorioamover + "/" + file.getName());
+                    if (fil.exists()) {
+                        Files.delete(Paths.get(file.getPath()));
+                    } else {
+                        ejbNotificacionFacade.create(notificacion);
+                        for (int i = 0; i < listaEventosAmarreMc.size(); i++) {
+                            ejbEventosAmarreMcFacade.create(listaEventosAmarreMc.get(i));
+                            ejbEventosConsumoMcFacade.create(listaEventosConsumoMc.get(i));
+                        }
+
+                        Files.move(Paths.get(file.getPath()), Paths.get(directorioamover + "/" + file.getName()));
+                    }
+
                 }
                 else
-                {   ejbNotificacionFacade.create(notificacion);                 
-                    for(int i = 0; i< listaEventosAmarreMc.size(); i++)
-                    {
-                        ejbEventosAmarreMcFacade.create(listaEventosAmarreMc.get(i));
-                        ejbEventosConsumoMcFacade.create(listaEventosConsumoMc.get(i));
-                    }
-                    
-                    Files.move(Paths.get(file.getPath()),Paths.get(directorioamover+"/"+file.getName()) );
+                {
+                    motivo = "El número de eventos esperado en el archivo es: "+numero_eventos+" y el número de eventos que contiene el archivo es : "+ listaEventosAmarreMc.size();
+                    createNotificacionArchivoConFalla_MoverPendientes(file, motivo);
                 }
+                
+                
                 
             }
             else
