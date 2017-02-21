@@ -67,10 +67,23 @@ public class MacroFacade extends AbstractFacade<Macro> {
         }
         return macro;
     }
-public List<Macro> buscarPorId(String idMacro) {
+    public List<Macro> buscarPorId(String idMacro) {
         Query query = getEntityManager().createNamedQuery("Macro.findByMacros");
         query.setParameter("idMacro", "%" + idMacro + "%");
         List<Macro> resultList = query.getResultList();
         return resultList;
     }
+
+    public Macro findById(String idMacro) {
+        Query query = getEntityManager().createNamedQuery("Macro.findByIdMacro");
+        query.setParameter("idMacro", idMacro);
+        List<Macro> resultList = query.getResultList();
+        if(resultList.size()>0)
+        {
+            return resultList.get(0);
+        }
+        return null;
+
+    }
+
 }

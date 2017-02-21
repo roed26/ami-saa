@@ -72,6 +72,10 @@ public class NotificacionesNuevasController {
             case 2:
                 tipoeventoformater="Evento de Amarre y Consumo MC y Medidor";
             break;
+            
+            case 3:
+                tipoeventoformater="Evento de Amarre y Consumo MMS y Macro";
+            break;
                 
         }
         

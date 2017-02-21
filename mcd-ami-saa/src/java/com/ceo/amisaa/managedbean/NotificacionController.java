@@ -7,17 +7,22 @@ package com.ceo.amisaa.managedbean;
 
 import com.ceo.amisaa.entidades.Cliente;
 import com.ceo.amisaa.entidades.EventosAmarre;
+import com.ceo.amisaa.entidades.EventosAmarreMacro;
 import com.ceo.amisaa.entidades.EventosAmarreMc;
 import com.ceo.amisaa.entidades.EventosConsumo;
+import com.ceo.amisaa.entidades.EventosConsumoMacro;
 import com.ceo.amisaa.entidades.EventosConsumoMc;
+import com.ceo.amisaa.entidades.Macro;
 import com.ceo.amisaa.entidades.Medidor;
 import com.ceo.amisaa.entidades.Notificacion;
 import com.ceo.amisaa.entidades.PlcMc;
 import com.ceo.amisaa.entidades.PlcMms;
 import com.ceo.amisaa.entidades.PlcTu;
 import com.ceo.amisaa.sessionbeans.EventosAmarreFacade;
+import com.ceo.amisaa.sessionbeans.EventosAmarreMacroFacade;
 import com.ceo.amisaa.sessionbeans.EventosAmarreMcFacade;
 import com.ceo.amisaa.sessionbeans.EventosConsumoFacade;
+import com.ceo.amisaa.sessionbeans.EventosConsumoMacroFacade;
 import com.ceo.amisaa.sessionbeans.EventosConsumoMcFacade;
 import com.ceo.amisaa.sessionbeans.NotificacionFacade;
 import javax.inject.Named;
@@ -52,6 +57,12 @@ public class NotificacionController implements Serializable {
     @EJB
     private EventosConsumoMcFacade ejbEventosConsumoMcFacade;
     
+     @EJB 
+    private EventosAmarreMacroFacade ejbEventosAmarreMacroFacade;
+    
+    @EJB
+    private EventosConsumoMacroFacade ejbEventosConsumoMacroFacade;
+    
     
     
     private String conteoNotificacionesNuevas;
@@ -63,6 +74,8 @@ public class NotificacionController implements Serializable {
     private boolean notificacionTipo1= false;
     
     private boolean notificacionTipo2 = false;
+    
+    private boolean notificacionTipo3 = false;
     
     private boolean notificacionTipoError = false;
     
@@ -80,11 +93,17 @@ public class NotificacionController implements Serializable {
     
     private List <EventosConsumoMc> listaEventosConsumoMcNotificacion = null;
     
+    private List <EventosAmarreMacro> listaEventosAmarreMacroNotificacion = null;
+    
+    private List <EventosConsumoMacro> listaEventosConsumoMacroNotificacion = null;
+    
     private Cliente clienteSelected = null;
     
     private EventosConsumo eventosConsumoSelected = null;
     
     private EventosConsumoMc eventosConsumoMcSelected = null;
+    
+    private EventosConsumoMacro eventosConsumoMacroSelected = null;
     /**
      * Creates a new instance of NotificacionController
      */
@@ -177,6 +196,14 @@ public class NotificacionController implements Serializable {
         this.notificacionTipo2 = notificacionTipo2;
     }
     
+    public boolean isNotificacionTipo3() {
+        return notificacionTipo3;
+    }
+
+    public void setNotificacionTipo3(boolean notificacionTipo3) {
+        this.notificacionTipo3 = notificacionTipo3;
+    }
+    
     public boolean isNotificacionTipoError() {
         return notificacionTipoError;
     }
@@ -200,6 +227,14 @@ public class NotificacionController implements Serializable {
     public void setListaEventosAmareNotificacion(List<EventosAmarre> listaEventosAmareNotificacion) {
         this.listaEventosAmareNotificacion = listaEventosAmareNotificacion;
     }
+    
+    public List<EventosAmarreMacro> getListaEventosAmareMacroNotificacion() {
+        return listaEventosAmarreMacroNotificacion;
+    }
+
+    public void setListaEventosAmareMacroNotificacion(List<EventosAmarreMacro> listaEventosAmarreMacroNotificacion) {
+        this.listaEventosAmarreMacroNotificacion = listaEventosAmarreMacroNotificacion;
+    }
 
     public List<EventosConsumo> getListaEventosConsumoNotificacion() {
         return listaEventosConsumoNotificacion;
@@ -207,6 +242,14 @@ public class NotificacionController implements Serializable {
 
     public void setListaEventosConsumoNotificacion(List<EventosConsumo> listaEventosConsumoNotificacion) {
         this.listaEventosConsumoNotificacion = listaEventosConsumoNotificacion;
+    }
+    
+    public List<EventosConsumoMacro> getListaEventosConsumoMacroNotificacion() {
+        return listaEventosConsumoMacroNotificacion;
+    }
+
+    public void setListaEventosConsumoMacroNotificacion(List<EventosConsumoMacro> listaEventosConsumoMacroNotificacion) {
+        this.listaEventosConsumoMacroNotificacion = listaEventosConsumoMacroNotificacion;
     }
 
     public PlcMc getPlcMcNotificacion() {
@@ -249,6 +292,14 @@ public class NotificacionController implements Serializable {
     public void setEventosConsumoSelected(EventosConsumo eventosConsumoSelected) {
         this.eventosConsumoSelected = eventosConsumoSelected;
     }
+    
+    public EventosConsumoMacro getEventosConsumoMacroSelected() {
+        return eventosConsumoMacroSelected;
+    }
+
+    public void setEventosConsumoMacroSelected(EventosConsumoMacro eventosConsumoMacroSelected) {
+        this.eventosConsumoMacroSelected = eventosConsumoMacroSelected;
+    }
 
     public EventosConsumoMc getEventosConsumoMcSelected() {
         return eventosConsumoMcSelected;
@@ -263,13 +314,13 @@ public class NotificacionController implements Serializable {
         notificacionSelected = notificacion;
         
         switch (notificacionSelected.getTipoEvento()) {
-            case 1:
-                
+            case 1:                
                 listaEventosAmareNotificacion =  ejbEventosAmarreFacade.findByIdNotificacion(notificacionSelected.getIdNotificacion());
                 listaEventosConsumoNotificacion = ejbEventosConsumoFacade.findByIdNotificacion(notificacionSelected.getIdNotificacion());              
                 plcMmsNotificacion = listaEventosAmareNotificacion.get(0).getIdPlcMms();
                 notificacionTipo1 = true;
                 notificacionTipo2 = false;
+                notificacionTipo3 = false;
                 notificacionTipoError= false;
                 break;
             case 2:
@@ -279,11 +330,22 @@ public class NotificacionController implements Serializable {
                 plcMcNotificacion = listaEventosAmarreMcNotificacion.get(0).getMacPlcMc();
                 notificacionTipo1 = false;
                 notificacionTipo2 = true;
+                notificacionTipo3 = false;
                 notificacionTipoError = false;
                 break;
+            case 3:
+                listaEventosAmarreMacroNotificacion =  ejbEventosAmarreMacroFacade.findByIdNotificacion(notificacionSelected.getIdNotificacion());
+                listaEventosConsumoMacroNotificacion = ejbEventosConsumoMacroFacade.findByIdNotificacion(notificacionSelected.getIdNotificacion());              
+                plcMmsNotificacion = listaEventosAmarreMacroNotificacion.get(0).getMacPlcMms();
+                notificacionTipo1 = false;
+                notificacionTipo2 = false;
+                notificacionTipo3 = true;
+                notificacionTipoError= false;
+            break;
             case -1:
                 notificacionTipo1 = false;
                 notificacionTipo2 = false;
+                notificacionTipo3 = false;
                 notificacionTipoError = true;
                 break;
         }
@@ -305,6 +367,7 @@ public class NotificacionController implements Serializable {
                 plcMmsNotificacion = listaEventosAmareNotificacion.get(0).getIdPlcMms();
                 notificacionTipo1 = true;
                 notificacionTipo2 = false;
+                notificacionTipo3 = false;
                 notificacionTipoError= false;
                 break;
             case 2:
@@ -313,12 +376,23 @@ public class NotificacionController implements Serializable {
                 plcMmsNotificacion = listaEventosAmarreMcNotificacion.get(0).getMacPlcMms();
                 plcMcNotificacion = listaEventosAmarreMcNotificacion.get(0).getMacPlcMc();
                 notificacionTipo1 = false;
+                notificacionTipo3 = false;
                 notificacionTipo2 = true;
                 notificacionTipoError = false;
                 break;
+            case 3:
+                listaEventosAmarreMacroNotificacion =  ejbEventosAmarreMacroFacade.findByIdNotificacion(notificacionSelected.getIdNotificacion());
+                listaEventosConsumoMacroNotificacion = ejbEventosConsumoMacroFacade.findByIdNotificacion(notificacionSelected.getIdNotificacion());              
+                plcMmsNotificacion = listaEventosAmarreMacroNotificacion.get(0).getMacPlcMms();
+                notificacionTipo1 = false;
+                notificacionTipo2 = false;
+                notificacionTipo3 = true;
+                notificacionTipoError= false;
+                break;         
             case -1:
                 notificacionTipo1 = false;
                 notificacionTipo2 = false;
+                notificacionTipo3 = false;
                 notificacionTipoError = true;
                 break;
         }        
@@ -360,6 +434,22 @@ public class NotificacionController implements Serializable {
             if(medidor.getIdMedidor().equals(evConMc.getIdMedidor().getIdMedidor()))
             {
                 eventosConsumoMcSelected = evConMc;
+                break;
+            }
+        }
+        
+        requestContext.update("idDialogConsumo");
+        requestContext.execute("PF('dialogConsumo').show()");
+    }
+    
+    public void verEventoConsumoMacro(Macro macro)
+    {
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        for(EventosConsumoMacro evConMacro : listaEventosConsumoMacroNotificacion)
+        {
+            if(macro.getIdMacro().equals(evConMacro.getIdMacro().getIdMacro()))
+            {
+                eventosConsumoMacroSelected = evConMacro;
                 break;
             }
         }

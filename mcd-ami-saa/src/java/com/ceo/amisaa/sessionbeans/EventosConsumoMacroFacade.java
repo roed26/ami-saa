@@ -42,4 +42,12 @@ public class EventosConsumoMacroFacade extends AbstractFacade<EventosConsumoMacr
         return resultList;
     }
     
+    public List<EventosConsumoMacro> findByIdNotificacion(Integer idNotificacion) {
+        Query query = getEntityManager().createNamedQuery("EventosConsumoMacro.findByIdNotificacion");
+        query.setParameter("idNotificacion", idNotificacion);
+        
+        List<EventosConsumoMacro> resultList = query.getResultList();
+        return resultList;
+    }
+    
 }

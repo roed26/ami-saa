@@ -44,6 +44,9 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Macro implements Serializable {
 
     @OneToMany(mappedBy = "idMacro")
+    private Collection<EventosAmarreMacro> eventosAmarreMacroCollection;
+
+    @OneToMany(mappedBy = "idMacro")
     private Collection<EventosConsumoMacro> eventosConsumoMacroCollection;
 
     private static final long serialVersionUID = 1L;
@@ -208,6 +211,15 @@ public class Macro implements Serializable {
 
     public void setEventosConsumoMacroCollection(Collection<EventosConsumoMacro> eventosConsumoMacroCollection) {
         this.eventosConsumoMacroCollection = eventosConsumoMacroCollection;
+    }
+
+    @XmlTransient
+    public Collection<EventosAmarreMacro> getEventosAmarreMacroCollection() {
+        return eventosAmarreMacroCollection;
+    }
+
+    public void setEventosAmarreMacroCollection(Collection<EventosAmarreMacro> eventosAmarreMacroCollection) {
+        this.eventosAmarreMacroCollection = eventosAmarreMacroCollection;
     }
     
 }

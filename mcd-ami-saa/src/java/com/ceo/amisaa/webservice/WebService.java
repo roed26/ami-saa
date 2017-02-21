@@ -6,18 +6,24 @@
 package com.ceo.amisaa.webservice;
 
 import com.ceo.amisaa.entidades.EventosAmarre;
+import com.ceo.amisaa.entidades.EventosAmarreMacro;
 import com.ceo.amisaa.entidades.EventosAmarreMc;
 import com.ceo.amisaa.entidades.EventosConsumo;
+import com.ceo.amisaa.entidades.EventosConsumoMacro;
 import com.ceo.amisaa.entidades.EventosConsumoMc;
+import com.ceo.amisaa.entidades.Macro;
 import com.ceo.amisaa.entidades.Medidor;
 import com.ceo.amisaa.entidades.Notificacion;
 import com.ceo.amisaa.entidades.PlcMc;
 import com.ceo.amisaa.entidades.PlcMms;
 import com.ceo.amisaa.entidades.PlcTu;
 import com.ceo.amisaa.sessionbeans.EventosAmarreFacade;
+import com.ceo.amisaa.sessionbeans.EventosAmarreMacroFacade;
 import com.ceo.amisaa.sessionbeans.EventosAmarreMcFacade;
 import com.ceo.amisaa.sessionbeans.EventosConsumoFacade;
+import com.ceo.amisaa.sessionbeans.EventosConsumoMacroFacade;
 import com.ceo.amisaa.sessionbeans.EventosConsumoMcFacade;
+import com.ceo.amisaa.sessionbeans.MacroFacade;
 import com.ceo.amisaa.sessionbeans.MedidorFacade;
 import com.ceo.amisaa.sessionbeans.NotificacionFacade;
 import com.ceo.amisaa.sessionbeans.PlcMcFacade;
@@ -90,11 +96,20 @@ public class WebService {
     @EJB
     private PlcMcFacade ejbPlcMcFacade;
     
+    @EJB
+    private MacroFacade ejbMacroFacade;
+    
     @EJB 
     private EventosAmarreMcFacade ejbEventosAmarreMcFacade;
     
     @EJB 
     private EventosConsumoMcFacade ejbEventosConsumoMcFacade;
+    
+    @EJB
+    private EventosConsumoMacroFacade ejbEventosConsumoMacroFacade;
+    
+    @EJB
+    private EventosAmarreMacroFacade ejbEventosAmarreMacroFacade;
     /**
      * 
      * Creates a new instance of WebService
@@ -189,9 +204,13 @@ public class WebService {
 
                 break;
 
-                default:
+                case "03":
                     //procesar archivo tipo3
+                    procesarArchivo_PlcMms_Macromedidor(file,plcMms);
                 break;
+                
+                default:
+                    break;
             }
         }
         else
@@ -377,7 +396,181 @@ public class WebService {
         
     }
     
-    
+    /**
+     * Metodo que se encarga de procesar un archivo tipo 3
+     * mms - macromedidor
+     * @param file tipo 3 a procesar
+     */
+    private void procesarArchivo_PlcMms_Macromedidor(File file, PlcMms macPlcMms)
+    {
+        String idMms = file.getName().split("_")[1];//obtenemos el id del dispositivo maestro        
+        String directorioamover = RUTAFTPDIRMMAESTROS + idMms;//el nombre de la carpeta final de destino
+        
+        List<EventosAmarreMacro> listaEventosAmarre = new ArrayList();
+        List<EventosConsumoMacro> listaEventosConsumo = new ArrayList();
+        boolean archivoProcesadoCorrectamente = true;
+        String motivo = "";
+        //es el id del maestro que envio el archivo
+        Notificacion notificacion = new Notificacion();
+        notificacion.setRevisadoNotificacion(0);
+        notificacion.setRutaarchivoNotificacion(directorioamover+"/"+file.getName());
+        notificacion.setFechaNotificacion(new Date());
+        notificacion.setTipoEvento(3);       
+        
+        
+        FileReader fr = null;
+        int contadorlinea = 0;
+        BufferedReader br;
+         try {        
+         fr = new FileReader (file);
+         br = new BufferedReader(fr);
+         String linea;
+         int numero_eventos = 0;
+         
+         String fecha="";
+         while(!(linea=br.readLine()).equals(" @;;;;;;") && contadorlinea >=0)//con convencion el @ indica el final del archivo
+         {             
+            if(contadorlinea == 0)
+            {
+                // de la primera linea sacamos la fecha
+               fecha= linea.split(";")[1];
+               fecha =fecha.replace("/", "-");
+               System.out.println(fecha);
+               
+            }
+            else if(contadorlinea == 1)
+            {
+                numero_eventos = 1;
+            }
+            else if(contadorlinea > 2)
+            {
+                //apartir de la 3 linea sacamos la informacion de amarre
+                String [] lineaEvento = linea.split(";");
+                String stringIdMacro = lineaEvento[0].trim();
+                String hora = lineaEvento[1].trim().replace("/", ":");
+                String intero = lineaEvento[2].trim();
+                System.out.println(intero);
+                int estadoAmarre =Integer.parseInt(intero);
+                String fecha_hora = fecha + " "+ hora;
+                SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");                
+                Date fechaHora = formatter.parse(fecha_hora);                
+                
+                Macro idMacro = ejbMacroFacade.findById(stringIdMacro);
+                
+                if (idMacro != null)
+                {
+                    EventosAmarreMacro eventoAmarre = new EventosAmarreMacro();
+                    eventoAmarre.setEstadoAmarre(estadoAmarre);
+                    eventoAmarre.setFechaHora(fechaHora);
+                    eventoAmarre.setMacPlcMms(macPlcMms);
+                    eventoAmarre.setIdMacro(idMacro);
+                    eventoAmarre.setIdNotificacion(notificacion);
+                    EventosConsumoMacro eventoConsumo = new EventosConsumoMacro();
+                    eventoConsumo.setMacPlcMms(macPlcMms);
+                    eventoConsumo.setIdNotificacion(notificacion);
+                    eventoConsumo.setFechaHora(fechaHora);
+                    eventoConsumo.setIdMacro(idMacro);                    
+                    if(estadoAmarre == 1)
+                    {
+                        Float energia = Float.parseFloat(lineaEvento[3].trim());
+                        Float potencia = Float.parseFloat(lineaEvento[4].trim());
+                        Float voltaje = Float.parseFloat(lineaEvento[5].trim());
+                        Float corriente = Float.parseFloat(lineaEvento[6].trim());
+                        eventoConsumo.setEnergia(energia);
+                        eventoConsumo.setPotencia(potencia);
+                        eventoConsumo.setVoltaje(voltaje);
+                        eventoConsumo.setCorriente(corriente);                        
+                    }                    
+                    listaEventosAmarre.add(eventoAmarre);
+                    listaEventosConsumo.add(eventoConsumo);
+                }
+                else
+                {
+                    archivoProcesadoCorrectamente = false;
+                    motivo ="Id del Macro de la linea " + (contadorlinea+1)+" del archivo no esta registrado";
+                    contadorlinea = -100;
+                }
+                
+                
+            }            
+            contadorlinea ++;
+         }         
+         
+         File f = new File(directorioamover);
+        
+        if (!f.exists())
+        { 
+            f.mkdirs();// si el archivo destino no existe lo creamos
+        } 
+        
+        if(archivoProcesadoCorrectamente)
+        {
+            if(listaEventosAmarre.size()>0)
+            {
+                //movemos el archivo ya procesado a la ruta destino correspondiente
+                
+                if (listaEventosAmarre.size() == numero_eventos) {
+                    File fil = new File(directorioamover + "/" + file.getName());
+                    if (fil.exists()) {
+                        Files.delete(Paths.get(file.getPath()));
+                    } else {
+                        ejbNotificacionFacade.create(notificacion);
+                        for (int i = 0; i < listaEventosAmarre.size(); i++) {
+                            ejbEventosAmarreMacroFacade.create(listaEventosAmarre.get(i));
+                            ejbEventosConsumoMacroFacade.create(listaEventosConsumo.get(i));
+                        }
+
+                        Files.move(Paths.get(file.getPath()), Paths.get(directorioamover + "/" + file.getName()));
+                    }
+
+                }
+                else
+                {
+                    motivo = "El número de eventos esperado en el archivo es: "+numero_eventos+" y el número de eventos que contiene el archivo es : "+ listaEventosAmarre.size();
+                    createNotificacionArchivoConFalla_MoverPendientes(file, motivo);
+                }
+                
+                
+                
+            }
+            else
+            {
+                motivo = "El archivo no contiene eventos de consumo y amarre";
+                createNotificacionArchivoConFalla_MoverPendientes(file, motivo);
+            }
+            
+            
+         
+        }
+        else
+        {            
+            createNotificacionArchivoConFalla_MoverPendientes(file, motivo);
+        }
+         
+         
+            
+      }
+      catch(IOException | NumberFormatException | ParseException e)      
+      {
+          
+          System.out.print("exception: "+e.getMessage());
+          
+          motivo ="el archivo tiene un problema";
+          createNotificacionArchivoConFalla_MoverPendientes(file, motivo);
+          //e.printStackTrace();
+      }
+      finally{
+         
+         try{                    
+            if( null != fr ){ 
+               
+               fr.close();     
+            }                  
+         }catch (Exception e2){ 
+         }
+      }
+        
+    }
     /**
      * Metodo que se encarga de procesar un archivo tipo 2 
      * mms - mc

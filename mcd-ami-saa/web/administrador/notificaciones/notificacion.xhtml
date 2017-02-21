@@ -185,10 +185,18 @@
                         <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo2 and notificacionController.eventosConsumoMcSelected.energia != null}">
                             #{notificacionController.eventosConsumoMcSelected.energia}
                         </p:column>
+                        
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo3 and notificacionController.eventosConsumoMacroSelected.energia != null}">
+                            #{notificacionController.eventosConsumoMacroSelected.energia}
+                        </p:column>
+                        
                         <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo1 and notificacionController.eventosConsumoSelected.energia == null}">
                             Sin medida
                         </p:column>
                         <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo2 and notificacionController.eventosConsumoMcSelected.energia == null}">
+                            Sin medida
+                        </p:column>
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo3 and notificacionController.eventosConsumoMacroSelected.energia == null}">
                             Sin medida
                         </p:column>
                     </p:row>
@@ -205,11 +213,18 @@
                             #{notificacionController.eventosConsumoMcSelected.potencia}
                         </p:column>
                         
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo3 and notificacionController.eventosConsumoMacroSelected.potencia != null}">
+                            #{notificacionController.eventosConsumoMacroSelected.potencia}
+                        </p:column>
+                        
                         <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo1 and notificacionController.eventosConsumoSelected.potencia == null}">
                             Sin medida
                         </p:column>
                         
                         <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo2 and notificacionController.eventosConsumoMcSelected.potencia == null}">
+                            Sin medida
+                        </p:column>
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo3 and notificacionController.eventosConsumoMacroSelected.potencia == null}">
                             Sin medida
                         </p:column>
                     </p:row>
@@ -224,10 +239,16 @@
                         <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo2 and notificacionController.eventosConsumoMcSelected.voltaje != null}">
                             #{notificacionController.eventosConsumoMcSelected.voltaje}
                         </p:column>
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo3 and notificacionController.eventosConsumoMacroSelected.voltaje != null}">
+                            #{notificacionController.eventosConsumoMacroSelected.voltaje}
+                        </p:column>
                         <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo1 and notificacionController.eventosConsumoSelected.voltaje == null}">
                             Sin medida
                         </p:column>
                         <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo2 and notificacionController.eventosConsumoMcSelected.voltaje == null}">
+                            Sin medida
+                        </p:column>
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo3 and notificacionController.eventosConsumoMacroSelected.voltaje == null}">
                             Sin medida
                         </p:column>
                     </p:row>
@@ -242,11 +263,17 @@
                         <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo2 and notificacionController.eventosConsumoMcSelected.corriente !=null}">
                             #{notificacionController.eventosConsumoMcSelected.corriente}
                         </p:column>
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo3 and notificacionController.eventosConsumoMacroSelected.corriente !=null}">
+                            #{notificacionController.eventosConsumoMacroSelected.corriente}
+                        </p:column>
                         
                         <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo1 and notificacionController.eventosConsumoSelected.corriente ==null}">
                             Sin medida
                         </p:column>                        
                         <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo2 and notificacionController.eventosConsumoMcSelected.corriente ==null}">
+                            Sin medida
+                        </p:column>
+                        <p:column style="font-size: 20px;" rendered="#{notificacionController.notificacionTipo3 and notificacionController.eventosConsumoMacroSelected.corriente ==null}">
                             Sin medida
                         </p:column>
                     </p:row>
@@ -391,6 +418,76 @@
             
         </h:form>
         
+        
+        <h:form id="formNotificacionTipo3" rendered="#{notificacionController.notificacionTipo3}">
+            <div id="tituloContenido">#{notificacionesNuevasController.formatiarTipoEvento(notificacionController.notificacionSelected)}</div>
+            <p:panelGrid>
+                
+                <p:row>
+                    <p:column>
+                        Fecha :
+                    </p:column>
+                    <p:column>
+                        #{notificacionController.notificacionSelected.fechaNotificacion}
+                    </p:column>
+                    
+                </p:row>
+                
+                <p:row>
+                    <p:column>
+                        Mac Mms :
+                    </p:column>
+                    <p:column>
+                        <p:commandLink value="#{notificacionController.plcMmsNotificacion.macPlcMms}"/>
+                    </p:column>
+                    
+                </p:row>                
+                <p:row>
+                    <p:column>
+                        Ubicación del trafo :
+                    </p:column>
+                    <p:column>
+                        <p:commandLink >                            
+                            <p:graphicImage width="20" height="20" value="./../resources/img/iconos/ubicacion.png"/>
+                        </p:commandLink>
+                    </p:column>
+                    
+                </p:row>
+                
+            </p:panelGrid>
+            
+            <br/>
+            <br/>
+            <p:dataTable value="#{notificacionController.listaEventosAmareMacroNotificacion}"
+                         var="eventoAmarreMacro" >
+                
+                <p:column style="text-align: center;"   headerText="Hora (HH:mm:ss)">
+                    #{eventoAmarreMacro.fechaHora.hours}:#{eventoAmarreMacro.fechaHora.minutes}:#{eventoAmarreMacro.fechaHora.seconds}
+                </p:column>
+                
+                <p:column style="text-align: center;"   headerText="Id Medidor">
+                    <p:commandLink title="Informacion del dispositivo"  value="#{eventoAmarreMacro.idMacro.idMacro}"/>
+                </p:column> 
+                <p:column style="text-align: center;" headerText="Ubicacion">
+                    <p:commandLink title="ver la Ubicacion del dispositivo">
+                        <p:graphicImage width="40" height="40" value="./../resources/img/iconos/ubicacion.png"/>
+                    </p:commandLink>
+                </p:column>
+                <p:column  style="text-align: center;" headerText="Estado amarre">  
+                    <p:graphicImage rendered="#{eventoAmarreMacro.estadoAmarre == 1}"  width="30" height="30" value="./../resources/img/estado/activo.png"/>
+                    
+                    <p:graphicImage rendered="#{eventoAmarreMacro.estadoAmarre == 0}" width="30" height="30" value="./../resources/img/estado/inactivo.png"/>
+                </p:column>
+                
+                <p:column style="text-align: center;" headerText="Consumos">
+                    <p:commandLink title="ver Consumos" actionListener="#{notificacionController.verEventoConsumoMacro(eventoAmarreMacro.idMacro)}">
+                        <p:graphicImage width="50" height="50" value="./../resources/img/iconos/consumo.png"/>
+                    </p:commandLink>
+                </p:column>
+                
+            </p:dataTable>
+            
+        </h:form>
         
     </h:body>
 </html>

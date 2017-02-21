@@ -38,6 +38,15 @@ import javax.xml.bind.annotation.XmlTransient;
 })
 public class Trafo implements Serializable {
 
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "latitud")
+    private double latitud;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "longitud")
+    private double longitud;
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -45,14 +54,6 @@ public class Trafo implements Serializable {
     @Size(min = 1, max = 20)
     @Column(name = "id_trafo")
     private String idTrafo;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "latitud")
-    private float latitud;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "longitud")
-    private float longitud;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTrafo")
     private Collection<Macro> macroCollection;
     @OneToMany(mappedBy = "idTrafo")
@@ -81,21 +82,6 @@ public class Trafo implements Serializable {
         this.idTrafo = idTrafo;
     }
 
-    public float getLatitud() {
-        return latitud;
-    }
-
-    public void setLatitud(float latitud) {
-        this.latitud = latitud;
-    }
-
-    public float getLongitud() {
-        return longitud;
-    }
-
-    public void setLongitud(float longitud) {
-        this.longitud = longitud;
-    }
 
     @XmlTransient
     public Collection<Macro> getMacroCollection() {
@@ -147,6 +133,22 @@ public class Trafo implements Serializable {
     @Override
     public String toString() {
         return "com.ceo.amisaa.managedbean.Trafo[ idTrafo=" + idTrafo + " ]";
+    }
+
+    public double getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(double latitud) {
+        this.latitud = latitud;
+    }
+
+    public double getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(double longitud) {
+        this.longitud = longitud;
     }
     
 }

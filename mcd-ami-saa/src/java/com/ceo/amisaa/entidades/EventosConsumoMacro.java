@@ -10,6 +10,8 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -36,32 +38,25 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EventosConsumoMacro.findByVoltaje", query = "SELECT e FROM EventosConsumoMacro e WHERE e.voltaje = :voltaje"),
     @NamedQuery(name = "EventosConsumoMacro.findByCorriente", query = "SELECT e FROM EventosConsumoMacro e WHERE e.corriente = :corriente"),
     @NamedQuery(name = "EventosConsumoMacro.findByFechaHora", query = "SELECT e FROM EventosConsumoMacro e WHERE e.fechaHora = :fechaHora"),
+    @NamedQuery(name = "EventosConsumoMacro.findByIdNotificacion", query = "SELECT e FROM EventosConsumoMacro e WHERE e.idNotificacion.idNotificacion = :idNotificacion"),
     @NamedQuery(name = "EventosConsumoMacro.findBylistaEventosMacro", query = "SELECT e FROM EventosConsumoMacro e WHERE e.idMacro = :macro AND(e.fechaHora BETWEEN :fechaHoraInicio AND :fechaHoraFin)")
 })
 public class EventosConsumoMacro implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id_consumo")
     private Integer idConsumo;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "energia")
-    private float energia;
-    @Basic(optional = false)
-    @NotNull
+    private Float energia;
     @Column(name = "potencia")
-    private float potencia;
-    @Basic(optional = false)
-    @NotNull
+    private Float potencia;
     @Column(name = "voltaje")
-    private float voltaje;
-    @Basic(optional = false)
-    @NotNull
+    private Float voltaje;
     @Column(name = "corriente")
-    private float corriente;
+    private Float corriente;
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha_hora")
@@ -73,6 +68,9 @@ public class EventosConsumoMacro implements Serializable {
     @JoinColumn(name = "mac_plc_mms", referencedColumnName = "mac_plc_mms")
     @ManyToOne(optional = false)
     private PlcMms macPlcMms;
+    @JoinColumn(name = "id_notificacion", referencedColumnName = "id_notificacion")
+    @ManyToOne(optional = false)
+    private Notificacion idNotificacion;
 
     public EventosConsumoMacro() {
     }
@@ -98,35 +96,35 @@ public class EventosConsumoMacro implements Serializable {
         this.idConsumo = idConsumo;
     }
 
-    public float getEnergia() {
+    public Float getEnergia() {
         return energia;
     }
 
-    public void setEnergia(float energia) {
+    public void setEnergia(Float energia) {
         this.energia = energia;
     }
 
-    public float getPotencia() {
+    public Float getPotencia() {
         return potencia;
     }
 
-    public void setPotencia(float potencia) {
+    public void setPotencia(Float potencia) {
         this.potencia = potencia;
     }
 
-    public float getVoltaje() {
+    public Float getVoltaje() {
         return voltaje;
     }
 
-    public void setVoltaje(float voltaje) {
+    public void setVoltaje(Float voltaje) {
         this.voltaje = voltaje;
     }
 
-    public float getCorriente() {
+    public Float getCorriente() {
         return corriente;
     }
 
-    public void setCorriente(float corriente) {
+    public void setCorriente(Float corriente) {
         this.corriente = corriente;
     }
 
@@ -172,6 +170,14 @@ public class EventosConsumoMacro implements Serializable {
             return false;
         }
         return true;
+    }
+    
+    public Notificacion getIdNotificacion() {
+        return idNotificacion;
+    }
+
+    public void setIdNotificacion(Notificacion idNotificacion) {
+        this.idNotificacion = idNotificacion;
     }
 
     @Override

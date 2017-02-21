@@ -43,6 +43,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Notificacion.findByRevisadoNotificacion", query = "SELECT n FROM Notificacion n WHERE n.revisadoNotificacion = :revisadoNotificacion")})
 public class Notificacion implements Serializable {
 
+    
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -75,8 +77,12 @@ public class Notificacion implements Serializable {
     private Collection<EventosConsumo> eventosConsumoCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idNotificacion")
     private Collection<EventosConsumoMc> eventosConsumoMcCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idNotificacion")
+    private Collection<EventosAmarreMacro> eventosAmarreMacroCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idNotificacion")
+    private Collection<EventosConsumoMacro> eventosConsumoMacroCollection;
     
-    @Size(max = 100)
+    @Size(max = 200)
     @Column(name = "motivo")
     private String motivo;
 
@@ -203,6 +209,24 @@ public class Notificacion implements Serializable {
     @Override
     public String toString() {
         return "com.ceo.amisaa.entidades.Notificacion[ idNotificacion=" + idNotificacion + " ]";
+    }
+
+    @XmlTransient
+    public Collection<EventosAmarreMacro> getEventosAmarreMacroCollection() {
+        return eventosAmarreMacroCollection;
+    }
+
+    public void setEventosAmarreMacroCollection(Collection<EventosAmarreMacro> eventosAmarreMacroCollection) {
+        this.eventosAmarreMacroCollection = eventosAmarreMacroCollection;
+    }
+    
+    @XmlTransient
+    public Collection<EventosConsumoMacro> getEventosConsumoMacroCollection() {
+        return eventosConsumoMacroCollection;
+    }
+
+    public void setEventosConsumoMacroCollection(Collection<EventosConsumoMacro> eventosConsumoMacroCollection) {
+        this.eventosConsumoMacroCollection = eventosConsumoMacroCollection;
     }
     
 }
