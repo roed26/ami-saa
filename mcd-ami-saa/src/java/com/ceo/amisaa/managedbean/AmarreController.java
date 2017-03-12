@@ -33,6 +33,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.inject.Named;
 import org.primefaces.context.RequestContext;
+import org.primefaces.model.chart.Axis;
+import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.PieChartModel;
@@ -71,14 +73,20 @@ public class AmarreController implements Serializable {
     private boolean histograma;
     private boolean torta;
     private boolean curvas;
+    private boolean resultadoGeneral;
+
     private SimpleDateFormat formatoFecha;
     private CartesianChartModel porcentajeAmarre;
+    private CartesianChartModel porcentajeAmarreIndividual;
     private Trafo trafo;
     private Macro macro;
+    private PlcTu mejorPlcTu;
+    private PlcTu peorPlcTu;
 
     //listas
     private List<EventosConsumoMacro> eventosConsumoMacro;
     private List<EventosAmarre> eventosAmarre;
+    private List<ResultadosEstadistica> listaResultados;
 
     private PieChartModel modeloResultadosEstadisticas;
 
@@ -90,6 +98,7 @@ public class AmarreController implements Serializable {
     @PostConstruct
     public void init() {
         this.procesado = false;
+        this.resultadoGeneral = false;
         this.macro = new Macro();
     }
 
@@ -123,6 +132,14 @@ public class AmarreController implements Serializable {
 
     public void setRangoFecha(String rangoFecha) {
         this.rangoFecha = rangoFecha;
+    }
+
+    public boolean isResultadoGeneral() {
+        return resultadoGeneral;
+    }
+
+    public void setResultadoGeneral(boolean resultadoGeneral) {
+        this.resultadoGeneral = resultadoGeneral;
     }
 
     public boolean isRangoFechaCambiado1() {
@@ -163,6 +180,22 @@ public class AmarreController implements Serializable {
 
     public void setRangoFechaCambiado4(boolean rangoFechaCambiado4) {
         this.rangoFechaCambiado4 = rangoFechaCambiado4;
+    }
+
+    public PlcTu getMejorPlcTu() {
+        return mejorPlcTu;
+    }
+
+    public void setMejorPlcTu(PlcTu mejorPlcTu) {
+        this.mejorPlcTu = mejorPlcTu;
+    }
+
+    public PlcTu getPeorPlcTu() {
+        return peorPlcTu;
+    }
+
+    public void setPeorPlcTu(PlcTu peorPlcTu) {
+        this.peorPlcTu = peorPlcTu;
     }
 
     public boolean isSinConsumo() {
@@ -237,6 +270,14 @@ public class AmarreController implements Serializable {
         this.porcentajeAmarre = porcentajeAmarre;
     }
 
+    public CartesianChartModel getPorcentajeAmarreIndividual() {
+        return porcentajeAmarreIndividual;
+    }
+
+    public void setPorcentajeAmarreIndividual(CartesianChartModel porcentajeAmarreIndividual) {
+        this.porcentajeAmarreIndividual = porcentajeAmarreIndividual;
+    }
+
     public Trafo getTrafo() {
         return trafo;
     }
@@ -251,6 +292,14 @@ public class AmarreController implements Serializable {
 
     public void setMacro(Macro macro) {
         this.macro = macro;
+    }
+
+    public List<ResultadosEstadistica> getListaResultados() {
+        return listaResultados;
+    }
+
+    public void setListaResultados(List<ResultadosEstadistica> listaResultados) {
+        this.listaResultados = listaResultados;
     }
 
     public void seleccionarFecha() {
@@ -269,6 +318,7 @@ public class AmarreController implements Serializable {
         }
 
         this.trafoSeleccionado = true;
+        this.resultadoGeneral = true;
         this.procesado = true;
         this.rangoFechaCambiado1 = false;
         this.rangoFechaCambiado2 = false;
@@ -276,6 +326,7 @@ public class AmarreController implements Serializable {
         RequestContext requestContext = RequestContext.getCurrentInstance();
         requestContext.execute("PF('seleccionarTrafo').hide()");
         requestContext.update("estadisticas");
+        requestContext.update("formPlcTus");
     }
 
     public void cambiarRangoFecha(ValueChangeEvent e) {
@@ -405,7 +456,7 @@ public class AmarreController implements Serializable {
         final ChartSeries porcentajeAmarreDia = new ChartSeries("porcentaje de amarre");
 
         List<Producto> listaProductosTrafo = new ArrayList<>();
-        List<ResultadosEstadistica> listaResultados = new ArrayList<>();
+        listaResultados = new ArrayList<>();
         for (int i = 0; i < trafo.getProductoCollection().toArray().length; i++) {
             listaProductosTrafo.add((Producto) trafo.getProductoCollection().toArray()[i]);
         }
@@ -417,63 +468,70 @@ public class AmarreController implements Serializable {
                 listaResultados.add(resultadosEstadistica);
             }
         }
-        int contAmarrados = 1;
-        int contNoAmarrados = 0;
 
-        for (int i = 0; i < listaResultados.size(); i++) {
-            if (listaResultados.get(i).getAmarre() == 1) {
-                contAmarrados++;
+        if (this.trafo.getPlcMmsCollection().toArray().length > 0) {
+            PlcMms plcMms = (PlcMms) this.trafo.getPlcMmsCollection().toArray()[0];
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(fechaDia);
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+            Date siguiente = calendar.getTime();
+            this.eventosAmarre = this.ejbEventosAmarre.listaEventosPorFecha(plcMms, fechaDia, siguiente);
+            if (this.eventosAmarre.size() > 0) {
+                for (int i = 0; i < listaResultados.size(); i++) {
+                    int cont = 0;
+                    int respondio = 0;
+                    int noRespondio = 0;
+                    for (int j = 0; j < this.eventosAmarre.size(); j++) {
+                        if (this.eventosAmarre.get(j).getMacPlcTu().equals(listaResultados.get(i).getPlcTu())) {
+                            if (this.eventosAmarre.get(j).getEstadoAmarre() == 0) {
+                                noRespondio++;
+                            } else {
+                                respondio++;
+                            }
+                            if (cont == listaResultados.size()) {
+                                int total = noRespondio + respondio;
+                                double porcentajeAmarre = (respondio * 100) / total;
+                                porcentajeAmarreDia.set(formatoFecha.format(this.eventosAmarre.get(j).getFechaHora()), porcentajeAmarre);
+                                cont = 0;
+                                respondio = 0;
+                                noRespondio = 0;
+                            } else {
+                                cont++;
+                            }
+                        }
+                    }
+                }
+                porcentajeAmarre.addSeries(porcentajeAmarreDia);
+
+                modeloResultadosEstadisticas.set("Con amerre", 4);
+                modeloResultadosEstadisticas.set("Sin amarre", 4);
+                modeloResultadosEstadisticas.setTitle("Porcentajes amarre");
+                modeloResultadosEstadisticas.setLegendPosition("e");
+                modeloResultadosEstadisticas.setShowDataLabels(true);
             } else {
-                contNoAmarrados++;
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El trafo seleccionado no tiene vinculado un maestro"));
+                RequestContext requestContext = RequestContext.getCurrentInstance();
+                requestContext.execute("PF('mensajeError').show()");
             }
+
         }
-        int contEncuetas = 0;
+    }
 
-        PlcMms plcMms = (PlcMms) this.trafo.getPlcMmsCollection().toArray()[0];
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(fechaDia);
-        calendar.add(Calendar.DAY_OF_YEAR, 1);
-        Date siguiente = calendar.getTime();
-        this.eventosAmarre = this.ejbEventosAmarre.listaEventosPorFecha(plcMms, fechaDia, siguiente);
-        if (this.eventosAmarre.size() > 0) {
-            for (int i = 0; i < this.eventosAmarre.size(); i++) {
-                if (this.eventosAmarre.get(i).getMacPlcTu().equals(listaResultados.get(0).getPlcTu())) {
-                    contEncuetas++;
-                }
-            }
+    public void respuestaResultados(ValueChangeEvent e) {
+        RequestContext requestContext = RequestContext.getCurrentInstance();
 
-            int cont = 0;
-            int respondio = 0;
-            int noRespondio = 0;
-            for (int j = 0; j < (this.eventosAmarre.size()); j++) {
-
-                if (this.eventosAmarre.get(j).getEstadoAmarre() == 0) {
-                    noRespondio++;
-                } else {
-                    respondio++;
-                }
-                if (cont == listaResultados.size()) {
-                    int total = noRespondio + respondio;
-                    double porcentajeAmarre = (respondio * 100) / total;
-                    porcentajeAmarreDia.set(formatoFecha.format(this.eventosAmarre.get(j).getFechaHora()), porcentajeAmarre);
-                    cont = 0;
-                    respondio = 0;
-                    noRespondio = 0;
-                } else {
-                    cont++;
-                }
-
-            }
-
-            porcentajeAmarre.addSeries(porcentajeAmarreDia);
-
-            modeloResultadosEstadisticas.set("Con amerre", contAmarrados);
-            modeloResultadosEstadisticas.set("Sin amarre", contNoAmarrados);
-
-            modeloResultadosEstadisticas.setTitle("Porcentajes amarre");
-            modeloResultadosEstadisticas.setLegendPosition("e");
-            modeloResultadosEstadisticas.setShowDataLabels(true);
+        if (e.getNewValue().equals("Si")) {
+            resultadoGeneral = true;
+        } else {
+            resultadoGeneral = false;
         }
+
+    }
+
+    public void procesarResultadosPlcTu(ValueChangeEvent e) {
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        procesarResultadosPlctu((String) e.getNewValue());
+
     }
 
     public void cambiarEstadoSeleccion() {
@@ -523,5 +581,20 @@ public class AmarreController implements Serializable {
         calendar.add(Calendar.DAY_OF_YEAR, -1);
 
         this.fechaInicioUsar = calendar.getTime();
+    }
+
+    private void procesarResultadosPlctu(String macPlcTu) {
+        porcentajeAmarreIndividual = new CartesianChartModel();
+        
+        final ChartSeries porcentajeAmarreIndividualPlcTu = new ChartSeries("porcentaje de amarre");
+        for (int j = 0; j < this.eventosAmarre.size(); j++) {
+            if (this.eventosAmarre.get(j).getMacPlcTu().getMacPlcTu().equalsIgnoreCase(macPlcTu)) {
+                porcentajeAmarreIndividualPlcTu.set(this.eventosAmarre.get(j).getFechaHora(), this.eventosAmarre.get(j).getEstadoAmarre());
+            }
+        }
+        porcentajeAmarreIndividual.addSeries(porcentajeAmarreIndividualPlcTu);
+        Axis yAxis = porcentajeAmarreIndividual.getAxis(AxisType.Y);
+        yAxis.setMin(0);
+        yAxis.setMax(1);
     }
 }

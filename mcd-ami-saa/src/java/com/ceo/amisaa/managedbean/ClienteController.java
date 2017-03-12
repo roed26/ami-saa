@@ -58,6 +58,10 @@ import org.primefaces.model.chart.ChartSeries;
 
 @Named("clienteController")
 @SessionScoped
+/*
+*
+*@khhg
+*/
 public class ClienteController implements Serializable {
 
     @EJB
