@@ -18,6 +18,8 @@ import com.ceo.amisaa.entidades.Notificacion;
 import com.ceo.amisaa.entidades.PlcMc;
 import com.ceo.amisaa.entidades.PlcMms;
 import com.ceo.amisaa.entidades.PlcTu;
+import com.ceo.amisaa.entidades.Producto;
+import com.ceo.amisaa.entidades.Trafo;
 import com.ceo.amisaa.sessionbeans.EventosAmarreFacade;
 import com.ceo.amisaa.sessionbeans.EventosAmarreMacroFacade;
 import com.ceo.amisaa.sessionbeans.EventosAmarreMcFacade;
@@ -30,8 +32,13 @@ import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import org.primefaces.context.RequestContext;
+import org.primefaces.model.map.DefaultMapModel;
+import org.primefaces.model.map.LatLng;
+import org.primefaces.model.map.MapModel;
+import org.primefaces.model.map.Marker;
 
 /**
  *
@@ -63,7 +70,10 @@ public class NotificacionController implements Serializable {
     @EJB
     private EventosConsumoMacroFacade ejbEventosConsumoMacroFacade;
     
+    private MapModel puntosModelo;
     
+    
+    private String centroMapa = "2.440834, -76.606994";
     
     private String conteoNotificacionesNuevas;
 
@@ -111,6 +121,13 @@ public class NotificacionController implements Serializable {
     {
     }
     
+    @PostConstruct
+    public void init() {
+        puntosModelo = new DefaultMapModel();
+        
+        System.out.println(puntosModelo.getMarkers().size());
+    }
+    
     public String getConteoNotificacionesNuevas()
     {
         return conteoNotificacionesNuevas;
@@ -120,6 +137,20 @@ public class NotificacionController implements Serializable {
         this.conteoNotificacionesNuevas = conteoNotificacionesNuevas;
     }
     
+    public MapModel getPuntosModelo() 
+    {
+        return puntosModelo;
+    }
+    
+    public String getCentroMapa()
+    {
+        if(puntosModelo.getMarkers().size()>0)
+        {
+            centroMapa=puntosModelo.getMarkers().get(0).getLatlng().getLat() + ", " +puntosModelo.getMarkers().get(0).getLatlng().getLng();
+        }
+        
+        return centroMapa;
+    }
     
     
     public void comprobarNotificaciones()
@@ -466,4 +497,86 @@ public class NotificacionController implements Serializable {
         
         return nombre;
     }
+    
+    public void showMapTrafo()
+    {
+       puntosModelo = new DefaultMapModel();
+       centroMapa = "2.440834, -76.606994";       
+       Trafo trafo = plcMmsNotificacion.getIdTrafo();
+       if(trafo!= null)
+       {        
+           Marker marker = new Marker(new LatLng(trafo.getLatitud(), trafo.getLongitud()), trafo.getIdTrafo(),trafo);
+           marker.setIcon("../resources/img/iconos/icon-trafo.png");
+           puntosModelo.addOverlay(marker);
+       }
+    }
+    
+    public void showMapTu(EventosAmarre eventoAmarre)
+    {
+       puntosModelo = new DefaultMapModel();
+       centroMapa = "2.440834, -76.606994";
+       PlcTu tu = eventoAmarre.getMacPlcTu();
+       Producto p = tu.getIdProducto();
+       
+       Trafo trafo = plcMmsNotificacion.getIdTrafo();
+       if(trafo!= null)
+       {        
+           Marker marker = new Marker(new LatLng(trafo.getLatitud(), trafo.getLongitud()), trafo.getIdTrafo(),trafo);
+           marker.setIcon("../resources/img/iconos/icon-trafo.png");
+           puntosModelo.addOverlay(marker);
+       }
+       
+       if(p != null)
+       {
+           Marker marker = new Marker(new LatLng(p.getLatitud(), p.getLongitud()), p.getCedula().getNombres(),p);           
+           puntosModelo.addOverlay(marker);
+       }
+       
+    }
+    
+    public void showMapMedidor(EventosAmarreMc eventoAmarreMc)
+    {
+       puntosModelo = new DefaultMapModel();
+       centroMapa = "2.440834, -76.606994";
+       Medidor medidor = eventoAmarreMc.getIdMedidor();
+       Producto p = medidor.getIdProducto();
+       
+       Trafo trafo = plcMmsNotificacion.getIdTrafo();
+       if(trafo!= null)
+       {        
+           Marker marker = new Marker(new LatLng(trafo.getLatitud(), trafo.getLongitud()), trafo.getIdTrafo(),trafo);
+           marker.setIcon("../resources/img/iconos/icon-trafo.png");
+           puntosModelo.addOverlay(marker);
+       }
+       
+       if(p != null)
+       {
+           Marker marker = new Marker(new LatLng(p.getLatitud(), p.getLongitud()), p.getCedula().getNombres(),p);           
+           puntosModelo.addOverlay(marker);
+       }
+       
+    }
+    
+    /*public void showMapMacro(EventosAmarreMacro eventoAmarreMacro)
+    {
+       puntosModelo = new DefaultMapModel();
+       centroMapa = "2.440834, -76.606994";
+       Macro macro = eventoAmarreMacro.getIdMacro().get
+       Producto p =macro.get
+       
+       Trafo trafo = plcMmsNotificacion.getIdTrafo();
+       if(trafo!= null)
+       {        
+           Marker marker = new Marker(new LatLng(trafo.getLatitud(), trafo.getLongitud()), trafo.getIdTrafo(),trafo);
+           marker.setIcon("../resources/img/iconos/icon-trafo.png");
+           puntosModelo.addOverlay(marker);
+       }
+       
+       if(p != null)
+       {
+           Marker marker = new Marker(new LatLng(p.getLatitud(), p.getLongitud()), p.getCedula().getNombres(),p);           
+           puntosModelo.addOverlay(marker);
+       }
+       
+    }*/
 }

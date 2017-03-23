@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>ubicación</title>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXroWbv5-OtudGXwL0NgbV9TrlfLwafPA"
+        type="text/javascript"></script>
+        <script type="text/javascript">
+                            var currentMarker = null;
+
+                            function handlePointClick(event) {
+                                if (currentMarker === null) {
+                                    document.getElementById('lat').value = event.latLng.lat();
+                                    document.getElementById('lng').value = event.latLng.lng();
+
+                                    currentMarker = new google.maps.Marker({
+                                        position: new google.maps.LatLng(event.latLng.lat(), event.latLng.lng())
+                                    });
+
+                                    PF('map').addOverlay(currentMarker);
+
+                                    PF('dlg').show();
+                                }
+                            }
+
+                            function markerAddComplete() {
+                                var title = document.getElementById('title');
+                                currentMarker.setTitle(title.value);
+                                title.value = "";
+
+                                currentMarker = null;
+                                PF('dlg').hide();
+                            }
+
+                            function cancel() {
+                                PF('dlg').hide();
+                                currentMarker.setMap(null);
+                                currentMarker = null;
+
+                                return false;
+                            }
+        </script>
+    </h:head>
+    <h:body>
+        
+            
+                <f:view contentType="text/html">
+                    <p:gmap  center="#{notificacionController.centroMapa}" zoom="15" type="HYBRID" style="width:80%;height:500px"                             
+                             model="#{notificacionController.puntosModelo}"/>
+                </f:view>
+            
+        
+    </h:body>
+</html>
+

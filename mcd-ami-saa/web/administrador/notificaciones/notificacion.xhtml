@@ -2,9 +2,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Facelet Title</title>
+        
+        
     </h:head>
     <h:body>
 
@@ -39,9 +42,13 @@
                         Ubicación del trafo :
                     </p:column>
                     <p:column>
-                        <p:commandLink >                            
-                            <p:graphicImage width="20" height="20" value="./../resources/img/iconos/ubicacion.png"/>
-                        </p:commandLink>
+                        <h:commandLink action="/administrador/notificaciones/mapanotificacion"  target="_blank" actionListener="#{notificacionController.showMapTrafo()}">                            
+                            <p:graphicImage 
+                                width="20" 
+                                height="20" 
+                                value="./../resources/img/iconos/ubicacion.png"
+                                />
+                        </h:commandLink>
                     </p:column>
                     
                 </p:row>
@@ -67,9 +74,13 @@
                 </p:column>
                 
                 <p:column style="text-align: center;" headerText="Ubicacion">
-                    <p:commandLink title="ver la Ubicacion del dispositivo">
-                        <p:graphicImage width="40" height="40" value="./../resources/img/iconos/ubicacion.png"/>
-                    </p:commandLink>
+                    <h:commandLink action="/administrador/notificaciones/mapanotificacion"  target="_blank" actionListener="#{notificacionController.showMapTu(eventoAmarre)}">                            
+                            <p:graphicImage 
+                                width="40" 
+                                height="40" 
+                                value="./../resources/img/iconos/ubicacion.png"
+                                />
+                        </h:commandLink>
                 </p:column>
                 <p:column  style="text-align: center;" headerText="Estado amarre">  
                     <p:graphicImage rendered="#{eventoAmarre.estadoAmarre == 1}"  width="30" height="30" value="./../resources/img/estado/activo.png"/>
@@ -370,9 +381,13 @@
                         Ubicación del trafo :
                     </p:column>
                     <p:column>
-                        <p:commandLink >                            
-                            <p:graphicImage width="20" height="20" value="./../resources/img/iconos/ubicacion.png"/>
-                        </p:commandLink>
+                        <h:commandLink action="/administrador/notificaciones/mapanotificacion"  target="_blank" actionListener="#{notificacionController.showMapTrafo()}">                            
+                            <p:graphicImage 
+                                width="20" 
+                                height="20" 
+                                value="./../resources/img/iconos/ubicacion.png"
+                                />
+                        </h:commandLink>
                     </p:column>
                     
                 </p:row>
@@ -398,9 +413,13 @@
                 </p:column>
                 
                 <p:column style="text-align: center;" headerText="Ubicacion">
-                    <p:commandLink title="ver la Ubicacion del dispositivo">
-                        <p:graphicImage width="40" height="40" value="./../resources/img/iconos/ubicacion.png"/>
-                    </p:commandLink>
+                    <h:commandLink action="/administrador/notificaciones/mapanotificacion"  target="_blank" actionListener="#{notificacionController.showMapMedidor(eventoAmarreMc)}">                            
+                            <p:graphicImage 
+                                width="40" 
+                                height="40" 
+                                value="./../resources/img/iconos/ubicacion.png"
+                                />
+                        </h:commandLink>
                 </p:column>
                 <p:column  style="text-align: center;" headerText="Estado amarre">  
                     <p:graphicImage rendered="#{eventoAmarreMc.estadoAmarre == 1}"  width="30" height="30" value="./../resources/img/estado/activo.png"/>
@@ -447,9 +466,13 @@
                         Ubicación del trafo :
                     </p:column>
                     <p:column>
-                        <p:commandLink >                            
-                            <p:graphicImage width="20" height="20" value="./../resources/img/iconos/ubicacion.png"/>
-                        </p:commandLink>
+                        <h:commandLink action="/administrador/notificaciones/mapanotificacion"  target="_blank" actionListener="#{notificacionController.showMapTrafo()}">                            
+                            <p:graphicImage 
+                                width="20" 
+                                height="20" 
+                                value="./../resources/img/iconos/ubicacion.png"
+                                />
+                        </h:commandLink>
                     </p:column>
                     
                 </p:row>
@@ -465,14 +488,14 @@
                     #{eventoAmarreMacro.fechaHora.hours}:#{eventoAmarreMacro.fechaHora.minutes}:#{eventoAmarreMacro.fechaHora.seconds}
                 </p:column>
                 
-                <p:column style="text-align: center;"   headerText="Id Medidor">
+                <p:column style="text-align: center;"   headerText="Id Macro">
                     <p:commandLink title="Informacion del dispositivo"  value="#{eventoAmarreMacro.idMacro.idMacro}"/>
                 </p:column> 
-                <p:column style="text-align: center;" headerText="Ubicacion">
+                <!--<p:column style="text-align: center;" headerText="Ubicacion">
                     <p:commandLink title="ver la Ubicacion del dispositivo">
                         <p:graphicImage width="40" height="40" value="./../resources/img/iconos/ubicacion.png"/>
                     </p:commandLink>
-                </p:column>
+                </p:column>-->
                 <p:column  style="text-align: center;" headerText="Estado amarre">  
                     <p:graphicImage rendered="#{eventoAmarreMacro.estadoAmarre == 1}"  width="30" height="30" value="./../resources/img/estado/activo.png"/>
                     
@@ -489,6 +512,11 @@
             
         </h:form>
         
+        
+        
+        
     </h:body>
+    
+    
 </html>
 
