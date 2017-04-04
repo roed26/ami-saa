@@ -39,6 +39,7 @@ import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
@@ -69,6 +70,10 @@ public class WebService {
     private  final String  RUTAFTPDIR = "/home/usuarioftp/amisaaftp/ftp";
     private  final String  RUTAFTPDIRMMAESTROS = "/home/usuarioftp/amisaaftp/archivos/maestros/";
     private  final String  RUTAFTPDIRPENDIENTES = "/home/usuarioftp/amisaaftp/archivos/pendientes";
+    
+    static final long ONE_MINUTE_IN_MILLIS=60000;
+    static final long LENGHT_MINUTES = 4;
+    
     @Context
     private UriInfo context;  
     
@@ -133,13 +138,23 @@ public class WebService {
     {
         String sDirectorio = RUTAFTPDIR;//ruta del directorio ftp
         File f = new File(sDirectorio);
+        Calendar date = Calendar.getInstance();
+        long t= date.getTimeInMillis();
+        Date dateAddingMins=new Date(t + (LENGHT_MINUTES * ONE_MINUTE_IN_MILLIS));
         
         if (f.exists())//si el directorio existe procedemos
         { 
             File[] ficheros = f.listFiles();
-            for (File fichero : ficheros) {                
-                procesarArchivo(fichero);//procesamos uno a uno los archivos que contenga el
-                //directorio ftp
+            for (File fichero : ficheros) { 
+                
+                Date newDate = new Date();
+                if(newDate.before(dateAddingMins))
+                {
+                    //procesamos uno a uno los archivos que contenga el
+                    //directorio ftp
+                    procesarArchivo(fichero);
+                }                
+                
             }
         }        
     }
@@ -247,11 +262,12 @@ public class WebService {
          try {        
          fr = new FileReader (file);
          br = new BufferedReader(fr);
-         String linea;
+         
          int numero_eventos = 0;
          
          String fecha="";
-         while(!(linea=br.readLine()).equals(" @;;;;;;") && contadorlinea >=0)//con convencion el @ indica el final del archivo
+         String linea =br.readLine();
+         while(linea!= null && !linea.equals(" @;;;;;;") && contadorlinea >=0)//con convencion el @ indica el final del archivo
          {             
             if(contadorlinea == 0)
             {
@@ -318,6 +334,7 @@ public class WebService {
                 
             }            
             contadorlinea ++;
+            linea =br.readLine();
          }         
          
          File f = new File(directorioamover);
@@ -374,7 +391,7 @@ public class WebService {
          
             
       }
-      catch(IOException | NumberFormatException | ParseException e)      
+      catch(IOException | NumberFormatException | ParseException  | java.lang.ArrayIndexOutOfBoundsException e )      
       {
           
           System.out.print("exception: "+e.getMessage());
@@ -424,11 +441,12 @@ public class WebService {
          try {        
          fr = new FileReader (file);
          br = new BufferedReader(fr);
-         String linea;
+         
          int numero_eventos = 0;
          
          String fecha="";
-         while(!(linea=br.readLine()).equals(" @;;;;;;") && contadorlinea >=0)//con convencion el @ indica el final del archivo
+         String linea =br.readLine();
+         while(linea != null && !linea.equals(" @;;;;;;") && contadorlinea >=0)//con convencion el @ indica el final del archivo
          {             
             if(contadorlinea == 0)
             {
@@ -494,6 +512,7 @@ public class WebService {
                 
             }            
             contadorlinea ++;
+            linea =br.readLine();
          }         
          
          File f = new File(directorioamover);
@@ -550,7 +569,7 @@ public class WebService {
          
             
       }
-      catch(IOException | NumberFormatException | ParseException e)      
+      catch(IOException | NumberFormatException | ParseException | java.lang.ArrayIndexOutOfBoundsException e)      
       {
           
           System.out.print("exception: "+e.getMessage());
@@ -600,11 +619,12 @@ public class WebService {
          try {        
          fr = new FileReader (file);
          br = new BufferedReader(fr);
-         String linea;         
+                  
          String fecha="";
          int numero_eventos =0;
          PlcMc plcMc = null;
-         while(!(linea=br.readLine()).equals(" @;;;;;;") && contadorlinea >=0)//con convencion el @ indica el final del archivo
+         String linea=br.readLine();
+         while(linea!= null && !linea.equals(" @;;;;;;") && contadorlinea >=0)//con convencion el @ indica el final del archivo
          {             
             if(contadorlinea == 0)
             {
@@ -682,6 +702,7 @@ public class WebService {
                 }
             }            
             contadorlinea ++;
+            linea=br.readLine();
          }         
          
          File f = new File(directorioamover);
