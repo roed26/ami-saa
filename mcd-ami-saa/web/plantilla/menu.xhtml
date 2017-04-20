@@ -99,6 +99,10 @@
                         <p:menuitem  value="Registrar macromedidor" action="#{routingController.irRegistrarMacromedidor()}" ajax="false"/>
                         <p:menuitem  value="Gestionar información de macromedidores" action="#{routingController.irGestionarMacromedidores()}"   ajax="false"/>
                     </p:submenu>
+                    <p:submenu label="Gestión de balances">
+                        <p:menuitem  value="Generar balance" action="#{routingController.irGestionarBalances()}" ajax="false"/>
+                        <p:menuitem  value="Generar balance porcentual" action="#{routingController.irGestionarBalancesPor()}" ajax="false"/>
+                    </p:submenu>
                 </p:tieredMenu>
             </h:form>
         </div>

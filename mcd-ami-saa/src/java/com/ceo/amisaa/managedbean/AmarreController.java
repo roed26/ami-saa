@@ -313,20 +313,14 @@ public class AmarreController implements Serializable {
         this.trafo = trafo;
         if (rangoFechaCambiado4 == true) {
             estadisticaPorDia();
+            this.trafoSeleccionado = true;
+            this.resultadoGeneral = true;
         } else {
-            estadisticaGeneral();
-        }
+            this.trafoSeleccionado = true;
 
-        this.trafoSeleccionado = true;
-        this.resultadoGeneral = true;
-        this.procesado = true;
-        this.rangoFechaCambiado1 = false;
-        this.rangoFechaCambiado2 = false;
-        this.rangoFechaCambiado3 = false;
-        RequestContext requestContext = RequestContext.getCurrentInstance();
-        requestContext.execute("PF('seleccionarTrafo').hide()");
-        requestContext.update("estadisticas");
-        requestContext.update("formPlcTus");
+            estadisticaGeneral();
+
+        }
     }
 
     public void cambiarRangoFecha(ValueChangeEvent e) {
@@ -508,12 +502,22 @@ public class AmarreController implements Serializable {
                 modeloResultadosEstadisticas.setTitle("Porcentajes amarre");
                 modeloResultadosEstadisticas.setLegendPosition("e");
                 modeloResultadosEstadisticas.setShowDataLabels(true);
-            } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El trafo seleccionado no tiene vinculado un maestro"));
+                this.procesado = true;
+                this.rangoFechaCambiado1 = false;
+                this.rangoFechaCambiado2 = false;
+                this.rangoFechaCambiado3 = false;
                 RequestContext requestContext = RequestContext.getCurrentInstance();
+                requestContext.execute("PF('seleccionarTrafo').hide()");
+                requestContext.update("estadisticas");
+                requestContext.update("formPlcTus");
+                
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El trafo seleccionado no reporta amarre en esta fecha"));
+                RequestContext requestContext = RequestContext.getCurrentInstance();
+                requestContext.execute("PF('seleccionarTrafo').hide()");
                 requestContext.execute("PF('mensajeError').show()");
+                
             }
-
         }
     }
 
@@ -585,7 +589,7 @@ public class AmarreController implements Serializable {
 
     private void procesarResultadosPlctu(String macPlcTu) {
         porcentajeAmarreIndividual = new CartesianChartModel();
-        
+
         final ChartSeries porcentajeAmarreIndividualPlcTu = new ChartSeries("porcentaje de amarre");
         for (int j = 0; j < this.eventosAmarre.size(); j++) {
             if (this.eventosAmarre.get(j).getMacPlcTu().getMacPlcTu().equalsIgnoreCase(macPlcTu)) {

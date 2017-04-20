@@ -83,6 +83,18 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         return resultList;
     }
     
+    public Producto buscarProductoDeMc(PlcMc macPlcMc) {
+        Producto producto= new Producto();
+        Query query = getEntityManager().createNamedQuery("Producto.findByPlcMc");
+        query.setParameter("macPlcMc", macPlcMc);
+        List<Producto> resultList = query.getResultList();
+        if(resultList.size()>0){
+            producto= resultList.get(0);
+        }else{
+            producto=null;
+        }
+        return producto;
+    } 
     
     
     

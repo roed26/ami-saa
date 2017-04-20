@@ -88,4 +88,12 @@ public class PlcTuFacade extends AbstractFacade<PlcTu> {
         }
         return plcTu;
      }
+    
+    public PlcTu buscarTUPorId(String idPlcTu) {
+        Query query = getEntityManager().createNamedQuery("PlcTu.findByIdPlcTu");
+        query.setParameter("idPlcTu", idPlcTu);
+        List<PlcTu> resultList = query.getResultList();
+        return resultList.get(0);
+
+    }
  }

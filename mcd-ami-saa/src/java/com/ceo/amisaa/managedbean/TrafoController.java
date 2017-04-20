@@ -306,6 +306,16 @@ public class TrafoController implements Serializable {
         return items;
     }
 
+    public List<Trafo> getListaTrafosDisponiblesEstadistica() {
+        List<Trafo> trafosDisponibles = new ArrayList<>();
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).getPlcMmsCollection().toArray().length > 0 && items.get(i).getProductoCollection().toArray().length > 0) {
+                trafosDisponibles.add(items.get(i));
+            }
+        }
+        return trafosDisponibles;
+    }
+
     public void cambiarRangoFecha(ValueChangeEvent e) {
         String rangoSeleccionado = e.getNewValue().toString();
         if (rangoSeleccionado.equals("1")) {
@@ -649,7 +659,7 @@ public class TrafoController implements Serializable {
                 requestContext.execute("PF('eliminarTrafo').hide()");
                 requestContext.execute("PF('eliminacionCorrecta').show()");
                 this.trafo = new Trafo();
-                
+
             } else {
                 this.trafo = new Trafo();
                 requestContext.execute("PF('eliminarTrafo').hide()");

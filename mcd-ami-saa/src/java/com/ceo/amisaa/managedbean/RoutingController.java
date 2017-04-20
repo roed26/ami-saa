@@ -55,6 +55,7 @@ public class RoutingController implements Serializable {
     public void irVincularPlcMc() {
         this.ruta = "/administrador/plcMc/VincularPlcMc.xhtml";
     }
+
     public void irDesvincularPlcMc() {
         this.ruta = "/administrador/desvinculos/DesvincularProductosPlcMc.xhtml";
     }
@@ -70,6 +71,7 @@ public class RoutingController implements Serializable {
     public void irVincularProductoCliente() {
         this.ruta = "/administrador/vinculos/VincularProductoCliente.xhtml";
     }
+
     public void irDesvincularProductoCliente() {
         this.ruta = "/administrador/desvinculos/DesvincularProductoCliente.xhtml";
     }
@@ -201,9 +203,16 @@ public class RoutingController implements Serializable {
     public void irNotificaciones() {
         this.ruta = "/administrador/notificaciones/notificaciones.xhtml";
     }
-    
-    public void irNotificacion()
-    {
+
+    public void irNotificacion() {
         this.ruta = "/administrador/notificaciones/notificacion.xhtml";
+    }
+
+    public void irGestionarBalances() {
+        this.ruta = "/administrador/balances/generarBalance.xhtml";
+    }
+
+    public void irGestionarBalancesPor() {
+        this.ruta = "/administrador/balances/generarBalancePorcentual.xhtml";
     }
 }

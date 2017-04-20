@@ -57,13 +57,12 @@
         </h:form>
         <h:form id="formPlcTus">
             <p:selectOneMenu valueChangeListener="#{amarreController.procesarResultadosPlcTu}" id="plctus"
-                             rendered="#{!amarreController.resultadoGeneral and amarreController.trafoSeleccionado}">
+                             rendered="#{!amarreController.resultadoGeneral and amarreController.procesado}">
                 <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
                 <f:selectItems value="#{amarreController.listaResultados}" var="dispositivosPlcTu"
                                itemLabel="#{dispositivosPlcTu.plcTu.macPlcTu}"
                                itemValue="#{dispositivosPlcTu.plcTu.macPlcTu}"
-                               />
-                    
+                               />                    
                 <f:ajax execute="plctus" render="estadisticasIndividuales" />
             </p:selectOneMenu>            
         </h:form>
@@ -71,8 +70,8 @@
         <h:form id="estadisticas">
             <p:panelGrid>
                 <p:row>
-                    <p:column rendered="#{amarreController.resultadoGeneral}">
-                        <p:chart rendered="#{amarreController.procesado}" type="pie" widgetVar="browserChart1" 
+                    <p:column rendered="#{amarreController.resultadoGeneral and amarreController.procesado}">
+                        <p:chart  type="pie" widgetVar="browserChart1" 
                                  model="#{amarreController.modeloResultadosEstadisticas}" style="width:250px;height:200px"  />
                     </p:column>
 
@@ -84,7 +83,7 @@
                     </p:column>
                 </p:row>
                 <p:row>
-                    <p:column colspan="2" rendered="#{amarreController.resultadoGeneral}">
+                    <p:column colspan="2" rendered="#{amarreController.resultadoGeneral and amarreController.procesado}}">
                         <p:barChart value="#{amarreController.porcentajeAmarre}" legendPosition="ne" 
                                     style="height:400px; width: 850px; color: black; text-align: center;"
                                     xaxisLabel="dias" yaxisLabel="% Respuesta" max="100" 
@@ -94,18 +93,18 @@
 
                 </p:row>
                 <p:row>
-                    <p:column style="background: #EBEDEB" rendered="#{amarreController.resultadoGeneral}">
+                    <p:column style="background: #EBEDEB" rendered="#{amarreController.resultadoGeneral and amarreController.procesado}}">
                         <p:outputLabel value="Mejor PLC_TU"/>
                     </p:column>
-                    <p:column style="background: #EBEDEB" rendered="#{amarreController.resultadoGeneral}">
+                    <p:column style="background: #EBEDEB" rendered="#{amarreController.resultadoGeneral and amarreController.procesado}}">
                         <p:outputLabel value="Peor PLC_TU"/>
                     </p:column>
                 </p:row>
                 <p:row>
-                    <p:column rendered="#{amarreController.trafoSeleccionado}">
+                    <p:column rendered="#{amarreController.resultadoGeneral and amarreController.procesado}}">
                         <p:outputLabel value="Mejor PLC_TU"/>
                     </p:column>
-                    <p:column rendered="#{amarreController.trafoSeleccionado}">
+                    <p:column rendered="#{amarreController.resultadoGeneral and amarreController.procesado}}">
                         <p:outputLabel value="Mejor PLC_TU"/>
                     </p:column>
                 </p:row>
@@ -117,13 +116,13 @@
 
         <h:form id="estadisticasIndividuales">
             <p:panelGrid >
-                <p:row rendered="#{!amarreController.resultadoGeneral and amarreController.trafoSeleccionado}">
+                <p:row rendered="#{!amarreController.resultadoGeneral and amarreController.procesado}">
                 <p:column colspan="2" style="background: #EBEDEB; font-weight: bold" 
                           >
                     <p:outputLabel value="Porcentaje de dispositivos PLC_TU que repondieron las encuestas realizadas por el maestro"/>
                 </p:column>
                 </p:row>
-                <p:row rendered="#{!amarreController.resultadoGeneral and amarreController.trafoSeleccionado}">
+                <p:row rendered="#{!amarreController.resultadoGeneral and amarreController.procesado}">
                     <p:column colspan="2" >
                         <p:barChart value="#{amarreController.porcentajeAmarreIndividual}" legendPosition="ne" 
                                     style="height:400px; width: 850px; color: black; text-align: center;"
@@ -287,7 +286,7 @@
                     </p:inputText>                          
                 </h:panelGrid>
                 <br/>
-                <p:dataTable id="datalist" value="#{trafoController.listaTrafos}" var="item"
+                <p:dataTable id="datalist" value="#{trafoController.listaTrafosDisponiblesEstadistica}" var="item"
                              paginator="true"
                              rowKey="#{item.idTrafo}"
                              rows="10"
@@ -320,7 +319,7 @@
         <p:dialog header="Información" modal="true" position="center" widgetVar="mensajeError" closable="false">
             <p:messages  style="font-size: 15px;"  showDetail="true" autoUpdate="true"/>
             <h:form>
-                <p:commandButton  value="Aceptar" style="font-weight: normal;"
+                <p:commandButton  value="Aceptar"  style="font-weight: normal;"
                                   onclick="PF('mensajeRegistroExitoso').hide()"/>
             </h:form>
         </p:dialog>

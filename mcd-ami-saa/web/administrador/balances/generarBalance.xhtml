@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </h:head>
+    <h:body>
+        <h:form id="datosIngreso" >
+            <h:panelGrid columns="2" > 
+                <p:commandButton style="left: 850px" 
+                                 action="#{balanceController.cambiarEstadoSeleccion}" value="Realizar nueva consulta" 
+                                 onclick="PF('seleccionarTrafo').show()" />
+            </h:panelGrid>
+            <br/>
+        </h:form>
+
+        <h:form id="trafoSeleccionado">
+
+            <p:outputLabel style="font-weight: bold; font-size: 16px; color: black;" 
+                           value="Información de consumo" rendered="#{balanceController.trafoSeleccionado}"/>
+            <p:separator/>
+            <br/>
+            <p:panelGrid rendered="#{balanceController.trafoSeleccionado}">
+                <p:row>
+                    <p:column rowspan="6" rendered="#{!balanceController.sinConsumo}">
+                        <p:lineChart value="#{balanceController.consumo}" legendPosition="ne" 
+                                    title="Diferencia entre macromedición y micromedición" style="height:400px; width: 500px; color: red; text-align: center;"
+                                    xaxisLabel="dias" yaxisLabel="kWh" 
+                                    xaxisAngle="270" showMarkers="true" animate="true"
+                                    />
+                    </p:column>
+                    
+                    <p:column rowspan="6" rendered="#{balanceController.sinConsumo}">
+                        <p:lineChart value="#{balanceController.consumo}" legendPosition="ne" 
+                                    title="No existe consumo para el periodo seleccionado" style="height:400px; width: 500px; color: red;"
+                                    xaxisLabel="dias" yaxisLabel="kWh" 
+                                    xaxisAngle="270" animate="true" 
+
+                                    />
+                    </p:column>
+                    <p:column colspan="2" style="height: 15px; background: #EBEDEB; text-align: center;">
+                        <p:outputLabel value="Balance" style="font-weight: bold; color: black;"/>                                                
+                    </p:column>                 
+                        
+                </p:row>
+                <p:row >
+                    <p:column style="background: #c2dfef; height: 10px;" >
+                        <p:outputLabel value="Fecha Inicial: " style="font-weight: bold; color: black;"/>                        
+                    </p:column>
+                    <p:column style="background: #c2dfef; height: 10px;">
+                        <p:outputLabel value="#{balanceController.getRangoBalanceI()} " style="font-weight: normal; color: black;"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column style="height: 10px;">
+                        <p:outputLabel value="Fecha final: " style="font-weight: bold; color: black;"/>                        
+                    </p:column>
+                    <p:column style="height: 10px;">
+                        <p:outputLabel value="#{balanceController.getRangoBalanceF()} " style="font-weight: normal; color: black;"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column style="background: #c2dfef; height: 10px; " >
+                        <p:outputLabel value="Macromedidor:" style="font-weight: bold; color: black;"/>                        
+                    </p:column>
+                    <p:column style="background: #c2dfef; height: 10px; ">
+                        <p:outputLabel value="#{balanceController.macro.idMacro} " style="font-weight: normal; color: black;"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column style="height: 10px;">
+                        <p:outputLabel value="Trafo:" style="font-weight: bold; color: black;"/>                        
+                    </p:column>
+                    <p:column style="height: 10px;">
+                        <p:outputLabel value="#{balanceController.trafo.idTrafo} " style="font-weight: normal; color: black;"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column style="background: #c2dfef; height: 10px;">
+                        <p:outputLabel value="Pérdidas totales:" style="font-weight: bold; color: black;"/>                        
+                    </p:column>
+                    <p:column style="background: #c2dfef; height: 10px;">
+                        <p:outputLabel value="#{balanceController.getRangoBalance()} kWh" style="font-weight: normal; color: black;"/>
+                    </p:column>
+                </p:row>
+                
+            </p:panelGrid>
+        </h:form>
+
+        <p:dialog closable="false" visible="#{!balanceController.trafoSeleccionado}" header="Seleccionar trafo" resizable="false" width="400" position="center"  widgetVar="seleccionarTrafo">
+            <p:outputLabel style="font-weight: bold; font-size: 16px" value="Busque y seleccione el trafo " />
+            <h:form id="listaTrafos">
+                <br/>
+                <h:panelGrid columns="2">
+                    <p:outputLabel value="Buscar " />
+                    <p:inputText  placeholder="Digite el identificador del trafo" style="width: 220px;"  value="#{trafoController.idTrafo}" >
+                        <p:ajax event="keyup" update="tablaTrafos" listener="#{trafoController.buscarPorId()}" />                                
+                    </p:inputText>                          
+                </h:panelGrid>
+                <br/>
+                <p:panel id="tablaTrafos">
+                    <p:dataTable id="datalist" value="#{trafoController.listaTrafos}" var="item"
+                                 paginator="true"
+                                 rowKey="#{item.idTrafo}"
+                                 rows="5"
+
+                                 >
+                        <p:column style="text-align: center; width: 180px">
+                            <f:facet name="header">
+                                <h:outputText value="Identificador de trafo"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idTrafo}"/>
+                        </p:column>
+
+                        <p:column style="width: 100px; background: #EBEDEB;">
+                            <f:facet name="header">
+                                <h:outputText value="Accion"/>
+                            </f:facet>
+                            <p:commandButton id="viewButton"  
+                                             action="#{balanceController.seleccionarTrafo(item)}" 
+                                             icon="ui-icon-plus" value="Seleccionar"  
+                                             />
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+                <h:panelGrid columns="2" >
+                    <p:commandButton id="viewButton"  
+                                     value="Cancelar"  
+                                     ajax="true"
+                                     action="#{trafoController.reiniciarVariables()}"
+                                     />
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+        
+        <p:dialog header="Seleccionar rango de fecha" resizable="false"  position="center" modal="true"  widgetVar="seleccionarFecha">
+            <h:form id="formFecha" style="text-align: center; font-weight: bold; color: black;">
+                <p:outputLabel style="font-weight: bold; font-size: 14px; " value="Seleccione el rango de fecha para conocer el consumo" />
+                <br/>
+                <p:outputLabel style="font-weight: bold; font-size: 14px; " value="del macromedidor vinculado al trafo: " />
+                <p:outputLabel style="font-weight: bold; font-size: 15px; color: blue; " value="#{balanceController.trafo.idTrafo}" />
+                <br/>
+                <br/>
+                <p:panelGrid id="panel">
+                    <p:row>
+                        <p:column colspan="2">
+                            <p:selectOneRadio id="rangoFecha" 
+                                              value="#{balanceController.rangoFecha}" 
+                                              valueChangeListener="#{balanceController.cambiarRangoFecha}"
+                                              required="true"
+                                              requiredMessage="Seleccione un rango de fecha"
+                                              >
+                                <f:selectItem itemValue="1" itemLabel=" Última semana " />
+                                <f:selectItem itemValue="2" itemLabel=" Último mes " />
+                                <f:selectItem itemValue="3" itemLabel="Seleccionar rango de fecha " />
+                                <f:ajax  execute="ocupacion"  render="panel"/>
+                            </p:selectOneRadio>
+                        </p:column>
+                        <p:column>
+                            <p:message for="rangoFecha"/>
+                        </p:column>
+
+                    </p:row>
+                    <p:row rendered="#{balanceController.rangoFechaCambiado1}">
+                        <p:column >
+                            <h:outputText value="Fecha de inicio"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{balanceController.formatoFecha.format(balanceController.fechaInicio)}"/>
+                        </p:column>
+
+                    </p:row>
+                    <p:row rendered="#{balanceController.rangoFechaCambiado1}">
+                        <p:column >
+                            <h:outputText value="Fecha de fin"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{balanceController.formatoFecha.format(balanceController.fechaFin)}"/>
+                        </p:column>
+
+                    </p:row>
+                    <p:row rendered="#{balanceController.rangoFechaCambiado2}">
+                        <p:column >
+                            <h:outputText value="Fecha de inicio"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{balanceController.formatoFecha.format(balanceController.fechaInicio)}"/>
+                        </p:column>
+
+                    </p:row>
+                    <p:row rendered="#{balanceController.rangoFechaCambiado2}">
+                        <p:column >
+                            <h:outputText value="Fecha de fin"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{balanceController.formatoFecha.format(balanceController.fechaFin)}"/>
+                        </p:column>
+
+                    </p:row>
+                    <p:row rendered="#{balanceController.rangoFechaCambiado3}">
+                        <p:column >
+                            <h:outputText value="Fecha de inicio"/>
+                        </p:column>
+                        <p:column>
+                            <p:calendar value="#{balanceController.fechaInicio}" size="14" id="fechaInicio"  required="true" 
+                                        requiredMessage="Seleccione una fecha de inicio."
+                                        showOn="button"
+                                        navigator="true" yearRange="c-100:c" pattern="yyyy-MM-dd" 
+                                        placeholder="aaaa-mm-dd"
+                                        >
+                                <f:validator validatorId="ValidarCampoFecha"/>
+                            </p:calendar>
+                        </p:column>
+                        <p:column>
+                            <p:message for="fechaInicio"/>
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{balanceController.rangoFechaCambiado3}">
+                        <p:column >
+                            <h:outputText value="Fecha de fin"/>
+                        </p:column>
+                        <p:column >
+                            <p:calendar value="#{balanceController.fechaFin}" size="14" id="fechaFin"  required="true" 
+                                        requiredMessage="Seleccione una fecha de fin." 
+                                        showOn="button" navigator="true" yearRange="c-100:c" pattern="yyyy-MM-dd" 
+                                        placeholder="aaaa-mm-dd"
+                                        >
+                                <f:validator validatorId="ValidarCampoFecha"/>                               
+                            </p:calendar>
+                        </p:column>
+                        <p:column>
+                            <p:message for="fechaFin"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="2" style="text-align: right;">
+                            <p:commandButton 
+                                value="Aceptar"  
+                                ajax="true" 
+                                update="panel"
+                                action="#{balanceController.procesarConsulta()}"
+                                oncomplete="#{balanceController.cambiarEstadoSeleccion()}"
+                                />
+                        </p:column>
+                    </p:row>                   
+                </p:panelGrid>
+
+            </h:form>
+
+        </p:dialog>
+        
+        <p:dialog header="Cargando..." resizable="false"  position="center" modal="true"  widgetVar="cargando">            
+            <h:form id="formLoading" style="text-align: center; font-weight: bold; color: black;">
+                <p:outputLabel style="font-weight: bold; font-size: 14px; " value="Buscando la información asociada al trafo: " />
+                <p:outputLabel style="font-weight: bold; font-size: 15px; color: blue; " value="#{balanceController.trafo.idTrafo}" />            
+            </h:form>                    
+        </p:dialog>
+        
+    </h:body>    
+</html>

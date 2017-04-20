@@ -6,6 +6,9 @@
 package com.ceo.amisaa.sessionbeans;
 
 import com.ceo.amisaa.entidades.EventosConsumoMc;
+import com.ceo.amisaa.entidades.Medidor;
+import com.ceo.amisaa.entidades.PlcMc;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -38,5 +41,24 @@ public class EventosConsumoMcFacade extends AbstractFacade<EventosConsumoMc> {
         List<EventosConsumoMc> resultList = query.getResultList();
         return resultList;
     }
+    
+    public List<EventosConsumoMc> listaEventosMc(PlcMc plcMc, Date fechaHoraInicio, Date fechaHoraFin) {
+        Query query = getEntityManager().createNamedQuery("EventosConsumoMc.findBylistaEventosPlcMc");
+        query.setParameter("plcMc", plcMc);
+        query.setParameter("fechaHoraInicio", fechaHoraInicio);
+        query.setParameter("fechaHoraFin", fechaHoraFin);
+        List<EventosConsumoMc> resultList = query.getResultList();
+        return resultList;
+    }
+    
+    public List<EventosConsumoMc> listaEventosMcMedidor(PlcMc plcMc, Medidor medidor, Date fechaHoraInicio, Date fechaHoraFin) {
+        Query query = getEntityManager().createNamedQuery("EventosConsumoMc.findBylistaEventosPlcMcMedidor");
+        query.setParameter("plcMc", plcMc);
+        query.setParameter("medidor", medidor);
+        query.setParameter("fechaHoraInicio", fechaHoraInicio);
+        query.setParameter("fechaHoraFin", fechaHoraFin);
+        List<EventosConsumoMc> resultList = query.getResultList();
+        return resultList;
+    }    
     
 }
