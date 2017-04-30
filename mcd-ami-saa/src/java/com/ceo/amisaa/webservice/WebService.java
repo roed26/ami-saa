@@ -17,6 +17,8 @@ import com.ceo.amisaa.entidades.Notificacion;
 import com.ceo.amisaa.entidades.PlcMc;
 import com.ceo.amisaa.entidades.PlcMms;
 import com.ceo.amisaa.entidades.PlcTu;
+import com.ceo.amisaa.entidades.Producto;
+import com.ceo.amisaa.entidades.Trafo;
 import com.ceo.amisaa.sessionbeans.EventosAmarreFacade;
 import com.ceo.amisaa.sessionbeans.EventosAmarreMacroFacade;
 import com.ceo.amisaa.sessionbeans.EventosAmarreMcFacade;
@@ -33,9 +35,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -73,6 +77,8 @@ public class WebService {
     
     static final long ONE_MINUTE_IN_MILLIS=60000;
     static final long LENGHT_MINUTES = 4;
+    
+    static final long MINIMUM_LENGHT_ACCESS_FILE_MILLIS= 180000;
     
     @Context
     private UriInfo context;  
@@ -134,7 +140,7 @@ public class WebService {
         return "true";
     }
     
-    private void revisarDirectorio()
+    private void revisarDirectorio() 
     {
         String sDirectorio = RUTAFTPDIR;//ruta del directorio ftp
         File f = new File(sDirectorio);
@@ -152,7 +158,19 @@ public class WebService {
                 {
                     //procesamos uno a uno los archivos que contenga el
                     //directorio ftp
-                    procesarArchivo(fichero);
+                    try
+                    {
+                       BasicFileAttributes attr = Files.readAttributes(Paths.get(fichero.getPath()), BasicFileAttributes.class);
+                       long lastModifiedFile = attr.lastModifiedTime().toMillis() ;
+                       Date dateLastModifiedFile = new Date(lastModifiedFile + MINIMUM_LENGHT_ACCESS_FILE_MILLIS);
+                       if(dateLastModifiedFile.before(newDate))
+                       {
+                           procesarArchivo(fichero);
+                       }
+                    }
+                    catch(IOException ex)
+                    {
+                    }
                 }                
                 
             }
@@ -195,6 +213,15 @@ public class WebService {
                     {
                         elnombredelArchivoEstabien = false;
                         motivo = "Id del MMS no registrado";
+                    }
+                    else
+                    {
+                        Trafo trafoMms = plcMms.getIdTrafo();
+                        if(trafoMms == null)
+                        {
+                            elnombredelArchivoEstabien = false;
+                            motivo = "El MMS no esta asociado a un trafo";
+                        }
                     }
                 }
             }
@@ -267,6 +294,8 @@ public class WebService {
          
          String fecha="";
          String linea =br.readLine();
+         String idtrafoPlcMms = macPlcMms.getIdTrafo().getIdTrafo();
+         
          while(linea!= null && !linea.equals(" @;;;;;;") && contadorlinea >=0)//con convencion el @ indica el final del archivo
          {             
             if(contadorlinea == 0)
@@ -299,30 +328,61 @@ public class WebService {
                 
                 if (macPlcTu != null)
                 {
-                    EventosAmarre eventoAmarre = new EventosAmarre();
-                    eventoAmarre.setEstadoAmarre(estadoAmarre);
-                    eventoAmarre.setFechaHora(fechaHora);
-                    eventoAmarre.setIdPlcMms(macPlcMms);
-                    eventoAmarre.setMacPlcTu(macPlcTu);
-                    eventoAmarre.setIdNotificacion(notificacion);
-                    EventosConsumo eventoConsumo = new EventosConsumo();
-                    eventoConsumo.setMacPlcMms(macPlcMms);
-                    eventoConsumo.setIdNotificacion(notificacion);
-                    eventoConsumo.setFechaHora(fechaHora);
-                    eventoConsumo.setMacPlcTu(macPlcTu);                    
-                    if(estadoAmarre == 1)
+                    Producto productoPlcTu = macPlcTu.getIdProducto();
+                    if(productoPlcTu != null)
                     {
-                        Float energia = Float.parseFloat(lineaEvento[3].trim());
-                        Float potencia = Float.parseFloat(lineaEvento[4].trim());
-                        Float voltaje = Float.parseFloat(lineaEvento[5].trim());
-                        Float corriente = Float.parseFloat(lineaEvento[6].trim());
-                        eventoConsumo.setEnergia(energia);
-                        eventoConsumo.setPotencia(potencia);
-                        eventoConsumo.setVoltaje(voltaje);
-                        eventoConsumo.setCorriente(corriente);                        
-                    }                    
-                    listaEventosAmarre.add(eventoAmarre);
-                    listaEventosConsumo.add(eventoConsumo);
+                        
+                        Trafo trafoPlcTu = productoPlcTu.getIdTrafo();
+                        if(trafoPlcTu != null)
+                        {
+                            String idtrafoPlcTu = trafoPlcTu.getIdTrafo();
+                            if(idtrafoPlcTu.equals(idtrafoPlcMms))
+                            {
+                                EventosAmarre eventoAmarre = new EventosAmarre();
+                                eventoAmarre.setEstadoAmarre(estadoAmarre);
+                                eventoAmarre.setFechaHora(fechaHora);
+                                eventoAmarre.setIdPlcMms(macPlcMms);
+                                eventoAmarre.setMacPlcTu(macPlcTu);
+                                eventoAmarre.setIdNotificacion(notificacion);
+                                EventosConsumo eventoConsumo = new EventosConsumo();
+                                eventoConsumo.setMacPlcMms(macPlcMms);
+                                eventoConsumo.setIdNotificacion(notificacion);
+                                eventoConsumo.setFechaHora(fechaHora);
+                                eventoConsumo.setMacPlcTu(macPlcTu);                    
+                                if(estadoAmarre == 1)
+                                {
+                                    Float energia = Float.parseFloat(lineaEvento[3].trim());
+                                    Float potencia = Float.parseFloat(lineaEvento[4].trim());
+                                    Float voltaje = Float.parseFloat(lineaEvento[5].trim());
+                                    Float corriente = Float.parseFloat(lineaEvento[6].trim());
+                                    eventoConsumo.setEnergia(energia);
+                                    eventoConsumo.setPotencia(potencia);
+                                    eventoConsumo.setVoltaje(voltaje);
+                                    eventoConsumo.setCorriente(corriente);                        
+                                }                    
+                                listaEventosAmarre.add(eventoAmarre);
+                                listaEventosConsumo.add(eventoConsumo);
+                            }
+                            else
+                            {
+                                archivoProcesadoCorrectamente = false;
+                                motivo ="El PlcTu  de la linea " + (contadorlinea+1)+" del archivo que inicialmente estaba vinculado al Trafo "+ idtrafoPlcTu+ " actualmente reporta vinculación al Trafo "+idtrafoPlcMms+". Se sugiere revisión.";
+                                contadorlinea = -100;
+                            }
+                        }
+                        else
+                        {
+                            archivoProcesadoCorrectamente = false;
+                            motivo ="El producto asociado al  PlcTu  de la linea " + (contadorlinea+1)+" del archivo no tieno un trafo asciado";
+                            contadorlinea = -100;
+                        }
+                    }
+                    else
+                    {
+                        archivoProcesadoCorrectamente = false;
+                        motivo ="El PlcTu  de la linea " + (contadorlinea+1)+" del archivo no tieno un producto asciado";
+                        contadorlinea = -100;
+                    }
                 }
                 else
                 {
@@ -330,8 +390,6 @@ public class WebService {
                     motivo ="Id del TU de la linea " + (contadorlinea+1)+" del archivo no esta registrado";
                     contadorlinea = -100;
                 }
-                
-                
             }            
             contadorlinea ++;
             linea =br.readLine();
@@ -624,6 +682,8 @@ public class WebService {
          int numero_eventos =0;
          PlcMc plcMc = null;
          String linea=br.readLine();
+         String idtrafoPlcMms = macPlcMms.getIdTrafo().getIdTrafo();
+         
          while(linea!= null && !linea.equals(" @;;;;;;") && contadorlinea >=0)//con convencion el @ indica el final del archivo
          {             
             if(contadorlinea == 0)
@@ -665,34 +725,65 @@ public class WebService {
                 Date fechaHora = formatter.parse(fecha_hora);                
                 Medidor medidor = ejbMedidorFacade.buscarMedidorPorId(stringIdmedidor);                
                 if (medidor != null)
-                {                
-                    EventosAmarreMc eventosAmarreMc = new EventosAmarreMc();
-                    eventosAmarreMc.setEstadoAmarre(estadoAmarre);                    
-                    eventosAmarreMc.setFechaHora(fechaHora);
-                    eventosAmarreMc.setMacPlcMms(macPlcMms);
-                    eventosAmarreMc.setMacPlcMc(plcMc);
-                    eventosAmarreMc.setIdMedidor(medidor);
-                    eventosAmarreMc.setIdNotificacion(notificacion);
-                    EventosConsumoMc eventoConsumoMc = new EventosConsumoMc();
-                    eventoConsumoMc.setMacPlcMms(macPlcMms);
-                    eventoConsumoMc.setIdNotificacion(notificacion);
-                    eventoConsumoMc.setFechaHora(fechaHora);
-                    eventoConsumoMc.setIdMedidor(medidor);
-                    eventoConsumoMc.setMacPlcMc(plcMc);                                      
-                    if(estadoAmarre == 1)
+                {       
+                    
+                    Producto productoMedidor = medidor.getIdProducto();
+                    if(productoMedidor != null)
                     {
-                        Float energia = Float.parseFloat(lineaEvento[3].trim());
-                        Float potencia = Float.parseFloat(lineaEvento[4].trim());
-                        Float voltaje = Float.parseFloat(lineaEvento[5].trim());
-                        Float corriente = Float.parseFloat(lineaEvento[6].trim());
-                        eventoConsumoMc.setEnergia(energia);
-                        eventoConsumoMc.setPotencia(potencia);
-                        eventoConsumoMc.setVoltaje(voltaje);
-                        eventoConsumoMc.setCorriente(corriente);
-                        
-                    }                    
-                    listaEventosAmarreMc.add(eventosAmarreMc);
-                    listaEventosConsumoMc.add(eventoConsumoMc);
+                        Trafo trafoMedidor = productoMedidor.getIdTrafo();
+                        if(trafoMedidor != null)
+                        {
+                            String idTrafoMedidor = trafoMedidor.getIdTrafo();
+                            if(idTrafoMedidor.equals(idtrafoPlcMms))
+                            {
+                                EventosAmarreMc eventosAmarreMc = new EventosAmarreMc();
+                                eventosAmarreMc.setEstadoAmarre(estadoAmarre);                    
+                                eventosAmarreMc.setFechaHora(fechaHora);
+                                eventosAmarreMc.setMacPlcMms(macPlcMms);
+                                eventosAmarreMc.setMacPlcMc(plcMc);
+                                eventosAmarreMc.setIdMedidor(medidor);
+                                eventosAmarreMc.setIdNotificacion(notificacion);
+                                EventosConsumoMc eventoConsumoMc = new EventosConsumoMc();
+                                eventoConsumoMc.setMacPlcMms(macPlcMms);
+                                eventoConsumoMc.setIdNotificacion(notificacion);
+                                eventoConsumoMc.setFechaHora(fechaHora);
+                                eventoConsumoMc.setIdMedidor(medidor);
+                                eventoConsumoMc.setMacPlcMc(plcMc);                                      
+                                if(estadoAmarre == 1)
+                                {
+                                    Float energia = Float.parseFloat(lineaEvento[3].trim());
+                                    Float potencia = Float.parseFloat(lineaEvento[4].trim());
+                                    Float voltaje = Float.parseFloat(lineaEvento[5].trim());
+                                    Float corriente = Float.parseFloat(lineaEvento[6].trim());
+                                    eventoConsumoMc.setEnergia(energia);
+                                    eventoConsumoMc.setPotencia(potencia);
+                                    eventoConsumoMc.setVoltaje(voltaje);
+                                    eventoConsumoMc.setCorriente(corriente);
+
+                                }                    
+                                listaEventosAmarreMc.add(eventosAmarreMc);
+                                listaEventosConsumoMc.add(eventoConsumoMc);
+                            }
+                            else
+                            {
+                                archivoProcesadoCorrectamente = false;
+                                motivo ="El Meidor  de la linea " + (contadorlinea+1)+" del archivo que inicialmente estaba vinculado al Trafo "+ idTrafoMedidor+ " actualmente reporta vinculación al Trafo "+idtrafoPlcMms+". Se sugiere revisión.";
+                                contadorlinea = -100;
+                            }
+                        }
+                        else
+                        {
+                            archivoProcesadoCorrectamente = false;
+                            motivo ="El producto asociado al  Medidor  de la linea " + (contadorlinea+1)+" del archivo no tieno un trafo asciado";
+                            contadorlinea = -100;
+                        }
+                    }
+                    else
+                    {
+                        archivoProcesadoCorrectamente = false;
+                        motivo ="El Medidor  de la linea " + (contadorlinea+1)+" del archivo no tieno un producto asciado";
+                        contadorlinea = -100;
+                    }
                 }
                 else
                 {
