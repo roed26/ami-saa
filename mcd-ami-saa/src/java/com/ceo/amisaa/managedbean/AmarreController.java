@@ -441,6 +441,10 @@ public class AmarreController implements Serializable {
             modeloResultadosEstadisticas.setTitle("Porcentajes amarre");
             modeloResultadosEstadisticas.setLegendPosition("e");
             modeloResultadosEstadisticas.setShowDataLabels(true);*/
+            RequestContext requestContext = RequestContext.getCurrentInstance();
+            requestContext.execute("PF('seleccionarTrafo').hide()");
+            requestContext.update("estadisticas");
+            requestContext.update("formPlcTus");
         }
     }
 
@@ -510,13 +514,13 @@ public class AmarreController implements Serializable {
                 requestContext.execute("PF('seleccionarTrafo').hide()");
                 requestContext.update("estadisticas");
                 requestContext.update("formPlcTus");
-                
+
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El trafo seleccionado no reporta amarre en esta fecha"));
                 RequestContext requestContext = RequestContext.getCurrentInstance();
                 requestContext.execute("PF('seleccionarTrafo').hide()");
                 requestContext.execute("PF('mensajeError').show()");
-                
+
             }
         }
     }

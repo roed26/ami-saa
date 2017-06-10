@@ -19,62 +19,36 @@
     <h:body>        
         <div id="centrar">
             <h:form >
-                <header>Iniciar sesión</header>
-                <p:panelGrid style="text-align: left" styleClass="panelgrid" class="transparentBackground" >
-                    <p:row >
-                        <p:column >
-                            <p:outputLabel value="Nombre de Usuario:" />
-                            <p:outputLabel style="color:red;"  value="*" />
-                        </p:column>
-                        <p:column>
-                            <p:inputText id="nombreUsuario" value="#{usuarioSessionController.nombreDeUsuario}"  
-                                         label="NombreUsuario" required="true"  requiredMessage="Ingrese nombre de usuario"/>
-                        </p:column>
-                        <p:column  >
-                            <p:message for="nombreUsuario" id="msgUsuario" display="icon" />
-                        </p:column>
-                    </p:row>
-                    <p:row>
-                        <p:column >
-                            <p:outputLabel  value="Contraseña:" />
-                            <p:outputLabel style="color:red;" value="*" />
-                        </p:column>
-                        <p:column>
-                            <p:password id="contrasena"  value="#{usuarioSessionController.contrasena}"
-                                        label="contraseña" rendered="true" requiredMessage="Ingrese una contraseña">
-                                <f:validateLength minimum="6" />
-                                <p:ajax update="msgContrasena" event="keyup" />
-                            </p:password>                          
-                        </p:column>
-                        <p:column style="width: 40px; ">
-                            <p:message for="contrasena" id="msgContrasena" display="icon" />
-                        </p:column>
-                    </p:row>
+                <header>Inicio de sesión</header>
+                <center><p:panelGrid style="text-align: left" styleClass="panelgrid" class="transparentBackground" >
+                        <p:row >                        
+                            <p:column>
+                                <p:inputText class="userNameClass" id="nombreUsuario" value="#{usuarioSessionController.nombreDeUsuario}"  
+                                             label="NombreUsuario" required="true"  requiredMessage="Ingrese nombre de usuario"/>
+                            </p:column>
+                            
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:password id="contrasena" class="passwordClass"  value="#{usuarioSessionController.contrasena}"
+                                            label="contraseña" rendered="true" requiredMessage="Ingrese una contraseña">
+                                    
+                                </p:password>                          
+                            </p:column>
+                            
+                        </p:row>
 
-                    <!--<p:row>
-                        <p:column colspan="3" style="text-align: center">
-                            <div class="help">Entre 6 y 20 caracteres </div>
-                        </p:column>
-                    </p:row>-->
-
-                    <p:row>
-                        <p:column colspan="3" style="text-align: center; ">
-                            <br/>
-                            <p:link  style="color: blue; font-size: 14px" value="¿Has olvidado tu contraseña?">                                
-                            </p:link>                      
-
-
-                        </p:column>                        
-                    </p:row>
-                    <p:row>
-                        <p:column colspan="3" style="text-align: center; ">
-                            <p:commandButton style="background: gainsboro; width: 150px; color:#000000; font-weight: bold; "
-                                             value="Iniciar sesión" action="#{usuarioSessionController.login()}"
-                                             ajax="false"
-                                             />
-                        </p:column>
-                    </p:row>
-                </p:panelGrid>
+                        <p:row>
+                            <p:column  style="text-align: center; ">
+                                <br/>
+                                <br/>
+                                <p:commandButton style="background: gainsboro; width: 150px; color:#000000; font-weight: bold; "
+                                                 value="Iniciar sesión" action="#{usuarioSessionController.login()}"
+                                                 ajax="false"
+                                                 />
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid></center>
             </h:form>
         </div>      
         <div id="footersesion">

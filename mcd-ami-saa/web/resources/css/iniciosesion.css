@@ -15,7 +15,7 @@ form {
     position: relative;
     color: #333;
     border-radius: 32px;
-    width: 34%;
+    width: 32%;
     height: 300px;
 }
 form header {
@@ -90,3 +90,17 @@ form .help {
 #footersesion p {padding:10px;color:#8f887e}
 #footersesion a {color:white}
 #footersesion a:hover {color:#a90341}
+
+.userNameClass {
+    background: url(../img/ico-usuario.png) no-repeat !important;
+    padding-left: 40px !important;
+    width: 210px !important;
+    height: 22px !important;
+}
+
+.passwordClass {
+    background: url(../img/ico-pass.png) no-repeat !important;
+    padding-left: 40px !important;
+    width: 210px !important;
+    height: 22px !important;
+}
